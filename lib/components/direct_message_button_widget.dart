@@ -1,5 +1,8 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,10 +13,10 @@ export 'direct_message_button_model.dart';
 class DirectMessageButtonWidget extends StatefulWidget {
   const DirectMessageButtonWidget({
     Key? key,
-    required this.userName,
+    required this.userRef,
   }) : super(key: key);
 
-  final String? userName;
+  final DocumentReference? userRef;
 
   @override
   _DirectMessageButtonWidgetState createState() =>
@@ -46,40 +49,74 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 40.0,
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-      ),
-      child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(3.0),
-              child: Image.network(
-                'https://picsum.photos/seed/429/600',
-                width: 25.0,
-                height: 25.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-              child: Text(
-                widget.userName!,
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      fontFamily: 'Inter',
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.normal,
-                    ),
-              ),
-            ),
-          ],
+    return FutureBuilder<List<UsersRecord>>(
+      future: queryUsersRecordOnce(
+        queryBuilder: (usersRecord) => usersRecord.where(
+          'user_ref',
+          isEqualTo: widget.userRef,
         ),
+        singleRecord: true,
       ),
+      builder: (context, snapshot) {
+        // Customize what your widget looks like when it's loading.
+        if (!snapshot.hasData) {
+          return Center(
+            child: SizedBox(
+              width: 50.0,
+              height: 50.0,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  FlutterFlowTheme.of(context).primary,
+                ),
+              ),
+            ),
+          );
+        }
+        List<UsersRecord> containerUsersRecordList =
+            snapshot.data!.where((u) => u.uid != currentUserUid).toList();
+        // Return an empty Container when the item does not exist.
+        if (snapshot.data!.isEmpty) {
+          return Container();
+        }
+        final containerUsersRecord = containerUsersRecordList.isNotEmpty
+            ? containerUsersRecordList.first
+            : null;
+        return Container(
+          width: double.infinity,
+          height: 40.0,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(3.0),
+                  child: Image.network(
+                    containerUsersRecord!.photoUrl,
+                    width: 25.0,
+                    height: 25.0,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                  child: Text(
+                    containerUsersRecord!.displayName,
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          fontFamily: 'Inter',
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

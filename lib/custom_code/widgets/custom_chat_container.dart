@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
+import 'index.dart'; // Imports other custom widgets
+
 // Set your widget name, define your parameter, and then add the
 // boilerplate code using the green button on the right!
 import '/flutter_flow/chat/index.dart';
