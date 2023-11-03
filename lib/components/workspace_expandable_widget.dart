@@ -269,7 +269,7 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                   return DirectMessageButtonWidget(
                                     key: Key(
                                         'Key3q1_${columnIndex}_of_${columnUsersRecordList.length}'),
-                                    userName: columnUsersRecord.displayName,
+                                    userRef: currentUserReference!,
                                   );
                                 }).divide(SizedBox(height: 5.0)),
                               );

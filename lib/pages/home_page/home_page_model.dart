@@ -33,12 +33,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   // State field(s) for Expandable widget.
   late ExpandableController expandableController2;
 
-  // Model for ChannelButton component.
-  late ChannelButtonModel channelButtonModel1;
-  // Model for ChannelButton component.
-  late ChannelButtonModel channelButtonModel2;
-  // Model for ChannelButton component.
-  late ChannelButtonModel channelButtonModel3;
   // State field(s) for Expandable widget.
   late ExpandableController expandableController3;
 
@@ -49,9 +43,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
 
   void initState(BuildContext context) {
     mainWebNavModel = createModel(context, () => MainWebNavModel());
-    channelButtonModel1 = createModel(context, () => ChannelButtonModel());
-    channelButtonModel2 = createModel(context, () => ChannelButtonModel());
-    channelButtonModel3 = createModel(context, () => ChannelButtonModel());
   }
 
   void dispose() {
@@ -59,9 +50,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
     mainWebNavModel.dispose();
     expandableController1.dispose();
     expandableController2.dispose();
-    channelButtonModel1.dispose();
-    channelButtonModel2.dispose();
-    channelButtonModel3.dispose();
     expandableController3.dispose();
     expandableController4.dispose();
   }
