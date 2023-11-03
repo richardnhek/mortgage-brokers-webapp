@@ -1,8 +1,10 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -222,6 +224,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                 0.0, 100.0, 0.0, 0.0),
                             child: FFButtonWidget(
                               onPressed: () async {
+                                Function() _navigate = () {};
                                 GoRouter.of(context).prepareAuthEvent();
                                 final smsCodeVal =
                                     _model.pinCodeController!.text;
@@ -243,8 +246,18 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                   return;
                                 }
 
-                                context.goNamedAuth(
+                                _navigate = () => context.goNamedAuth(
                                     'HomePage', context.mounted);
+                                if (widget.authType == 'Create') {
+                                  await currentUserReference!
+                                      .update(createUsersRecordData(
+                                    email: widget.userEmail,
+                                    displayName: widget.displayName,
+                                    userRef: currentUserReference,
+                                  ));
+                                }
+
+                                _navigate();
                               },
                               text: 'Confirm',
                               options: FFButtonOptions(
