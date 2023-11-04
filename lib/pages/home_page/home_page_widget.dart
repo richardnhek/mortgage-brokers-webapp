@@ -34,7 +34,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     _model = createModel(context, () => HomePageModel());
 
     _model.expandableController1 = ExpandableController(initialExpanded: false);
-    _model.expandableController2 = ExpandableController(initialExpanded: false);
+    _model.expandableController2 = ExpandableController(initialExpanded: true);
     _model.expandableController3 = ExpandableController(initialExpanded: false);
     _model.expandableController4 = ExpandableController(initialExpanded: false);
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));

@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 
 import 'index.dart'; // Imports other custom widgets
 
+import 'index.dart'; // Imports other custom widgets
+
 // Set your widget name, define your parameter, and then add the
 // boilerplate code using the green button on the right!
 import '/flutter_flow/chat/index.dart';
@@ -36,6 +38,8 @@ class CustomChatContainer extends StatefulWidget {
 class _CustomChatContainerState extends State<CustomChatContainer> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   FFChatInfo? _chatInfo;
+  StreamSubscription<FFChatInfo>? _chatInfoSubscription;
+
   bool isGroupChat() {
     if (widget.chatUser == null) {
       return true;
@@ -49,7 +53,8 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
   @override
   void initState() {
     super.initState();
-    FFChatManager.instance
+    // Subscribe to the chat info
+    _chatInfoSubscription = FFChatManager.instance
         .getChatInfo(
       otherUserRecord: widget.chatUser,
       chatReference: widget.chatRef,
@@ -59,12 +64,33 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
         setState(() => _chatInfo = info);
       }
     });
+  }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  @override
+  void didUpdateWidget(CustomChatContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.chatUser != oldWidget.chatUser ||
+        widget.chatRef != oldWidget.chatRef) {
+      // If the user or chat reference has changed, re-subscribe to the chat info
+      _chatInfoSubscription?.cancel(); // Cancel the existing subscription
+
+      _chatInfoSubscription = FFChatManager.instance
+          .getChatInfo(
+        otherUserRecord: widget.chatUser,
+        chatReference: widget.chatRef,
+      )
+          .listen((info) {
+        if (mounted) {
+          setState(() => _chatInfo = info);
+        }
+      });
+    }
   }
 
   @override
   void dispose() {
+    _chatInfoSubscription
+        ?.cancel(); // Cancel the subscription when the widget is disposed
     super.dispose();
   }
 
