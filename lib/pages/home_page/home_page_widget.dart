@@ -1,3 +1,5 @@
+import 'package:mortgage_broker_web_app/custom_code/widgets/custom_chat_container.dart';
+
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/channel_button_widget.dart';
@@ -830,6 +832,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 child: custom_widgets.CustomChatContainer(
                   width: double.infinity,
                   height: double.infinity,
+                  key: ValueKey(
+                      '${_model.chatUser ?? 'null'}-${_model.chatRef?.id}'),
                   chatUser: _model.chatUser,
                   chatRef: _model.chatRef,
                 ),
