@@ -1,4 +1,3 @@
-import '/components/workspace_expandable_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:expandable/expandable.dart';
@@ -43,6 +42,8 @@ class _WorkspaceWebNavWidgetState extends State<WorkspaceWebNavWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
       width: MediaQuery.sizeOf(context).width * 0.2,
       height: double.infinity,
@@ -106,11 +107,6 @@ class _WorkspaceWebNavWidgetState extends State<WorkspaceWebNavWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        wrapWithModel(
-                          model: _model.workspaceExpandableModel,
-                          updateCallback: () => setState(() {}),
-                          child: WorkspaceExpandableWidget(),
-                        ),
                         Container(
                           width: double.infinity,
                           color: Colors.transparent,

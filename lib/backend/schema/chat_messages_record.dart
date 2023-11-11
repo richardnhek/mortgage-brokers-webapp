@@ -41,12 +41,18 @@ class ChatMessagesRecord extends FirestoreRecord {
   DateTime? get timestamp => _timestamp;
   bool hasTimestamp() => _timestamp != null;
 
+  // "chat_message_ref" field.
+  DocumentReference? _chatMessageRef;
+  DocumentReference? get chatMessageRef => _chatMessageRef;
+  bool hasChatMessageRef() => _chatMessageRef != null;
+
   void _initializeFields() {
     _user = snapshotData['user'] as DocumentReference?;
     _chat = snapshotData['chat'] as DocumentReference?;
     _text = snapshotData['text'] as String?;
     _image = snapshotData['image'] as String?;
     _timestamp = snapshotData['timestamp'] as DateTime?;
+    _chatMessageRef = snapshotData['chat_message_ref'] as DocumentReference?;
   }
 
   static CollectionReference get collection =>
@@ -89,6 +95,7 @@ Map<String, dynamic> createChatMessagesRecordData({
   String? text,
   String? image,
   DateTime? timestamp,
+  DocumentReference? chatMessageRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -97,6 +104,7 @@ Map<String, dynamic> createChatMessagesRecordData({
       'text': text,
       'image': image,
       'timestamp': timestamp,
+      'chat_message_ref': chatMessageRef,
     }.withoutNulls,
   );
 
@@ -113,12 +121,13 @@ class ChatMessagesRecordDocumentEquality
         e1?.chat == e2?.chat &&
         e1?.text == e2?.text &&
         e1?.image == e2?.image &&
-        e1?.timestamp == e2?.timestamp;
+        e1?.timestamp == e2?.timestamp &&
+        e1?.chatMessageRef == e2?.chatMessageRef;
   }
 
   @override
-  int hash(ChatMessagesRecord? e) => const ListEquality()
-      .hash([e?.user, e?.chat, e?.text, e?.image, e?.timestamp]);
+  int hash(ChatMessagesRecord? e) => const ListEquality().hash(
+      [e?.user, e?.chat, e?.text, e?.image, e?.timestamp, e?.chatMessageRef]);
 
   @override
   bool isValidKey(Object? o) => o is ChatMessagesRecord;
