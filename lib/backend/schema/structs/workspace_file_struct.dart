@@ -15,12 +15,14 @@ class WorkspaceFileStruct extends FFFirebaseStruct {
     DateTime? sentDateTime,
     DocumentReference? sharedBy,
     String? fileThumnail,
+    String? fileName,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _fileUrl = fileUrl,
         _fileType = fileType,
         _sentDateTime = sentDateTime,
         _sharedBy = sharedBy,
         _fileThumnail = fileThumnail,
+        _fileName = fileName,
         super(firestoreUtilData);
 
   // "fileUrl" field.
@@ -53,6 +55,12 @@ class WorkspaceFileStruct extends FFFirebaseStruct {
   set fileThumnail(String? val) => _fileThumnail = val;
   bool hasFileThumnail() => _fileThumnail != null;
 
+  // "fileName" field.
+  String? _fileName;
+  String get fileName => _fileName ?? '';
+  set fileName(String? val) => _fileName = val;
+  bool hasFileName() => _fileName != null;
+
   static WorkspaceFileStruct fromMap(Map<String, dynamic> data) =>
       WorkspaceFileStruct(
         fileUrl: data['fileUrl'] as String?,
@@ -60,6 +68,7 @@ class WorkspaceFileStruct extends FFFirebaseStruct {
         sentDateTime: data['sentDateTime'] as DateTime?,
         sharedBy: data['sharedBy'] as DocumentReference?,
         fileThumnail: data['fileThumnail'] as String?,
+        fileName: data['fileName'] as String?,
       );
 
   static WorkspaceFileStruct? maybeFromMap(dynamic data) =>
@@ -71,6 +80,7 @@ class WorkspaceFileStruct extends FFFirebaseStruct {
         'sentDateTime': _sentDateTime,
         'sharedBy': _sharedBy,
         'fileThumnail': _fileThumnail,
+        'fileName': _fileName,
       }.withoutNulls;
 
   @override
@@ -93,6 +103,10 @@ class WorkspaceFileStruct extends FFFirebaseStruct {
         ),
         'fileThumnail': serializeParam(
           _fileThumnail,
+          ParamType.String,
+        ),
+        'fileName': serializeParam(
+          _fileName,
           ParamType.String,
         ),
       }.withoutNulls;
@@ -125,6 +139,11 @@ class WorkspaceFileStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
+        fileName: deserializeParam(
+          data['fileName'],
+          ParamType.String,
+          false,
+        ),
       );
 
   @override
@@ -137,12 +156,13 @@ class WorkspaceFileStruct extends FFFirebaseStruct {
         fileType == other.fileType &&
         sentDateTime == other.sentDateTime &&
         sharedBy == other.sharedBy &&
-        fileThumnail == other.fileThumnail;
+        fileThumnail == other.fileThumnail &&
+        fileName == other.fileName;
   }
 
   @override
-  int get hashCode => const ListEquality()
-      .hash([fileUrl, fileType, sentDateTime, sharedBy, fileThumnail]);
+  int get hashCode => const ListEquality().hash(
+      [fileUrl, fileType, sentDateTime, sharedBy, fileThumnail, fileName]);
 }
 
 WorkspaceFileStruct createWorkspaceFileStruct({
@@ -151,6 +171,7 @@ WorkspaceFileStruct createWorkspaceFileStruct({
   DateTime? sentDateTime,
   DocumentReference? sharedBy,
   String? fileThumnail,
+  String? fileName,
   Map<String, dynamic> fieldValues = const {},
   bool clearUnsetFields = true,
   bool create = false,
@@ -162,6 +183,7 @@ WorkspaceFileStruct createWorkspaceFileStruct({
       sentDateTime: sentDateTime,
       sharedBy: sharedBy,
       fileThumnail: fileThumnail,
+      fileName: fileName,
       firestoreUtilData: FirestoreUtilData(
         clearUnsetFields: clearUnsetFields,
         create: create,

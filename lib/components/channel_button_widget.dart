@@ -8,7 +8,12 @@ import 'channel_button_model.dart';
 export 'channel_button_model.dart';
 
 class ChannelButtonWidget extends StatefulWidget {
-  const ChannelButtonWidget({Key? key}) : super(key: key);
+  const ChannelButtonWidget({
+    Key? key,
+    required this.channelName,
+  }) : super(key: key);
+
+  final String? channelName;
 
   @override
   _ChannelButtonWidgetState createState() => _ChannelButtonWidgetState();
@@ -40,6 +45,8 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
       width: double.infinity,
       height: 40.0,
@@ -59,13 +66,12 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
               ),
               child: Stack(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(3.0),
-                    child: Image.network(
-                      'https://picsum.photos/seed/429/600',
-                      width: 25.0,
-                      height: 25.0,
-                      fit: BoxFit.cover,
+                  Container(
+                    width: 25.0,
+                    height: 25.0,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFB253),
+                      borderRadius: BorderRadius.circular(3.0),
                     ),
                   ),
                   Align(
@@ -99,7 +105,7 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 4.0),
               child: Text(
-                'Whole team',
+                widget.channelName!,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                       fontFamily: 'Inter',
                       fontSize: 16.0,

@@ -1,14 +1,13 @@
-import '/backend/backend.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'user_details_widget.dart' show UserDetailsWidget;
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'empty_chat_widget_widget.dart' show EmptyChatWidgetWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class UserDetailsModel extends FlutterFlowModel<UserDetailsWidget> {
+class EmptyChatWidgetModel extends FlutterFlowModel<EmptyChatWidgetWidget> {
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {}

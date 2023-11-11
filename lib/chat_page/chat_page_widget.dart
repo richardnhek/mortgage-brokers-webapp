@@ -77,6 +77,8 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
       );
     }
 
+    context.watch<FFAppState>();
+
     return Scaffold(
       key: scaffoldKey,
       body: SafeArea(
