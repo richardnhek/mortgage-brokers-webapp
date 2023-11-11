@@ -21,29 +21,16 @@ class WorkspaceExpandableModel
   // State field(s) for Expandable widget.
   late ExpandableController expandableController2;
 
-  // Model for ChannelButton component.
-  late ChannelButtonModel channelButtonModel1;
-  // Model for ChannelButton component.
-  late ChannelButtonModel channelButtonModel2;
-  // Model for ChannelButton component.
-  late ChannelButtonModel channelButtonModel3;
   // State field(s) for Expandable widget.
   late ExpandableController expandableController3;
 
   /// Initialization and disposal methods.
 
-  void initState(BuildContext context) {
-    channelButtonModel1 = createModel(context, () => ChannelButtonModel());
-    channelButtonModel2 = createModel(context, () => ChannelButtonModel());
-    channelButtonModel3 = createModel(context, () => ChannelButtonModel());
-  }
+  void initState(BuildContext context) {}
 
   void dispose() {
     expandableController1.dispose();
     expandableController2.dispose();
-    channelButtonModel1.dispose();
-    channelButtonModel2.dispose();
-    channelButtonModel3.dispose();
     expandableController3.dispose();
   }
 

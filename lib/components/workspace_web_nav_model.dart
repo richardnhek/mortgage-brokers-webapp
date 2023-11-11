@@ -1,4 +1,3 @@
-import '/components/workspace_expandable_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'workspace_web_nav_widget.dart' show WorkspaceWebNavWidget;
@@ -11,20 +10,14 @@ import 'package:provider/provider.dart';
 class WorkspaceWebNavModel extends FlutterFlowModel<WorkspaceWebNavWidget> {
   ///  State fields for stateful widgets in this component.
 
-  // Model for WorkspaceExpandable component.
-  late WorkspaceExpandableModel workspaceExpandableModel;
   // State field(s) for Expandable widget.
   late ExpandableController expandableController;
 
   /// Initialization and disposal methods.
 
-  void initState(BuildContext context) {
-    workspaceExpandableModel =
-        createModel(context, () => WorkspaceExpandableModel());
-  }
+  void initState(BuildContext context) {}
 
   void dispose() {
-    workspaceExpandableModel.dispose();
     expandableController.dispose();
   }
 

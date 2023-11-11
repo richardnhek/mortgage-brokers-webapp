@@ -52,6 +52,26 @@ class ChatsRecord extends FirestoreRecord {
       _lastMessageSeenBy ?? const [];
   bool hasLastMessageSeenBy() => _lastMessageSeenBy != null;
 
+  // "chat_type" field.
+  String? _chatType;
+  String get chatType => _chatType ?? '';
+  bool hasChatType() => _chatType != null;
+
+  // "workspace_id" field.
+  String? _workspaceId;
+  String get workspaceId => _workspaceId ?? '';
+  bool hasWorkspaceId() => _workspaceId != null;
+
+  // "channel_name" field.
+  String? _channelName;
+  String get channelName => _channelName ?? '';
+  bool hasChannelName() => _channelName != null;
+
+  // "workspace_ref" field.
+  DocumentReference? _workspaceRef;
+  DocumentReference? get workspaceRef => _workspaceRef;
+  bool hasWorkspaceRef() => _workspaceRef != null;
+
   void _initializeFields() {
     _users = getDataList(snapshotData['users']);
     _userA = snapshotData['user_a'] as DocumentReference?;
@@ -61,6 +81,10 @@ class ChatsRecord extends FirestoreRecord {
     _lastMessageSentBy =
         snapshotData['last_message_sent_by'] as DocumentReference?;
     _lastMessageSeenBy = getDataList(snapshotData['last_message_seen_by']);
+    _chatType = snapshotData['chat_type'] as String?;
+    _workspaceId = snapshotData['workspace_id'] as String?;
+    _channelName = snapshotData['channel_name'] as String?;
+    _workspaceRef = snapshotData['workspace_ref'] as DocumentReference?;
   }
 
   static CollectionReference get collection =>
@@ -102,6 +126,10 @@ Map<String, dynamic> createChatsRecordData({
   String? lastMessage,
   DateTime? lastMessageTime,
   DocumentReference? lastMessageSentBy,
+  String? chatType,
+  String? workspaceId,
+  String? channelName,
+  DocumentReference? workspaceRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -110,6 +138,10 @@ Map<String, dynamic> createChatsRecordData({
       'last_message': lastMessage,
       'last_message_time': lastMessageTime,
       'last_message_sent_by': lastMessageSentBy,
+      'chat_type': chatType,
+      'workspace_id': workspaceId,
+      'channel_name': channelName,
+      'workspace_ref': workspaceRef,
     }.withoutNulls,
   );
 
@@ -128,7 +160,11 @@ class ChatsRecordDocumentEquality implements Equality<ChatsRecord> {
         e1?.lastMessage == e2?.lastMessage &&
         e1?.lastMessageTime == e2?.lastMessageTime &&
         e1?.lastMessageSentBy == e2?.lastMessageSentBy &&
-        listEquality.equals(e1?.lastMessageSeenBy, e2?.lastMessageSeenBy);
+        listEquality.equals(e1?.lastMessageSeenBy, e2?.lastMessageSeenBy) &&
+        e1?.chatType == e2?.chatType &&
+        e1?.workspaceId == e2?.workspaceId &&
+        e1?.channelName == e2?.channelName &&
+        e1?.workspaceRef == e2?.workspaceRef;
   }
 
   @override
@@ -139,7 +175,11 @@ class ChatsRecordDocumentEquality implements Equality<ChatsRecord> {
         e?.lastMessage,
         e?.lastMessageTime,
         e?.lastMessageSentBy,
-        e?.lastMessageSeenBy
+        e?.lastMessageSeenBy,
+        e?.chatType,
+        e?.workspaceId,
+        e?.channelName,
+        e?.workspaceRef
       ]);
 
   @override

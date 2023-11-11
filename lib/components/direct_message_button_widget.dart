@@ -49,6 +49,8 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return FutureBuilder<List<UsersRecord>>(
       future: queryUsersRecordOnce(
         queryBuilder: (usersRecord) => usersRecord.where(

@@ -13,7 +13,12 @@ import 'workspace_expandable_model.dart';
 export 'workspace_expandable_model.dart';
 
 class WorkspaceExpandableWidget extends StatefulWidget {
-  const WorkspaceExpandableWidget({Key? key}) : super(key: key);
+  const WorkspaceExpandableWidget({
+    Key? key,
+    required this.workspaceDoc,
+  }) : super(key: key);
+
+  final WorkspacesRecord? workspaceDoc;
 
   @override
   _WorkspaceExpandableWidgetState createState() =>
@@ -49,6 +54,8 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return Container(
       width: double.infinity,
       color: FlutterFlowTheme.of(context).darkGray1,
@@ -68,7 +75,10 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
                   child: Text(
-                    'Wallace & William',
+                    valueOrDefault<String>(
+                      widget.workspaceDoc?.name,
+                      'N/A',
+                    ),
                     style: FlutterFlowTheme.of(context).displaySmall.override(
                           fontFamily: 'Inter',
                           color: Colors.black,
@@ -86,50 +96,62 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
             children: [
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
-                child: Container(
-                  width: double.infinity,
-                  height: 40.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 4.0,
-                        color: Color(0x0E000000),
-                        offset: Offset(0.0, 4.0),
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                      color: FlutterFlowTheme.of(context).tertiary,
-                      width: 1.0,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Icon(
-                          Icons.auto_awesome_outlined,
-                          color: FlutterFlowTheme.of(context).secondary,
-                          size: 21.0,
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 0.0, 0.0, 0.0),
-                          child: Text(
-                            'Overview',
-                            style: FlutterFlowTheme.of(context)
-                                .displaySmall
-                                .override(
-                                  fontFamily: 'Inter',
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
-                        ),
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    _model.updatePage(() {
+                      FFAppState().currentMainView = 'Overview';
+                    });
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).primaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Color(0x0E000000),
+                          offset: Offset(0.0, 4.0),
+                        )
                       ],
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(
+                        color: FlutterFlowTheme.of(context).tertiary,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Icon(
+                            Icons.auto_awesome_outlined,
+                            color: FlutterFlowTheme.of(context).secondary,
+                            size: 21.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                10.0, 0.0, 0.0, 0.0),
+                            child: Text(
+                              'Overview',
+                              style: FlutterFlowTheme.of(context)
+                                  .displaySmall
+                                  .override(
+                                    fontFamily: 'Inter',
+                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -167,25 +189,60 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                         expanded: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               25.0, 20.0, 25.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              wrapWithModel(
-                                model: _model.channelButtonModel1,
-                                updateCallback: () => setState(() {}),
-                                child: ChannelButtonWidget(),
+                          child: FutureBuilder<List<ChatsRecord>>(
+                            future: queryChatsRecordOnce(
+                              queryBuilder: (chatsRecord) => chatsRecord.where(
+                                'chat_type',
+                                isEqualTo: 'Channel',
                               ),
-                              wrapWithModel(
-                                model: _model.channelButtonModel2,
-                                updateCallback: () => setState(() {}),
-                                child: ChannelButtonWidget(),
-                              ),
-                              wrapWithModel(
-                                model: _model.channelButtonModel3,
-                                updateCallback: () => setState(() {}),
-                                child: ChannelButtonWidget(),
-                              ),
-                            ].divide(SizedBox(height: 5.0)),
+                            ),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        FlutterFlowTheme.of(context).primary,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              List<ChatsRecord> columnChatsRecordList =
+                                  snapshot.data!;
+                              return Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children:
+                                    List.generate(columnChatsRecordList.length,
+                                        (columnIndex) {
+                                  final columnChatsRecord =
+                                      columnChatsRecordList[columnIndex];
+                                  return InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      _model.updatePage(() {
+                                        FFAppState().currentChatRef =
+                                            columnChatsRecord.reference;
+                                        FFAppState().currentChatUserRef = null;
+                                        FFAppState().currentMainView = 'Chat';
+                                      });
+                                    },
+                                    child: ChannelButtonWidget(
+                                      key: Key(
+                                          'Keyg6r_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                      channelName:
+                                          columnChatsRecord.channelName,
+                                    ),
+                                  );
+                                }).divide(SizedBox(height: 5.0)),
+                              );
+                            },
                           ),
                         ),
                         theme: ExpandableThemeData(
@@ -238,8 +295,13 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                         expanded: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               25.0, 20.0, 25.0, 0.0),
-                          child: StreamBuilder<List<UsersRecord>>(
-                            stream: queryUsersRecord(),
+                          child: FutureBuilder<List<ChatsRecord>>(
+                            future: queryChatsRecordOnce(
+                              queryBuilder: (chatsRecord) => chatsRecord.where(
+                                'chat_type',
+                                isEqualTo: 'DM',
+                              ),
+                            ),
                             builder: (context, snapshot) {
                               // Customize what your widget looks like when it's loading.
                               if (!snapshot.hasData) {
@@ -255,21 +317,42 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                   ),
                                 );
                               }
-                              List<UsersRecord> columnUsersRecordList = snapshot
-                                  .data!
-                                  .where((u) => u.uid != currentUserUid)
-                                  .toList();
+                              List<ChatsRecord> columnChatsRecordList =
+                                  snapshot.data!;
                               return Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children:
-                                    List.generate(columnUsersRecordList.length,
+                                    List.generate(columnChatsRecordList.length,
                                         (columnIndex) {
-                                  final columnUsersRecord =
-                                      columnUsersRecordList[columnIndex];
-                                  return DirectMessageButtonWidget(
-                                    key: Key(
-                                        'Key3q1_${columnIndex}_of_${columnUsersRecordList.length}'),
-                                    userRef: currentUserReference!,
+                                  final columnChatsRecord =
+                                      columnChatsRecordList[columnIndex];
+                                  return InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      _model.updatePage(() {
+                                        FFAppState().currentChatRef =
+                                            columnChatsRecord.reference;
+                                        FFAppState().currentChatUserRef =
+                                            columnChatsRecord.users
+                                                .where((e) =>
+                                                    e != currentUserReference)
+                                                .toList()
+                                                .first;
+                                        FFAppState().currentMainView = 'Chat';
+                                      });
+                                    },
+                                    child: DirectMessageButtonWidget(
+                                      key: Key(
+                                          'Key3q1_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                      userRef: columnChatsRecord.users
+                                          .where(
+                                              (e) => e != currentUserReference)
+                                          .toList()
+                                          .first,
+                                    ),
                                   );
                                 }).divide(SizedBox(height: 5.0)),
                               );
