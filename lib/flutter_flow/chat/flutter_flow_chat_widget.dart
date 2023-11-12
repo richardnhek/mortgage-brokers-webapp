@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:transparent_image/transparent_image.dart';
 
 enum TimeDisplaySetting {
   alwaysVisible,
@@ -53,7 +54,7 @@ class FFChatWidget extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: focusNode.unfocus,
         child: Container(
-          color: backgroundColor,
+          color: Colors.white,
           child: Stack(
             children: [
               Padding(
@@ -91,7 +92,7 @@ class FFChatWidget extends StatelessWidget {
                       hintText: 'Type message here',
                       hintStyle: inputHintTextStyle ??
                           GoogleFonts.getFont(
-                            'DM Sans',
+                            'Inter',
                             color: const Color(0xFF95A1AC),
                             fontSize: 14,
                           ),
@@ -99,7 +100,7 @@ class FFChatWidget extends StatelessWidget {
                     ),
                     inputTextStyle: inputTextStyle ??
                         GoogleFonts.getFont(
-                          'DM Sans',
+                          'Inter',
                           color: Colors.black,
                           fontSize: 14,
                         ),
@@ -116,16 +117,94 @@ class FFChatWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.white,
                     ),
-                    messageBuilder: (chatMessage) => FFChatMessage(
-                      key: Key('ChatMessage_${chatMessage.id}'),
-                      chatMessage: chatMessage,
-                      isMe: chatMessage.user.uid == currentUser.uid,
-                      timeDisplaySetting: timeDisplaySetting,
-                      currentUserBoxDecoration: currentUserBoxDecoration,
-                      otherUsersBoxDecoration: otherUsersBoxDecoration,
-                      currentUserTextStyle: currentUserTextStyle,
-                      otherUsersTextStyle: otherUsersTextStyle,
-                    ),
+                    showUserAvatar: true,
+                    avatarBuilder: (p0) =>
+                        p0.avatar != null && p0.avatar!.length != 0
+                            ? Container(
+                                width: 35,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                  child: FadeInImage.memoryNetwork(
+                                    placeholder: kTransparentImage,
+                                    image: p0.avatar!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 35,
+                                width: 35,
+                                decoration: BoxDecoration(
+                                    color: Colors.amber,
+                                    borderRadius: BorderRadius.circular(4.0)),
+                                child: Center(
+                                    child: Text(
+                                  p0.name == null || p0.name!.isEmpty
+                                      ? ''
+                                      : p0.name![0],
+                                  style: GoogleFonts.getFont(
+                                    'Inter',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 14,
+                                  ),
+                                )),
+                              ),
+                    messageBuilder: (chatMessage) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Row for user name and timestamp
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  chatMessage.user.name!,
+                                  style: GoogleFonts.getFont(
+                                    'Inter',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  chatMessage.createdAt.isBefore(DateTime.now()
+                                          .subtract(const Duration(minutes: 3)))
+                                      ? timeago.format(chatMessage.createdAt)
+                                      : DateFormat.jm()
+                                          .format(chatMessage.createdAt),
+                                  style: GoogleFonts.getFont(
+                                    'Inter',
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Message text
+                            Text(
+                              chatMessage.text!,
+                              style: GoogleFonts.getFont(
+                                'Inter',
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -142,9 +221,9 @@ class FFChatMessage extends StatefulWidget {
     Key? key,
     required this.chatMessage,
     required this.isMe,
-    this.timeDisplaySetting,
     this.currentUserBoxDecoration,
     this.otherUsersBoxDecoration,
+    this.timeDisplaySetting,
     this.currentUserTextStyle,
     this.otherUsersTextStyle,
   }) : super(key: key);
@@ -175,54 +254,27 @@ class _FFChatMessageState extends State<FFChatMessage> {
     }
   }
 
-  BoxDecoration get boxDecoration => ((widget.isMe
-                  ? widget.currentUserBoxDecoration
-                  : widget.otherUsersBoxDecoration) ??
-              BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: widget.isMe ? Colors.white : const Color(0xFF4B39EF),
-              ))
-          .copyWith(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.15),
-            offset: const Offset(0, 1),
-            blurRadius: 3.0,
-          ),
-        ],
-      );
-
-  TextStyle get textStyle => ((widget.isMe
-              ? widget.currentUserTextStyle
-              : widget.otherUsersTextStyle) ??
-          GoogleFonts.getFont(
-            'DM Sans',
-            color: widget.isMe ? const Color(0xFF1E2429) : Colors.white,
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ))
-      .copyWith(height: 1.5);
+  TextStyle get textStyle => (GoogleFonts.getFont(
+        'Inter',
+        color: Colors.black,
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+      )).copyWith(height: 1.5);
 
   bool get hasImage => (widget.chatMessage.image ?? '').isNotEmpty;
 
   @override
   Widget build(BuildContext context) => Align(
-        alignment: widget.isMe
-            ? AlignmentDirectional.centerEnd
-            : AlignmentDirectional.centerStart,
+        alignment: AlignmentDirectional.topStart,
         child: Column(
-          crossAxisAlignment:
-              widget.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 6.0),
             InkWell(
               onTap: () => setState(() => _showTime = !showTime),
               splashColor: Colors.transparent,
               child: Container(
                 constraints: BoxConstraints(
-                    maxWidth: MediaQuery.sizeOf(context).width * 0.65),
-                decoration: boxDecoration.copyWith(
-                    color: hasImage ? Colors.transparent : null),
+                    maxWidth: MediaQuery.of(context).size.width * 0.65),
                 child: hasImage
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(16),
@@ -233,8 +285,8 @@ class _FFChatMessageState extends State<FFChatMessage> {
                       )
                     : Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 6,
+                          vertical: 15,
+                          horizontal: 10,
                         ),
                         child: Text(
                           widget.chatMessage.text!,
@@ -245,7 +297,7 @@ class _FFChatMessageState extends State<FFChatMessage> {
             ),
             if (showTime)
               Padding(
-                padding: const EdgeInsetsDirectional.only(top: 5.0, start: 5.0),
+                padding: const EdgeInsetsDirectional.only(top: 2.0),
                 child: Text(
                   widget.chatMessage.createdAt.isBefore(
                           DateTime.now().subtract(const Duration(minutes: 3)))
@@ -257,7 +309,6 @@ class _FFChatMessageState extends State<FFChatMessage> {
                   ),
                 ),
               ),
-            const SizedBox(height: 2.0),
           ],
         ),
       );
