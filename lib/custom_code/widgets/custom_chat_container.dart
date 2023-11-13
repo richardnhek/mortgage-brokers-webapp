@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '../../components/empty_chat_widget_widget.dart';
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -155,9 +156,16 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
               ),
-              emptyChatWidget: Image.asset(
-                'assets/images/messagesEmpty@2x.png',
-                width: MediaQuery.sizeOf(context).width * 0.76,
+              emptyChatWidget: Center(
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      FlutterFlowTheme.of(context).primary,
+                    ),
+                  ),
+                ),
               ),
             )
           : Center(
