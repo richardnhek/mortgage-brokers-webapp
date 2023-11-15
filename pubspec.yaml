@@ -31,6 +31,7 @@ dependencies:
   cloud_firestore: 4.8.0
   cloud_firestore_platform_interface: 5.15.0
   cloud_firestore_web: 3.6.0
+  collection: 1.17.1
   dash_chat: 
     git:
       url: https://github.com/FlutterFlow/flutterflow_dash_chat.git
@@ -89,6 +90,7 @@ dependencies:
   sign_in_with_apple_web: 1.0.1
   sqflite: 2.2.6
   stream_transform: 2.1.0
+  textfield_tags: 2.0.2
   timeago: 3.2.2
   url_launcher: 6.1.10
   url_launcher_android: 6.0.27

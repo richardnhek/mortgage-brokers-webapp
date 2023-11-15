@@ -7,7 +7,6 @@ import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/random_data_util.dart' as random_data;
 import 'create_workspace_widget.dart' show CreateWorkspaceWidget;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,8 +38,6 @@ class CreateWorkspaceModel extends FlutterFlowModel<CreateWorkspaceWidget> {
   FocusNode? channelNameFocusNode;
   TextEditingController? channelNameController;
   String? Function(BuildContext, String?)? channelNameControllerValidator;
-  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
-  List<UsersRecord>? selectedMembers;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
   WorkspacesRecord? createdWorkspace;
 

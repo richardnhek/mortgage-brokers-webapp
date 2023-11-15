@@ -9,6 +9,10 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "workspace_ref",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "users",
           "arrayConfig": "CONTAINS"
         }
