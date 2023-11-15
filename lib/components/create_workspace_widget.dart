@@ -6,11 +6,11 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'create_workspace_model.dart';
 export 'create_workspace_model.dart';
 
@@ -58,40 +58,40 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
     return Container(
       width: double.infinity,
       constraints: BoxConstraints(
-        maxWidth: 590.0,
-        maxHeight: 1070.0,
+        maxWidth: 590,
+        maxHeight: 1070,
       ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
         boxShadow: [
           BoxShadow(
-            blurRadius: 40.0,
+            blurRadius: 40,
             color: Color(0x19000000),
-            offset: Offset(0.0, 12.0),
+            offset: Offset(0, 12),
           )
         ],
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: FlutterFlowTheme.of(context).alternate,
-          width: 1.0,
+          width: 1,
         ),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(20.0, 30.0, 20.0, 40.0),
+        padding: EdgeInsetsDirectional.fromSTEB(20, 30, 20, 40),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(8),
               child: Image.asset(
                 'assets/images/empty-widget-ui.webp',
-                width: 160.0,
+                width: 160,
                 fit: BoxFit.contain,
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 25.0, 10.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(10, 25, 10, 0),
               child: Form(
                 key: _model.formKey,
                 autovalidateMode: AutovalidateMode.always,
@@ -109,20 +109,19 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                               .headlineMedium
                               .override(
                                 fontFamily: 'Inter',
-                                fontSize: 20.0,
+                                fontSize: 20,
                                 fontWeight: FontWeight.w500,
                               ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 15.0, 0.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                           child: Text(
                             'Invite new members to the workspace',
                             style: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
                                   fontFamily: 'Inter',
-                                  fontSize: 15.0,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.normal,
                                 ),
                           ),
@@ -130,27 +129,26 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                       ],
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
-                            width: 160.0,
+                            width: 160,
                             decoration: BoxDecoration(
                               color: Colors.transparent,
                             ),
                             child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 25.0, 0.0),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 25, 0),
                               child: Text(
                                 'Workspace name',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
                                       fontFamily: 'Inter',
-                                      fontSize: 15.0,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.normal,
                                       lineHeight: 1.5,
                                     ),
@@ -159,22 +157,22 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                           ),
                           Expanded(
                             child: Container(
-                              height: 50.0,
+                              height: 50,
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
                                     .primaryBackground,
                                 boxShadow: [
                                   BoxShadow(
-                                    blurRadius: 4.0,
+                                    blurRadius: 4,
                                     color: Color(0x14000000),
-                                    offset: Offset(0.0, 2.0),
+                                    offset: Offset(0, 2),
                                   )
                                 ],
-                                borderRadius: BorderRadius.circular(5.0),
+                                borderRadius: BorderRadius.circular(5),
                                 border: Border.all(
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
-                                  width: 1.0,
+                                  width: 1,
                                 ),
                               ),
                               child: TextFormField(
@@ -190,7 +188,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                         fontFamily: 'Inter',
                                         color: FlutterFlowTheme.of(context)
                                             .darkGrey2,
-                                        fontSize: 15.0,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.normal,
                                       ),
                                   enabledBorder: InputBorder.none,
@@ -199,7 +197,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                   focusedErrorBorder: InputBorder.none,
                                   contentPadding:
                                       EdgeInsetsDirectional.fromSTEB(
-                                          10.0, 10.0, 10.0, 10.0),
+                                          10, 10, 10, 10),
                                 ),
                                 style: FlutterFlowTheme.of(context)
                                     .headlineMedium
@@ -207,7 +205,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                       fontFamily: 'Inter',
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
-                                      fontSize: 15.0,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.normal,
                                     ),
                                 validator: _model
@@ -220,8 +218,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -235,31 +232,31 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                     .bodyMedium
                                     .override(
                                       fontFamily: 'Inter',
-                                      fontSize: 17.0,
+                                      fontSize: 17,
                                     ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 30.0, 0.0, 0.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Container(
-                                      width: 160.0,
+                                      width: 160,
                                       decoration: BoxDecoration(
                                         color: Colors.transparent,
                                       ),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 25.0, 0.0),
+                                            0, 0, 25, 0),
                                         child: Text(
                                           'Channel name',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Inter',
-                                                fontSize: 15.0,
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.normal,
                                                 lineHeight: 1.5,
                                               ),
@@ -268,23 +265,23 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                     ),
                                     Expanded(
                                       child: Container(
-                                        height: 50.0,
+                                        height: 50,
                                         decoration: BoxDecoration(
                                           color: FlutterFlowTheme.of(context)
                                               .primaryBackground,
                                           boxShadow: [
                                             BoxShadow(
-                                              blurRadius: 4.0,
+                                              blurRadius: 4,
                                               color: Color(0x14000000),
-                                              offset: Offset(0.0, 2.0),
+                                              offset: Offset(0, 2),
                                             )
                                           ],
                                           borderRadius:
-                                              BorderRadius.circular(5.0),
+                                              BorderRadius.circular(5),
                                           border: Border.all(
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryBackground,
-                                            width: 1.0,
+                                            width: 1,
                                           ),
                                         ),
                                         child: TextFormField(
@@ -304,7 +301,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                                   color: FlutterFlowTheme.of(
                                                           context)
                                                       .darkGrey2,
-                                                  fontSize: 15.0,
+                                                  fontSize: 15,
                                                   fontWeight: FontWeight.normal,
                                                 ),
                                             enabledBorder: InputBorder.none,
@@ -314,7 +311,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                                 InputBorder.none,
                                             contentPadding:
                                                 EdgeInsetsDirectional.fromSTEB(
-                                                    10.0, 0.0, 10.0, 0.0),
+                                                    10, 0, 10, 0),
                                           ),
                                           style: FlutterFlowTheme.of(context)
                                               .headlineMedium
@@ -323,7 +320,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText,
-                                                fontSize: 15.0,
+                                                fontSize: 15,
                                                 fontWeight: FontWeight.normal,
                                               ),
                                           maxLines: null,
@@ -337,8 +334,8 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 15.0, 0.0, 0.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                                 child: FutureBuilder<List<UsersRecord>>(
                                   future: queryUsersRecordOnce(),
                                   builder: (context, snapshot) {
@@ -346,8 +343,8 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                     if (!snapshot.hasData) {
                                       return Center(
                                         child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
+                                          width: 50,
+                                          height: 50,
                                           child: CircularProgressIndicator(
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
@@ -376,14 +373,13 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                                 MainAxisAlignment.start,
                                             children: [
                                               Container(
-                                                width: 160.0,
+                                                width: 160,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
                                                 ),
                                                 child: Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          0.0, 0.0, 25.0, 0.0),
+                                                      .fromSTEB(0, 0, 25, 0),
                                                   child: Text(
                                                     'Channel members',
                                                     style: FlutterFlowTheme.of(
@@ -391,7 +387,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Inter',
-                                                          fontSize: 15.0,
+                                                          fontSize: 15,
                                                           fontWeight:
                                                               FontWeight.normal,
                                                           lineHeight: 1.5,
@@ -402,28 +398,27 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                               Expanded(
                                                 child: Container(
                                                   width: double.infinity,
-                                                  height: 50.0,
+                                                  height: 50,
                                                   decoration: BoxDecoration(
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .primaryBackground,
                                                     boxShadow: [
                                                       BoxShadow(
-                                                        blurRadius: 4.0,
+                                                        blurRadius: 4,
                                                         color:
                                                             Color(0x14000000),
-                                                        offset:
-                                                            Offset(0.0, 2.0),
+                                                        offset: Offset(0, 2),
                                                       )
                                                     ],
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            5.0),
+                                                            5),
                                                     border: Border.all(
                                                       color: FlutterFlowTheme
                                                               .of(context)
                                                           .secondaryBackground,
-                                                      width: 0.0,
+                                                      width: 0,
                                                     ),
                                                   ),
                                                 ),
@@ -436,19 +431,19 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Container(
-                                                width: 160.0,
+                                                width: 160,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
                                                 ),
                                               ),
                                               Expanded(
                                                 child: Container(
-                                                  width: double.infinity,
-                                                  height: 150.0,
+                                                  width: 325,
+                                                  height: 100,
                                                   child: custom_widgets
                                                       .CustomMemberSelectorV2(
-                                                    width: double.infinity,
-                                                    height: 150.0,
+                                                    width: 325,
+                                                    height: 100,
                                                     userDocsList:
                                                         containerUsersRecordList,
                                                   ),
@@ -469,11 +464,6 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                     ),
                     FFButtonWidget(
                       onPressed: () async {
-                        _model.selectedMembers = await queryUsersRecordOnce(
-                          queryBuilder: (usersRecord) => usersRecord.whereIn(
-                              'uid', _model.channelMemberUidList),
-                        );
-
                         var workspacesRecordReference =
                             WorkspacesRecord.collection.doc();
                         await workspacesRecordReference.set({
@@ -489,9 +479,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                           ),
                           ...mapToFirestore(
                             {
-                              'members': _model.selectedMembers
-                                  ?.map((e) => e.reference)
-                                  .toList(),
+                              'members': FFAppState().selectedMembers,
                             },
                           ),
                         });
@@ -509,9 +497,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                           ),
                           ...mapToFirestore(
                             {
-                              'members': _model.selectedMembers
-                                  ?.map((e) => e.reference)
-                                  .toList(),
+                              'members': FFAppState().selectedMembers,
                             },
                           ),
                         }, workspacesRecordReference);
@@ -527,31 +513,51 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                             },
                           ),
                         });
+                        setState(() {
+                          FFAppState()
+                              .addToSelectedMembers(currentUserReference!);
+                        });
+
+                        await ChatsRecord.collection.doc().set({
+                          ...createChatsRecordData(
+                            chatType: 'Channel',
+                            workspaceId: _model.createdWorkspace?.id,
+                            channelName: _model.channelNameController.text,
+                            workspaceRef: _model.createdWorkspace?.reference,
+                          ),
+                          ...mapToFirestore(
+                            {
+                              'users': FFAppState().selectedMembers,
+                            },
+                          ),
+                        });
+                        setState(() {
+                          FFAppState().selectedMembers = [];
+                        });
+                        Navigator.pop(context);
 
                         setState(() {});
                       },
                       text: 'Create Workplace',
                       options: FFButtonOptions(
                         width: double.infinity,
-                        height: 56.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        height: 56,
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                        iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                         color: FlutterFlowTheme.of(context).primary,
                         textStyle:
                             FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Inter',
                                   color: Colors.white,
-                                  fontSize: 16.0,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
-                        elevation: 0.0,
+                        elevation: 0,
                         borderSide: BorderSide(
                           color: Colors.transparent,
-                          width: 0.0,
+                          width: 0,
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ],
