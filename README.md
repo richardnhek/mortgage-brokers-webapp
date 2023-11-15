@@ -1,7 +1,11 @@
 # MortgageBrokerWebApp
 
-A new Flutter project.
+BuyerSide.ai
 
-## Getting Started
+# Relevant Info
 
-FlutterFlow projects are built to run on the Flutter _stable_ release.
+Build web app:
+`flutter build web`
+
+Run web app (debug mode, select Chrome as option):
+`flutter run`
