@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'channel_button_model.dart';
 export 'channel_button_model.dart';
 
@@ -49,39 +50,39 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
 
     return Container(
       width: double.infinity,
-      height: 40.0,
+      height: 40,
       decoration: BoxDecoration(
         color: Colors.transparent,
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+        padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              width: 30.0,
-              height: 30.0,
+              width: 30,
+              height: 30,
               decoration: BoxDecoration(
                 color: Colors.transparent,
               ),
               child: Stack(
                 children: [
                   Container(
-                    width: 25.0,
-                    height: 25.0,
+                    width: 25,
+                    height: 25,
                     decoration: BoxDecoration(
                       color: Color(0xFFFFB253),
-                      borderRadius: BorderRadius.circular(3.0),
+                      borderRadius: BorderRadius.circular(3),
                     ),
                   ),
                   Align(
                     alignment: AlignmentDirectional(0.80, 0.80),
                     child: Container(
-                      width: 15.0,
-                      height: 15.0,
+                      width: 15,
+                      height: 15,
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).primary,
-                        borderRadius: BorderRadius.circular(2.0),
+                        borderRadius: BorderRadius.circular(2),
                       ),
                       child: Align(
                         alignment: AlignmentDirectional(0.00, 0.00),
@@ -92,7 +93,7 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                                     fontFamily: 'Inter',
                                     color: FlutterFlowTheme.of(context)
                                         .primaryBackground,
-                                    fontSize: 8.0,
+                                    fontSize: 8,
                                     fontWeight: FontWeight.normal,
                                   ),
                         ),

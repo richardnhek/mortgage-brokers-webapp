@@ -1,3 +1,6 @@
+// CUSTOM_CODE_STARTED
+import 'dart:js_interop';
+
 import 'index.dart';
 
 import 'dart:async';
@@ -45,9 +48,13 @@ class _FFChatPageState extends State<FFChatPage> {
 
   DocumentReference get chatReference => widget.chatInfo.chatRecord.reference;
   ChatUser get currentUser => widget.chatInfo.currentUser.toChatUser(true);
+  ChatUser get otherUser => widget.chatInfo.otherUsersList[0].toChatUser(false);
   Map<String, ChatUser> get otherUsers => widget.chatInfo.otherUsers.map(
         (k, u) => MapEntry(k, u.toChatUser(false)),
       );
+  List<ChatUser> get otherUsersList => widget.chatInfo.otherUsersList
+      .map((element) => element.toChatUser(false))
+      .toList();
 
   Map<String, ChatMessagesRecord> allMessages = {};
   List<ChatMessagesRecord> messages = [];
@@ -69,8 +76,10 @@ class _FFChatPageState extends State<FFChatPage> {
       return;
     }
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      Future.delayed(Duration(milliseconds: 100))
-          .then((_) => scrollController.jumpTo(0));
+      await Future.delayed(Duration(milliseconds: 100));
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(0);
+      }
       updateSeenBy();
     });
   }
@@ -98,6 +107,7 @@ class _FFChatPageState extends State<FFChatPage> {
     super.initState();
     updateMessages(FFChatManager.instance.getLatestMessages(chatReference));
     messagesStream = getMessagesStream(chatReference);
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
       updateSeenBy();
       setState(() => _initialized = true);
@@ -141,23 +151,23 @@ class _FFChatPageState extends State<FFChatPage> {
         children: [
           FFChatWidget(
             currentUser: currentUser,
+            otherUser: otherUser,
+            otherUsers: otherUsersList,
             scrollController: scrollController,
             focusNode: focusNode,
             messages: messages
                 .map(
                   (message) => ChatMessage(
-                    id: message.reference.id,
-                    user: message.user?.id == currentUser.uid
+                    user: message.user?.id == currentUser.id
                         ? currentUser
                         : otherUsers[message.user?.id]!,
                     text: message.text,
-                    image: message.image,
-                    createdAt: message.timestamp,
+                    createdAt: message.timestamp!,
                   ),
                 )
                 .toList(),
-            onSend: (message) =>
-                sendMessage(text: message.text, imageUrl: message.image),
+            onSend: (message) => sendMessage(
+                text: message.text, imageUrl: message.medias?[0].url),
             uploadMediaAction: widget.allowImages
                 ? () async {
                     final selectedMedia =
@@ -197,10 +207,18 @@ class _FFChatPageState extends State<FFChatPage> {
 
 extension _ChatUserExtensions on UsersRecord {
   ChatUser toChatUser(bool currentUser) => currentUser
-      ? ChatUser(uid: reference.id)
+      ? ChatUser(
+          id: reference.id,
+          firstName: displayName.isNotEmpty ? displayName : 'Friend',
+          lastName: displayName.isNotEmpty ? displayName : 'Friend',
+          profileImage:
+              photoUrl.isNotEmpty || !photoUrl.isNull ? photoUrl : null,
+        )
       : ChatUser(
-          uid: reference.id,
-          name: displayName!.isNotEmpty ? displayName : 'Friend',
-          avatar: photoUrl,
+          id: reference.id,
+          firstName: displayName.isNotEmpty ? displayName : 'Friend',
+          lastName: displayName.isNotEmpty ? displayName : 'Friend',
+          profileImage: photoUrl,
         );
 }
+// CUSTOM_CODE_ENDED

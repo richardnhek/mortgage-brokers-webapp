@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'start_new_chat_model.dart';
 export 'start_new_chat_model.dart';
 
@@ -64,25 +65,25 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
     return Container(
       width: double.infinity,
       constraints: BoxConstraints(
-        maxWidth: 590.0,
+        maxWidth: 590,
       ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: FlutterFlowTheme.of(context).alternate,
-          width: 1.0,
+          width: 1,
         ),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+        padding: EdgeInsetsDirectional.fromSTEB(25, 25, 25, 25),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Align(
               alignment: AlignmentDirectional(-1.00, 0.00),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +103,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                 .headlineSmall
                                 .override(
                                   fontFamily: 'Inter',
-                                  fontSize: 20.0,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.w500,
                                 ),
                           ),
@@ -131,7 +132,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                       textAlign: TextAlign.start,
                       style: FlutterFlowTheme.of(context).labelMedium.override(
                             fontFamily: 'Inter',
-                            fontSize: 15.0,
+                            fontSize: 15,
                             fontWeight: FontWeight.w300,
                           ),
                     ),
@@ -140,7 +141,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -148,14 +149,13 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                   Align(
                     alignment: AlignmentDirectional(-1.00, 0.00),
                     child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 15.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
                       child: Text(
                         'Channel name',
                         textAlign: TextAlign.start,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Inter',
-                              fontSize: 15.0,
+                              fontSize: 15,
                               fontWeight: FontWeight.normal,
                               lineHeight: 1.5,
                             ),
@@ -409,31 +409,30 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                 text: 'Send Invite',
                 options: FFButtonOptions(
                   width: double.infinity,
-                  height: 56.0,
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                  iconPadding:
-                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  height: 56,
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                   color: FlutterFlowTheme.of(context).primary,
                   textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                         fontFamily: 'Inter',
-                        fontSize: 16.0,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         lineHeight: 1.2,
                       ),
-                  elevation: 3.0,
+                  elevation: 3,
                   borderSide: BorderSide(
                     color: Colors.transparent,
-                    width: 1.0,
+                    width: 1,
                   ),
                   borderRadius: BorderRadius.circular(10.0),
                   disabledColor: FlutterFlowTheme.of(context).secondaryText,
                   hoverColor: FlutterFlowTheme.of(context).accent1,
                   hoverBorderSide: BorderSide(
                     color: FlutterFlowTheme.of(context).primary,
-                    width: 1.0,
+                    width: 1,
                   ),
                   hoverTextColor: FlutterFlowTheme.of(context).primaryText,
-                  hoverElevation: 0.0,
+                  hoverElevation: 0,
                 ),
               ),
             ),

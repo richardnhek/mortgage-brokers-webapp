@@ -1,4 +1,9 @@
 // Automatic FlutterFlow imports
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:textfield_tags/textfield_tags.dart';
+
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -79,7 +84,13 @@ class _CustomMemberSelectorV2State extends State<CustomMemberSelectorV2> {
                       onTap: () {
                         onSelected(option);
                         setState(() {
-                          FFAppState().selectedMembers.add(option.reference);
+                          FFAppState().update(
+                            () {
+                              FFAppState()
+                                  .selectedMembers
+                                  .add(option.reference);
+                            },
+                          );
                         });
 
                         for (var member in FFAppState().selectedMembers) {
@@ -121,7 +132,13 @@ class _CustomMemberSelectorV2State extends State<CustomMemberSelectorV2> {
                 );
                 if (userToRemove != null) {
                   setState(() {
-                    FFAppState().selectedMembers.remove(userToRemove.reference);
+                    FFAppState().update(
+                      () {
+                        FFAppState()
+                            .selectedMembers
+                            .remove(userToRemove.reference);
+                      },
+                    );
                   });
                 }
                 return 'Member already selected';
@@ -206,10 +223,15 @@ class _CustomMemberSelectorV2State extends State<CustomMemberSelectorV2> {
                                           );
                                           if (userToRemove != null) {
                                             setState(() {
-                                              FFAppState()
-                                                  .selectedMembers
-                                                  .remove(
-                                                      userToRemove.reference);
+                                              FFAppState().update(
+                                                () {
+                                                  FFAppState()
+                                                      .selectedMembers
+                                                      .remove(userToRemove
+                                                          .reference);
+                                                },
+                                              );
+
                                               print(
                                                   "Deleted member: ${userToRemove.displayName}");
                                             });

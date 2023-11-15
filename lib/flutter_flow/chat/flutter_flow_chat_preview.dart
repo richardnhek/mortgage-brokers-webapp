@@ -1,3 +1,4 @@
+// CUSTOM_CODE_STARTED
 import 'index.dart';
 
 import 'package:flutter/material.dart';
@@ -62,14 +63,6 @@ class FFChatPreview extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: seen ? Colors.transparent : unreadColor,
                       ),
-                    ),
-                  ),
-                  AvatarContainer(
-                    user: ChatUser(avatar: userProfilePic),
-                    avatarMaxSize: 30.0,
-                    constraints: BoxConstraints(
-                      maxHeight: 420.0,
-                      maxWidth: 420.0,
                     ),
                   ),
                 ],
