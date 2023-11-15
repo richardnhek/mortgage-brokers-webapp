@@ -103,15 +103,21 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                  child: Text(
-                    containerUsersRecord!.displayName,
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Inter',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.normal,
-                        ),
+                Expanded(
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                    child: Text(
+                      containerUsersRecord!.displayName.maybeHandleOverflow(
+                        maxChars: 18,
+                        replacement: '…',
+                      ),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Inter',
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.normal,
+                          ),
+                    ),
                   ),
                 ),
               ],

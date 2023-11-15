@@ -8,8 +8,7 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'index.dart'; // Imports other custom widgets
-
+import '../../components/empty_chat_widget_widget.dart';
 import 'index.dart'; // Imports other custom widgets
 
 // Set your widget name, define your parameter, and then add the
@@ -23,11 +22,17 @@ import 'package:provider/provider.dart';
 
 class CustomChatContainer extends StatefulWidget {
   const CustomChatContainer(
-      {Key? key, this.chatUser, this.chatRef, this.width, this.height})
+      {Key? key,
+      this.chatUser,
+      this.chatRef,
+      this.channelName,
+      this.width,
+      this.height})
       : super(key: key);
 
   final UsersRecord? chatUser;
   final DocumentReference? chatRef;
+  final String? channelName;
   final double? width;
   final double? height;
 
@@ -70,7 +75,8 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
   void didUpdateWidget(CustomChatContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.chatUser != oldWidget.chatUser ||
-        widget.chatRef != oldWidget.chatRef) {
+        widget.chatRef != oldWidget.chatRef ||
+        widget.channelName != oldWidget.channelName) {
       // If the user or chat reference has changed, re-subscribe to the chat info
       _chatInfoSubscription?.cancel(); // Cancel the existing subscription
 
@@ -155,9 +161,16 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
                 fontWeight: FontWeight.normal,
                 fontSize: 14,
               ),
-              emptyChatWidget: Image.asset(
-                'assets/images/messagesEmpty@2x.png',
-                width: MediaQuery.sizeOf(context).width * 0.76,
+              emptyChatWidget: Center(
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      FlutterFlowTheme.of(context).primary,
+                    ),
+                  ),
+                ),
               ),
             )
           : Center(

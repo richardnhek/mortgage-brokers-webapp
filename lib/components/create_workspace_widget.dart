@@ -6,7 +6,6 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -82,13 +81,37 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Image.asset(
-                'assets/images/empty-widget-ui.webp',
-                width: 160.0,
-                fit: BoxFit.contain,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.asset(
+                    'assets/images/empty-widget-ui.webp',
+                    width: 160.0,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    _model.updatePage(() {
+                      FFAppState().selectedMembers = [];
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.clear_rounded,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 24.0,
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10.0, 25.0, 10.0, 0.0),
@@ -443,12 +466,12 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                               ),
                                               Expanded(
                                                 child: Container(
-                                                  width: double.infinity,
-                                                  height: 150.0,
+                                                  width: 325.0,
+                                                  height: 100.0,
                                                   child: custom_widgets
                                                       .CustomMemberSelectorV2(
-                                                    width: double.infinity,
-                                                    height: 150.0,
+                                                    width: 325.0,
+                                                    height: 100.0,
                                                     userDocsList:
                                                         containerUsersRecordList,
                                                   ),
@@ -469,11 +492,6 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                     ),
                     FFButtonWidget(
                       onPressed: () async {
-                        _model.selectedMembers = await queryUsersRecordOnce(
-                          queryBuilder: (usersRecord) => usersRecord.whereIn(
-                              'uid', _model.channelMemberUidList),
-                        );
-
                         var workspacesRecordReference =
                             WorkspacesRecord.collection.doc();
                         await workspacesRecordReference.set({
@@ -489,9 +507,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                           ),
                           ...mapToFirestore(
                             {
-                              'members': _model.selectedMembers
-                                  ?.map((e) => e.reference)
-                                  .toList(),
+                              'members': FFAppState().selectedMembers,
                             },
                           ),
                         });
@@ -509,9 +525,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                           ),
                           ...mapToFirestore(
                             {
-                              'members': _model.selectedMembers
-                                  ?.map((e) => e.reference)
-                                  .toList(),
+                              'members': FFAppState().selectedMembers,
                             },
                           ),
                         }, workspacesRecordReference);
@@ -527,6 +541,28 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                             },
                           ),
                         });
+                        setState(() {
+                          FFAppState()
+                              .addToSelectedMembers(currentUserReference!);
+                        });
+
+                        await ChatsRecord.collection.doc().set({
+                          ...createChatsRecordData(
+                            chatType: 'Channel',
+                            workspaceId: _model.createdWorkspace?.id,
+                            channelName: _model.channelNameController.text,
+                            workspaceRef: _model.createdWorkspace?.reference,
+                          ),
+                          ...mapToFirestore(
+                            {
+                              'users': FFAppState().selectedMembers,
+                            },
+                          ),
+                        });
+                        _model.updatePage(() {
+                          FFAppState().selectedMembers = [];
+                        });
+                        Navigator.pop(context);
 
                         setState(() {});
                       },

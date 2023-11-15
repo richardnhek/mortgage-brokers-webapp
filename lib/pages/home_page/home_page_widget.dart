@@ -7,6 +7,7 @@ import '/components/direct_message_button_widget.dart';
 import '/components/empty_chat_widget_widget.dart';
 import '/components/main_web_nav_widget.dart';
 import '/components/overview_widget.dart';
+import '/components/start_new_chat_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -16,6 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +40,13 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HomePageModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        FFAppState().selectedMembers = [];
+      });
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -460,6 +469,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                             'users',
                                                                             arrayContains:
                                                                                 currentUserReference,
+                                                                          )
+                                                                          .where(
+                                                                            'workspace_ref',
+                                                                            isEqualTo:
+                                                                                columnWorkspacesRecord.workspaceRef,
                                                                           ),
                                                                     ),
                                                                     builder:
@@ -513,6 +527,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                               });
                                                                               setState(() {
                                                                                 _model.chatUser = null;
+                                                                                _model.selectedChannel = columnChatsRecord.channelName;
                                                                               });
                                                                               setState(() {
                                                                                 FFAppState().currentMainView = 'Chat';
@@ -638,6 +653,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                             'users',
                                                                             arrayContains:
                                                                                 currentUserReference,
+                                                                          )
+                                                                          .where(
+                                                                            'workspace_ref',
+                                                                            isEqualTo:
+                                                                                columnWorkspacesRecord.workspaceRef,
                                                                           ),
                                                                     ),
                                                                     builder:
@@ -750,6 +770,131 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                           ),
                                                         ),
                                                       ),
+                                                      Builder(
+                                                        builder: (context) =>
+                                                            Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      25.0,
+                                                                      25.0,
+                                                                      25.0,
+                                                                      0.0),
+                                                          child: InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              await showAlignedDialog(
+                                                                barrierColor: Color(
+                                                                    0x25000000),
+                                                                barrierDismissible:
+                                                                    false,
+                                                                context:
+                                                                    context,
+                                                                isGlobal: true,
+                                                                avoidOverflow:
+                                                                    false,
+                                                                targetAnchor:
+                                                                    AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0)
+                                                                        .resolve(
+                                                                            Directionality.of(context)),
+                                                                followerAnchor:
+                                                                    AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0)
+                                                                        .resolve(
+                                                                            Directionality.of(context)),
+                                                                builder:
+                                                                    (dialogContext) {
+                                                                  return Material(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap: () => _model
+                                                                              .unfocusNode
+                                                                              .canRequestFocus
+                                                                          ? FocusScope.of(context).requestFocus(_model
+                                                                              .unfocusNode)
+                                                                          : FocusScope.of(context)
+                                                                              .unfocus(),
+                                                                      child:
+                                                                          StartNewChatWidget(
+                                                                        workspaceRef:
+                                                                            columnWorkspacesRecord.reference,
+                                                                        workspaceId:
+                                                                            columnWorkspacesRecord.id,
+                                                                        memberList:
+                                                                            columnWorkspacesRecord.members,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ).then((value) =>
+                                                                  setState(
+                                                                      () {}));
+                                                            },
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              children: [
+                                                                Container(
+                                                                  width: 20.0,
+                                                                  height: 20.0,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Color(
+                                                                        0xFF32176D),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            2.0),
+                                                                  ),
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .add_rounded,
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primaryBackground,
+                                                                    size: 12.0,
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          10.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Text(
+                                                                    'New chat',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Inter',
+                                                                          fontSize:
+                                                                              16.0,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ].addToEnd(
                                                         SizedBox(height: 25.0)),
                                                   ),
@@ -776,7 +921,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                 ),
                                               ),
                                             );
-                                          }),
+                                          }).divide(SizedBox(height: 10.0)),
                                         );
                                       },
                                     ),
@@ -792,6 +937,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           onTap: () async {
                                             await showAlignedDialog(
                                               barrierColor: Color(0x25000000),
+                                              barrierDismissible: false,
                                               context: context,
                                               isGlobal: true,
                                               avoidOverflow: false,
@@ -895,10 +1041,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 height: double.infinity,
                                 chatUser: _model.chatUser,
                                 chatRef: FFAppState().currentChatRef,
-                                // CUSTOM_CODE_STARTED
-                                key: ValueKey(
-                                    '${_model.chatUser ?? 'null'}-${_model.chatRef?.id}'),
-                                // CUSTOM_CODE_ENDED
+                                channelName: _model.selectedChannel,
                               ),
                             );
                           } else {
