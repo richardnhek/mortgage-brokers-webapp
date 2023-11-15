@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'direct_message_button_model.dart';
 export 'direct_message_button_model.dart';
 
@@ -64,8 +65,8 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
         if (!snapshot.hasData) {
           return Center(
             child: SizedBox(
-              width: 50.0,
-              height: 50.0,
+              width: 50,
+              height: 50,
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
                   FlutterFlowTheme.of(context).primary,
@@ -85,33 +86,38 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
             : null;
         return Container(
           width: double.infinity,
-          height: 40.0,
+          height: 40,
           decoration: BoxDecoration(
             color: Colors.transparent,
           ),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+            padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(3.0),
+                  borderRadius: BorderRadius.circular(3),
                   child: Image.network(
                     containerUsersRecord!.photoUrl,
-                    width: 25.0,
-                    height: 25.0,
+                    width: 25,
+                    height: 25,
                     fit: BoxFit.cover,
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
-                  child: Text(
-                    containerUsersRecord!.displayName,
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Inter',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.normal,
-                        ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                    child: Text(
+                      containerUsersRecord!.displayName.maybeHandleOverflow(
+                        maxChars: 18,
+                        replacement: '…',
+                      ),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Inter',
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                    ),
                   ),
                 ),
               ],

@@ -510,6 +510,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                               });
                                                                               setState(() {
                                                                                 _model.chatUser = null;
+                                                                                _model.selectedChannel = columnChatsRecord.channelName;
                                                                               });
                                                                               setState(() {
                                                                                 FFAppState().currentMainView = 'Chat';
@@ -814,6 +815,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                             columnWorkspacesRecord.reference,
                                                                         workspaceId:
                                                                             columnWorkspacesRecord.id,
+                                                                        memberList:
+                                                                            columnWorkspacesRecord.members,
                                                                       ),
                                                                     ),
                                                                   );
@@ -1018,6 +1021,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 height: double.infinity,
                                 chatUser: _model.chatUser,
                                 chatRef: FFAppState().currentChatRef,
+                                channelName: _model.selectedChannel,
+                                // CUSTOM_CODE_STARTED
+                                key: ValueKey(
+                                    '${_model.chatUser ?? 'null'}-${_model.chatRef?.id}-${_model.selectedChannel}'),
+                                // CUSTOM_CODE_ENDED
                               ),
                             );
                           } else {

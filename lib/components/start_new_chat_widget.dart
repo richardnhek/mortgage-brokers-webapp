@@ -5,6 +5,8 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,10 +20,12 @@ class StartNewChatWidget extends StatefulWidget {
     Key? key,
     required this.workspaceRef,
     required this.workspaceId,
+    required this.memberList,
   }) : super(key: key);
 
   final DocumentReference? workspaceRef;
   final String? workspaceId;
+  final List<DocumentReference>? memberList;
 
   @override
   _StartNewChatWidgetState createState() => _StartNewChatWidgetState();
@@ -135,86 +139,88 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                 ),
               ),
             ),
-            if (FFAppState().selectedMembers.length >= 2)
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: AlignmentDirectional(-1.00, 0.00),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                        child: Text(
-                          'Channel name',
-                          textAlign: TextAlign.start,
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Inter',
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal,
-                                    lineHeight: 1.5,
-                                  ),
-                        ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(-1.00, 0.00),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
+                      child: Text(
+                        'Channel name',
+                        textAlign: TextAlign.start,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Inter',
+                              fontSize: 15,
+                              fontWeight: FontWeight.normal,
+                              lineHeight: 1.5,
+                            ),
                       ),
                     ),
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).primaryBackground,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 4,
-                            color: Color(0x14000000),
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          width: 1,
-                        ),
+                  ),
+                  Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).primaryBackground,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4,
+                          color: Color(0x14000000),
+                          offset: Offset(0, 2),
+                        )
+                      ],
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        width: 1,
                       ),
-                      child: TextFormField(
-                        controller: _model.channelNameController,
-                        focusNode: _model.channelNameFocusNode,
-                        autofocus: true,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          hintText: 'Whole team',
-                          hintStyle: FlutterFlowTheme.of(context)
-                              .headlineMedium
-                              .override(
-                                fontFamily: 'Inter',
-                                color: FlutterFlowTheme.of(context).darkGrey2,
-                                fontSize: 15,
-                                fontWeight: FontWeight.normal,
-                              ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          focusedErrorBorder: InputBorder.none,
-                          contentPadding:
-                              EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
-                        ),
-                        style: FlutterFlowTheme.of(context)
+                    ),
+                    child: TextFormField(
+                      controller: _model.channelNameController,
+                      focusNode: _model.channelNameFocusNode,
+                      onChanged: (_) => EasyDebounce.debounce(
+                        '_model.channelNameController',
+                        Duration(milliseconds: 100),
+                        () => setState(() {}),
+                      ),
+                      autofocus: true,
+                      readOnly: FFAppState().selectedMembers.length < 2,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Whole team',
+                        hintStyle: FlutterFlowTheme.of(context)
                             .headlineMedium
                             .override(
                               fontFamily: 'Inter',
-                              color: FlutterFlowTheme.of(context).primaryText,
+                              color: FlutterFlowTheme.of(context).darkGrey2,
                               fontSize: 15,
                               fontWeight: FontWeight.normal,
                             ),
-                        maxLines: null,
-                        validator: _model.channelNameControllerValidator
-                            .asValidator(context),
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        focusedErrorBorder: InputBorder.none,
+                        contentPadding:
+                            EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
                       ),
+                      style:
+                          FlutterFlowTheme.of(context).headlineMedium.override(
+                                fontFamily: 'Inter',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontSize: 15,
+                                fontWeight: FontWeight.normal,
+                              ),
+                      maxLines: null,
+                      validator: _model.channelNameControllerValidator
+                          .asValidator(context),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
               child: Column(
@@ -238,7 +244,10 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                     ),
                   ),
                   StreamBuilder<List<UsersRecord>>(
-                    stream: queryUsersRecord(),
+                    stream: queryUsersRecord(
+                      queryBuilder: (usersRecord) =>
+                          usersRecord.whereIn('user_ref', widget.memberList),
+                    ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
                       if (!snapshot.hasData) {
@@ -304,6 +313,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                 _model.channelNameController.text == ''))
                     ? null
                     : () async {
+                        var _shouldSetState = false;
                         if (FFAppState().selectedMembers.length > 1) {
                           _model.updatePage(() {
                             FFAppState()
@@ -328,28 +338,71 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                             FFAppState()
                                 .addToSelectedMembers(currentUserReference!);
                           });
-
-                          await ChatsRecord.collection.doc().set({
-                            ...createChatsRecordData(
-                              chatType: 'DM',
-                              workspaceId: '',
-                              channelName: _model.channelNameController.text,
-                              workspaceRef: widget.workspaceRef,
-                              userA: currentUserReference,
-                              userB: FFAppState().selectedMembers.first,
-                            ),
-                            ...mapToFirestore(
-                              {
-                                'users': FFAppState().selectedMembers,
-                              },
-                            ),
-                          });
+                          _model.chatsInWorkspace = await queryChatsRecordOnce(
+                            queryBuilder: (chatsRecord) => chatsRecord
+                                .where(
+                                  'workspace_ref',
+                                  isEqualTo: widget.workspaceRef,
+                                )
+                                .where(
+                                  'users',
+                                  arrayContains:
+                                      FFAppState().selectedMembers.first,
+                                )
+                                .where(
+                                  'chat_type',
+                                  isEqualTo: 'DM',
+                                ),
+                          );
+                          _shouldSetState = true;
+                          if (_model.chatsInWorkspace!.length >= 1) {
+                            Navigator.pop(context);
+                            _model.updatePage(() {
+                              FFAppState().selectedMembers = [];
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Chat already exists',
+                                  style: GoogleFonts.getFont(
+                                    'Inter',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                duration: Duration(milliseconds: 4000),
+                                backgroundColor:
+                                    FlutterFlowTheme.of(context).primary,
+                              ),
+                            );
+                            if (_shouldSetState) setState(() {});
+                            return;
+                          } else {
+                            await ChatsRecord.collection.doc().set({
+                              ...createChatsRecordData(
+                                chatType: 'DM',
+                                workspaceId: '',
+                                channelName: _model.channelNameController.text,
+                                workspaceRef: widget.workspaceRef,
+                                userA: currentUserReference,
+                                userB: FFAppState().selectedMembers.first,
+                              ),
+                              ...mapToFirestore(
+                                {
+                                  'users': FFAppState().selectedMembers,
+                                },
+                              ),
+                            });
+                          }
                         }
 
                         _model.updatePage(() {
                           FFAppState().selectedMembers = [];
                         });
                         Navigator.pop(context);
+                        if (_shouldSetState) setState(() {});
                       },
                 text: 'Send Invite',
                 options: FFButtonOptions(

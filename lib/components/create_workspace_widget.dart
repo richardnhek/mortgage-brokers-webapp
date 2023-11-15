@@ -82,13 +82,37 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                'assets/images/empty-widget-ui.webp',
-                width: 160,
-                fit: BoxFit.contain,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    'assets/images/empty-widget-ui.webp',
+                    width: 160,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    _model.updatePage(() {
+                      FFAppState().selectedMembers = [];
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.clear_rounded,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 24,
+                  ),
+                ),
+              ],
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10, 25, 10, 0),
@@ -531,7 +555,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                             },
                           ),
                         });
-                        setState(() {
+                        _model.updatePage(() {
                           FFAppState().selectedMembers = [];
                         });
                         Navigator.pop(context);

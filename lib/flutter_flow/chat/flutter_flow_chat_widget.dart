@@ -128,6 +128,13 @@ class _FFChatWidgetState extends State<FFChatWidget> {
   TextEditingController textEditingController = TextEditingController();
   Map<String, bool> messageHoverStates = {};
 
+  @override
+  void dispose() {
+    textEditingController.dispose();
+
+    super.dispose();
+  }
+
   bool onMessageHover = false;
   @override
   Widget build(BuildContext context) {

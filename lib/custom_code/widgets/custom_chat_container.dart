@@ -9,10 +9,6 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'index.dart'; // Imports other custom widgets
-
-import 'index.dart'; // Imports other custom widgets
-
 // Set your widget name, define your parameter, and then add the
 // boilerplate code using the green button on the right!
 import '/flutter_flow/chat/index.dart';
@@ -24,11 +20,17 @@ import 'package:provider/provider.dart';
 
 class CustomChatContainer extends StatefulWidget {
   const CustomChatContainer(
-      {Key? key, this.chatUser, this.chatRef, this.width, this.height})
+      {Key? key,
+      this.chatUser,
+      this.chatRef,
+      this.channelName,
+      this.width,
+      this.height})
       : super(key: key);
 
   final UsersRecord? chatUser;
   final DocumentReference? chatRef;
+  final String? channelName;
   final double? width;
   final double? height;
 
@@ -71,7 +73,8 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
   void didUpdateWidget(CustomChatContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.chatUser != oldWidget.chatUser ||
-        widget.chatRef != oldWidget.chatRef) {
+        widget.chatRef != oldWidget.chatRef ||
+        widget.channelName != oldWidget.channelName) {
       // If the user or chat reference has changed, re-subscribe to the chat info
       _chatInfoSubscription?.cancel(); // Cancel the existing subscription
 
