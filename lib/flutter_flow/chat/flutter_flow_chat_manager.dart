@@ -1,3 +1,4 @@
+// CUSTOM_CODE_STARTED
 import 'package:stream_transform/stream_transform.dart';
 
 import 'index.dart';
@@ -245,3 +246,4 @@ class FFChatManager {
     return chat;
   }
 }
+// CUSTOM_CODE_ENDED

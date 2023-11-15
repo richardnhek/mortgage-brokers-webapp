@@ -1,4 +1,9 @@
 // Automatic FlutterFlow imports
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:textfield_tags/textfield_tags.dart';
+
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -7,6 +12,13 @@ import 'index.dart'; // Imports other custom widgets
 import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
+
+import 'package:collection/collection.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:textfield_tags/textfield_tags.dart';
+
+import 'index.dart'; // Imports other custom widgets
 
 class CustomMemberSelectorV2 extends StatefulWidget {
   const CustomMemberSelectorV2({
@@ -25,118 +37,226 @@ class CustomMemberSelectorV2 extends StatefulWidget {
 }
 
 class _CustomMemberSelectorV2State extends State<CustomMemberSelectorV2> {
-  final TextEditingController _controller = TextEditingController();
-  List<UsersRecord> _selectedUsers = [];
-  late FocusNode _focusNode;
-  String _filter = '';
+  late double _distanceToField;
+  late TextfieldTagsController _controller;
 
   @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _distanceToField = MediaQuery.of(context).size.width;
   }
 
   @override
   void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
     super.dispose();
+    _controller.dispose();
   }
 
-  void _addUserChip(UsersRecord user) {
-    if (!_selectedUsers
-        .any((selectedUser) => selectedUser.userRef == user.userRef)) {
-      setState(() {
-        _selectedUsers.add(user);
-        _controller.clear();
-        _filter = '';
-        FFAppState().selectedMembers.add(user.reference);
-      });
-    }
-  }
-
-  void _removeUserChip(UsersRecord user) {
-    setState(() {
-      _selectedUsers.remove(user);
-      FFAppState().selectedMembers.remove(user.reference);
-    });
-  }
-
-  Widget _buildChips() {
-    List<Widget> chips = _selectedUsers.map((user) {
-      return InputChip(
-        label: Text(user.displayName),
-        onDeleted: () => _removeUserChip(user),
-      );
-    }).toList();
-
-    return Wrap(
-      spacing: 8.0,
-      runSpacing: 4.0,
-      children: chips,
-    );
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextfieldTagsController();
   }
 
   @override
   Widget build(BuildContext context) {
-    // List<UsersRecord> filteredList = widget.userDocsList.where((user) {
-    //   return user.displayName.toLowerCase().contains(_filter.toLowerCase());
-    // }).toList();
-    List<UsersRecord> filteredList = widget.userDocsList.where((user) {
-      return user.displayName.toLowerCase().contains(_filter.toLowerCase()) &&
-          !_selectedUsers
-              .any((selectedUser) => selectedUser.userRef == user.userRef);
-    }).toList();
+    final List<UsersRecord> _pickUser = widget.userDocsList;
+    return SizedBox(
+      width: widget.width ?? 340,
+      child: Autocomplete<UsersRecord>(
+        optionsViewBuilder: (context, onSelected, options) {
+          return Align(
+            alignment: const Alignment(-1, -1.07),
+            child: Material(
+              child: Container(
+                width: widget.width ?? 340,
+                margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: options.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final UsersRecord option = options.elementAt(index);
+                    return ListTile(
+                      tileColor: Colors.white,
+                      title: Text(option.displayName),
+                      subtitle: Text(option
+                          .email), // Assuming 'email' is a field in UsersRecord
+                      onTap: () {
+                        onSelected(option);
+                        setState(() {
+                          FFAppState().update(
+                            () {
+                              FFAppState()
+                                  .selectedMembers
+                                  .add(option.reference);
+                            },
+                          );
+                        });
 
-    return Column(
-      children: [
-        GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(_focusNode);
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 8.0),
-            constraints: BoxConstraints(minHeight: 50),
-            decoration: BoxDecoration(),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _buildChips(),
-                TextField(
-                  controller: _controller,
-                  focusNode: _focusNode,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    hintText: 'Enter member name',
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      _filter = value;
-                    });
+                        for (var member in FFAppState().selectedMembers) {
+                          print(
+                              "Added members: ${member.id}"); // Replace 'email' with the property you want to print
+                        }
+                      },
+                    );
                   },
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: filteredList.length,
-            itemBuilder: (context, index) {
-              var user = filteredList[index];
-              return ListTile(
-                title: Text(user.displayName),
-                onTap: () {
-                  _addUserChip(user);
-                  FocusScope.of(context).requestFocus(_focusNode);
-                },
-              );
+          );
+        },
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text == '') {
+            return const Iterable<UsersRecord>.empty();
+          }
+          return _pickUser.where((UsersRecord option) {
+            return option.displayName
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          });
+        },
+        onSelected: (UsersRecord selectedTag) {
+          _controller.addTag = selectedTag.email;
+        },
+        fieldViewBuilder: (context, ttec, tfn, onFieldSubmitted) {
+          return TextFieldTags(
+            textEditingController: ttec,
+            focusNode: tfn,
+            textfieldTagsController: _controller,
+            textSeparators: const [' ', ','],
+            letterCase: LetterCase.normal,
+            validator: (String tag) {
+              if (_controller.getTags!.contains(tag)) {
+                final userToRemove = widget.userDocsList.firstWhereOrNull(
+                  (user) => user.email == tag,
+                );
+                if (userToRemove != null) {
+                  setState(() {
+                    FFAppState().update(
+                      () {
+                        FFAppState()
+                            .selectedMembers
+                            .remove(userToRemove.reference);
+                      },
+                    );
+                  });
+                }
+                return 'Member already selected';
+              }
+              return null;
             },
-          ),
-        ),
-      ],
+            inputfieldBuilder:
+                (context, tec, fn, error, onChanged, onSubmitted) {
+              return ((context, sc, tags, onTagDelete) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: TextField(
+                    controller: tec,
+                    focusNode: fn,
+                    decoration: InputDecoration(
+                      enabledBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      hintText: _controller.hasTags ? '' : "Select member...",
+                      hintStyle: GoogleFonts.inter(
+                          color: FlutterFlowTheme.of(context).darkGrey2,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.normal),
+                      errorText: error,
+                      prefixIconConstraints:
+                          BoxConstraints(maxWidth: _distanceToField * 0.2),
+                      prefixIcon: tags.isNotEmpty
+                          ? SingleChildScrollView(
+                              controller: sc,
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  children: tags.map((String tag) {
+                                return Container(
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(5.0),
+                                      ),
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        width: 1.0,
+                                      ),
+                                      color: Color(0x2651A781)),
+                                  margin: const EdgeInsets.only(right: 10.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        tag,
+                                        style: GoogleFonts.inter(
+                                            color: Colors.black,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      InkWell(
+                                        child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          decoration: const BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(4.0),
+                                              ),
+                                              color: Color(0xFF51A781)),
+                                          child: const Center(
+                                            child: Icon(
+                                              CupertinoIcons.clear,
+                                              size: 12,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          final userToRemove = widget
+                                              .userDocsList
+                                              .firstWhereOrNull(
+                                            (user) => user.email == tag,
+                                          );
+                                          if (userToRemove != null) {
+                                            setState(() {
+                                              FFAppState().update(
+                                                () {
+                                                  FFAppState()
+                                                      .selectedMembers
+                                                      .remove(userToRemove
+                                                          .reference);
+                                                },
+                                              );
+
+                                              print(
+                                                  "Deleted member: ${userToRemove.displayName}");
+                                            });
+                                          }
+                                          onTagDelete(tag);
+                                          print(
+                                              "Remaining members: ${FFAppState().selectedMembers}");
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }).toList()),
+                            )
+                          : null,
+                    ),
+                    onChanged: onChanged,
+                    onSubmitted: onSubmitted,
+                  ),
+                );
+              });
+            },
+          );
+        },
+      ),
     );
   }
 }

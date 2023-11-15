@@ -96,10 +96,20 @@ class _MyAppState extends State<MyApp> {
       supportedLocales: const [Locale('en', '')],
       theme: ThemeData(
         brightness: Brightness.light,
+        // CUSTOM_CODE_STARTED
+        canvasColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        dividerColor: Colors.transparent,
+        // CUSTOM_CODE_ENDED
         scrollbarTheme: ScrollbarThemeData(),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        // CUSTOM_CODE_STARTED
+        canvasColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        dividerColor: Colors.transparent,
+        // CUSTOM_CODE_ENDED
         scrollbarTheme: ScrollbarThemeData(),
       ),
       themeMode: _themeMode,

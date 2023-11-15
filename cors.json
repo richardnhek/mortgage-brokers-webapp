@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://testing-mortgage-2023.firebaseapp.com", "https://testing-mortgage-2023.web.app"],
+      "method": ["GET"],
+      "maxAgeSeconds": 3600
+    }
+]
+  
