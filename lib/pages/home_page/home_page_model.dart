@@ -75,27 +75,23 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
   UsersRecord? selectedUser;
   // Model for EmptyChatWidget component.
-  late EmptyChatWidgetModel emptyChatWidgetModel1;
+  late EmptyChatWidgetModel emptyChatWidgetModel;
   // Model for Overview component.
   late OverviewModel overviewModel;
-  // Model for EmptyChatWidget component.
-  late EmptyChatWidgetModel emptyChatWidgetModel2;
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
     mainWebNavModel = createModel(context, () => MainWebNavModel());
-    emptyChatWidgetModel1 = createModel(context, () => EmptyChatWidgetModel());
+    emptyChatWidgetModel = createModel(context, () => EmptyChatWidgetModel());
     overviewModel = createModel(context, () => OverviewModel());
-    emptyChatWidgetModel2 = createModel(context, () => EmptyChatWidgetModel());
   }
 
   void dispose() {
     unfocusNode.dispose();
     mainWebNavModel.dispose();
-    emptyChatWidgetModel1.dispose();
+    emptyChatWidgetModel.dispose();
     overviewModel.dispose();
-    emptyChatWidgetModel2.dispose();
   }
 
   /// Action blocks are added here.

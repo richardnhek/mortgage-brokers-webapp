@@ -44,7 +44,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      setState(() {
+      FFAppState().update(() {
         FFAppState().selectedMembers = [];
       });
     });
@@ -272,6 +272,25 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                           highlightColor: Colors
                                                               .transparent,
                                                           onTap: () async {
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState()
+                                                                  .currentMainView = '';
+                                                            });
+                                                            setState(() {
+                                                              _model.selectedOverview =
+                                                                  null;
+                                                              _model.workspaceMembers =
+                                                                  [];
+                                                              _model.workspaceFiles =
+                                                                  [];
+                                                              _model.workspaceRef =
+                                                                  null;
+                                                            });
+                                                            await Future.delayed(
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        500));
                                                             setState(() {
                                                               _model.selectedOverview =
                                                                   columnWorkspacesRecord
@@ -292,7 +311,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                   columnWorkspacesRecord
                                                                       .reference;
                                                             });
-                                                            setState(() {
+                                                            FFAppState()
+                                                                .update(() {
                                                               FFAppState()
                                                                       .currentMainView =
                                                                   'Overview';
@@ -1022,15 +1042,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 chatUser: _model.chatUser,
                                 chatRef: FFAppState().currentChatRef,
                                 channelName: _model.selectedChannel,
-                                // CUSTOM_CODE_STARTED
-                                key: ValueKey(
-                                    '${_model.chatUser ?? 'null'}-${_model.chatRef?.id}-${_model.selectedChannel}'),
-                                // CUSTOM_CODE_ENDED
                               ),
                             );
                           } else {
                             return wrapWithModel(
-                              model: _model.emptyChatWidgetModel1,
+                              model: _model.emptyChatWidgetModel,
                               updateCallback: () => setState(() {}),
                               child: EmptyChatWidgetWidget(),
                             );
@@ -1038,21 +1054,68 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         },
                       );
                     } else if (FFAppState().currentMainView == 'Overview') {
-                      return wrapWithModel(
-                        model: _model.overviewModel,
-                        updateCallback: () => setState(() {}),
-                        child: OverviewWidget(
-                          selectedWorkspaceOverview: _model.selectedOverview!,
-                          workspaceMembers: _model.workspaceMembers,
-                          workspaceFiles: _model.workspaceFiles,
-                          workspaceRef: _model.workspaceRef!,
+                      return StreamBuilder<List<WorkspacesRecord>>(
+                        stream: queryWorkspacesRecord(
+                          queryBuilder: (workspacesRecord) =>
+                              workspacesRecord.where(
+                            'workspace_ref',
+                            isEqualTo: _model.workspaceRef,
+                          ),
+                          singleRecord: true,
                         ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    FlutterFlowTheme.of(context).primary,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          List<WorkspacesRecord> overviewWorkspacesRecordList =
+                              snapshot.data!;
+                          // Return an empty Container when the item does not exist.
+                          if (snapshot.data!.isEmpty) {
+                            return Container();
+                          }
+                          final overviewWorkspacesRecord =
+                              overviewWorkspacesRecordList.isNotEmpty
+                                  ? overviewWorkspacesRecordList.first
+                                  : null;
+                          return wrapWithModel(
+                            model: _model.overviewModel,
+                            updateCallback: () => setState(() {}),
+                            child: OverviewWidget(
+                              selectedWorkspaceOverview:
+                                  overviewWorkspacesRecord!.overview,
+                              workspaceMembers:
+                                  overviewWorkspacesRecord!.members,
+                              workspaceFiles: overviewWorkspacesRecord!.files,
+                              workspaceRef: overviewWorkspacesRecord!.reference,
+                              workspaceName: overviewWorkspacesRecord!.name,
+                            ),
+                          );
+                        },
                       );
                     } else {
-                      return wrapWithModel(
-                        model: _model.emptyChatWidgetModel2,
-                        updateCallback: () => setState(() {}),
-                        child: EmptyChatWidgetWidget(),
+                      return Align(
+                        alignment: AlignmentDirectional(0.00, 0.00),
+                        child: Container(
+                          width: 100,
+                          height: 100,
+                          child: custom_widgets.FFlowSpinner(
+                            width: 50,
+                            height: 50,
+                            backgroundColor: Colors.transparent,
+                            spinnerColor: FlutterFlowTheme.of(context).primary,
+                          ),
+                        ),
                       );
                     }
                   },

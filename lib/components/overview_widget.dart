@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -22,12 +23,14 @@ class OverviewWidget extends StatefulWidget {
     required this.workspaceMembers,
     required this.workspaceFiles,
     required this.workspaceRef,
+    required this.workspaceName,
   }) : super(key: key);
 
   final WorkspaceOverviewStruct? selectedWorkspaceOverview;
   final List<DocumentReference>? workspaceMembers;
   final List<WorkspaceFileStruct>? workspaceFiles;
   final DocumentReference? workspaceRef;
+  final String? workspaceName;
 
   @override
   _OverviewWidgetState createState() => _OverviewWidgetState();
@@ -46,6 +49,30 @@ class _OverviewWidgetState extends State<OverviewWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OverviewModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        _model.communicationNotesController?.text =
+            widget.selectedWorkspaceOverview!.communicationNotes;
+      });
+      setState(() {
+        _model.loanAmountController?.text = formatNumber(
+          widget.selectedWorkspaceOverview!.loanAmount,
+          formatType: FormatType.custom,
+          currency: '\$',
+          format: '0.00',
+          locale: 'en_US',
+        );
+      });
+      setState(() {
+        _model.currentStatusController?.text =
+            widget.selectedWorkspaceOverview!.currentStatus;
+      });
+      setState(() {
+        _model.isChanged = false;
+      });
+    });
 
     _model.textController1 ??= TextEditingController();
     _model.textFieldFocusNode1 ??= FocusNode();
@@ -98,50 +125,48 @@ class _OverviewWidgetState extends State<OverviewWidget> {
             Align(
               alignment: AlignmentDirectional(-1.00, -1.00),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 0.0, 25.0),
+                padding: EdgeInsetsDirectional.fromSTEB(25, 27.5, 0, 27.5),
                 child: Text(
-                  'Overview',
+                  'Overview - ${widget.workspaceName}',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
-                        fontSize: 16.0,
+                        fontSize: 16,
                       ),
                 ),
               ),
             ),
             Divider(
-              height: 1.0,
-              thickness: 1.0,
+              height: 1,
+              thickness: 1,
               color: FlutterFlowTheme.of(context).secondaryBackground,
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(25, 0, 25, 0),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
-                            width: 1.0,
+                            width: 1,
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 25.0, 0.0, 25.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 25, 0, 25),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    25.0, 0.0, 25.0, 0.0),
+                                    25, 0, 25, 0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -156,8 +181,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 10.0),
+                                                    .fromSTEB(0, 0, 0, 10),
                                                 child: Text(
                                                   'Clients',
                                                   style: FlutterFlowTheme.of(
@@ -169,7 +193,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .darkGrey3,
-                                                        fontSize: 15.0,
+                                                        fontSize: 15,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                         lineHeight: 1.5,
@@ -177,17 +201,16 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 ),
                                               ),
                                               Container(
-                                                height: 56.0,
+                                                height: 56,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          4.0),
+                                                      BorderRadius.circular(4),
                                                   border: Border.all(
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .darkGrey4,
-                                                    width: 1.0,
+                                                    width: 1,
                                                   ),
                                                 ),
                                                 child: Container(
@@ -218,7 +241,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                               .override(
                                                                 fontFamily:
                                                                     'Inter',
-                                                                fontSize: 16.0,
+                                                                fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal,
@@ -235,10 +258,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                       contentPadding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  16.0,
-                                                                  0.0,
-                                                                  16.0,
-                                                                  0.0),
+                                                                  16, 0, 16, 0),
                                                     ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -264,8 +284,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 10.0),
+                                                    .fromSTEB(0, 0, 0, 10),
                                                 child: Text(
                                                   'Clients',
                                                   style: FlutterFlowTheme.of(
@@ -277,7 +296,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .darkGrey3,
-                                                        fontSize: 15.0,
+                                                        fontSize: 15,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                         lineHeight: 1.5,
@@ -285,17 +304,16 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 ),
                                               ),
                                               Container(
-                                                height: 56.0,
+                                                height: 56,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          4.0),
+                                                      BorderRadius.circular(4),
                                                   border: Border.all(
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .darkGrey4,
-                                                    width: 1.0,
+                                                    width: 1,
                                                   ),
                                                 ),
                                                 child: Container(
@@ -326,7 +344,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                               .override(
                                                                 fontFamily:
                                                                     'Inter',
-                                                                fontSize: 16.0,
+                                                                fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal,
@@ -343,10 +361,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                       contentPadding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  16.0,
-                                                                  0.0,
-                                                                  16.0,
-                                                                  0.0),
+                                                                  16, 0, 16, 0),
                                                     ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -364,7 +379,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             ],
                                           ),
                                         ),
-                                      ].divide(SizedBox(width: 10.0)),
+                                      ].divide(SizedBox(width: 10)),
                                     ),
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
@@ -377,8 +392,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 10.0),
+                                                    .fromSTEB(0, 0, 0, 10),
                                                 child: Text(
                                                   'Current Status',
                                                   style: FlutterFlowTheme.of(
@@ -390,7 +404,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .darkGrey3,
-                                                        fontSize: 15.0,
+                                                        fontSize: 15,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                         lineHeight: 1.5,
@@ -398,17 +412,16 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 ),
                                               ),
                                               Container(
-                                                height: 56.0,
+                                                height: 56,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          4.0),
+                                                      BorderRadius.circular(4),
                                                   border: Border.all(
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .darkGrey4,
-                                                    width: 1.0,
+                                                    width: 1,
                                                   ),
                                                 ),
                                                 child: Container(
@@ -451,7 +464,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                               .override(
                                                                 fontFamily:
                                                                     'Inter',
-                                                                fontSize: 16.0,
+                                                                fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal,
@@ -468,17 +481,14 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                       contentPadding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  16.0,
-                                                                  0.0,
-                                                                  16.0,
-                                                                  0.0),
+                                                                  16, 0, 16, 0),
                                                     ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Inter',
-                                                          fontSize: 16.0,
+                                                          fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.normal,
                                                           lineHeight: 1.5,
@@ -504,8 +514,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 10.0),
+                                                    .fromSTEB(0, 0, 0, 10),
                                                 child: Text(
                                                   'Loan Amount',
                                                   style: FlutterFlowTheme.of(
@@ -517,7 +526,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .darkGrey3,
-                                                        fontSize: 15.0,
+                                                        fontSize: 15,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                         lineHeight: 1.5,
@@ -525,17 +534,16 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 ),
                                               ),
                                               Container(
-                                                height: 56.0,
+                                                height: 56,
                                                 decoration: BoxDecoration(
                                                   color: Colors.transparent,
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          4.0),
+                                                      BorderRadius.circular(4),
                                                   border: Border.all(
                                                     color: FlutterFlowTheme.of(
                                                             context)
                                                         .darkGrey4,
-                                                    width: 1.0,
+                                                    width: 1,
                                                   ),
                                                 ),
                                                 child: Container(
@@ -578,7 +586,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                               .override(
                                                                 fontFamily:
                                                                     'Inter',
-                                                                fontSize: 16.0,
+                                                                fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .normal,
@@ -595,17 +603,14 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                       contentPadding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  16.0,
-                                                                  0.0,
-                                                                  16.0,
-                                                                  0.0),
+                                                                  16, 0, 16, 0),
                                                     ),
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
                                                         .override(
                                                           fontFamily: 'Inter',
-                                                          fontSize: 16.0,
+                                                          fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.normal,
                                                           lineHeight: 1.5,
@@ -627,7 +632,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             ],
                                           ),
                                         ),
-                                      ].divide(SizedBox(width: 10.0)),
+                                      ].divide(SizedBox(width: 10)),
                                     ),
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
@@ -640,8 +645,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             children: [
                                               Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 10.0),
+                                                    .fromSTEB(0, 0, 0, 10),
                                                 child: Text(
                                                   'Communication Notes',
                                                   style: FlutterFlowTheme.of(
@@ -653,7 +657,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .darkGrey3,
-                                                        fontSize: 15.0,
+                                                        fontSize: 15,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                         lineHeight: 1.5,
@@ -692,11 +696,11 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .darkGrey4,
-                                                        width: 1.0,
+                                                        width: 1,
                                                       ),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              4.0),
+                                                              4),
                                                     ),
                                                     focusedBorder:
                                                         OutlineInputBorder(
@@ -705,11 +709,11 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .darkGrey4,
-                                                        width: 1.0,
+                                                        width: 1,
                                                       ),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              4.0),
+                                                              4),
                                                     ),
                                                     errorBorder:
                                                         OutlineInputBorder(
@@ -718,11 +722,11 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .error,
-                                                        width: 1.0,
+                                                        width: 1,
                                                       ),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              4.0),
+                                                              4),
                                                     ),
                                                     focusedErrorBorder:
                                                         OutlineInputBorder(
@@ -731,26 +735,23 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .error,
-                                                        width: 1.0,
+                                                        width: 1,
                                                       ),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              4.0),
+                                                              4),
                                                     ),
                                                     contentPadding:
                                                         EdgeInsetsDirectional
                                                             .fromSTEB(
-                                                                16.0,
-                                                                16.0,
-                                                                16.0,
-                                                                16.0),
+                                                                16, 16, 16, 16),
                                                   ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
                                                       .override(
                                                         fontFamily: 'Inter',
-                                                        fontSize: 16.0,
+                                                        fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                       ),
@@ -770,57 +771,60 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                         ),
                                       ],
                                     ),
-                                  ].divide(SizedBox(height: 25.0)),
+                                  ].divide(SizedBox(height: 25)),
                                 ),
                               ),
                               Divider(
-                                height: 50.0,
-                                thickness: 1.0,
+                                height: 50,
+                                thickness: 1,
                                 color: FlutterFlowTheme.of(context).alternate,
                               ),
                               Align(
                                 alignment: AlignmentDirectional(1.00, 0.00),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 30.0, 0.0),
+                                      0, 0, 30, 0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       FFButtonWidget(
-                                        onPressed: () async {
-                                          setState(() {
-                                            _model.currentStatusController
-                                                    ?.text =
-                                                widget
-                                                    .selectedWorkspaceOverview!
-                                                    .currentStatus;
-                                          });
-                                          setState(() {
-                                            _model.loanAmountController?.text =
-                                                widget
-                                                    .selectedWorkspaceOverview!
-                                                    .loanAmount
-                                                    .toString();
-                                          });
-                                          setState(() {
-                                            _model.communicationNotesController
-                                                    ?.text =
-                                                widget
-                                                    .selectedWorkspaceOverview!
-                                                    .communicationNotes;
-                                          });
-                                        },
+                                        onPressed: _model.isChanged == false
+                                            ? null
+                                            : () async {
+                                                setState(() {
+                                                  _model.currentStatusController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .currentStatus;
+                                                });
+                                                setState(() {
+                                                  _model.loanAmountController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .loanAmount
+                                                          .toString();
+                                                });
+                                                setState(() {
+                                                  _model.communicationNotesController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .communicationNotes;
+                                                });
+                                              },
                                         text: 'Dischard changes',
                                         options: FFButtonOptions(
-                                          width: 160.0,
-                                          height: 50.0,
+                                          width: 160,
+                                          height: 50,
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                                  0, 0, 0, 0),
                                           iconPadding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                                  0, 0, 0, 0),
                                           color: Colors.transparent,
                                           textStyle: FlutterFlowTheme.of(
                                                   context)
@@ -830,86 +834,98 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText,
-                                                fontSize: 16.0,
+                                                fontSize: 16,
                                                 fontWeight: FontWeight.w500,
                                               ),
-                                          elevation: 0.0,
+                                          elevation: 0,
                                           borderSide: BorderSide(
                                             color: FlutterFlowTheme.of(context)
                                                 .secondary4,
-                                            width: 1.0,
+                                            width: 1,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8),
+                                          disabledTextColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
                                         ),
                                       ),
                                       FFButtonWidget(
-                                        onPressed: () async {
-                                          await widget.workspaceRef!.update(
-                                              createWorkspacesRecordData(
-                                            overview:
-                                                updateWorkspaceOverviewStruct(
-                                              WorkspaceOverviewStruct(
-                                                currentStatus: _model
-                                                    .currentStatusController
-                                                    .text,
-                                                loanAmount: double.tryParse(
-                                                    _model.loanAmountController
-                                                        .text),
-                                                communicationNotes: _model
-                                                    .communicationNotesController
-                                                    .text,
-                                              ),
-                                              clearUnsetFields: false,
-                                            ),
-                                          ));
-                                          _model.currentWorkspace =
-                                              await queryWorkspacesRecordOnce(
-                                            queryBuilder: (workspacesRecord) =>
-                                                workspacesRecord.where(
-                                              'workspace_ref',
-                                              isEqualTo: widget.workspaceRef,
-                                            ),
-                                            singleRecord: true,
-                                          ).then((s) => s.firstOrNull);
-                                          setState(() {
-                                            _model.currentStatusController
-                                                    ?.text =
-                                                _model.currentWorkspace!
-                                                    .overview.currentStatus;
-                                          });
-                                          setState(() {
-                                            _model.loanAmountController?.text =
-                                                formatNumber(
-                                              _model.currentWorkspace!.overview
-                                                  .loanAmount,
-                                              formatType: FormatType.custom,
-                                              currency: '\$',
-                                              format: '0.00',
-                                              locale: 'en_US',
-                                            );
-                                          });
-                                          setState(() {
-                                            _model.communicationNotesController
-                                                    ?.text =
-                                                _model
-                                                    .currentWorkspace!
-                                                    .overview
-                                                    .communicationNotes;
-                                          });
+                                        onPressed: _model.isChanged == false
+                                            ? null
+                                            : () async {
+                                                await widget.workspaceRef!.update(
+                                                    createWorkspacesRecordData(
+                                                  overview:
+                                                      updateWorkspaceOverviewStruct(
+                                                    WorkspaceOverviewStruct(
+                                                      currentStatus: _model
+                                                          .currentStatusController
+                                                          .text,
+                                                      loanAmount:
+                                                          double.tryParse(_model
+                                                              .loanAmountController
+                                                              .text),
+                                                      communicationNotes: _model
+                                                          .communicationNotesController
+                                                          .text,
+                                                    ),
+                                                    clearUnsetFields: false,
+                                                  ),
+                                                ));
+                                                _model.currentWorkspace =
+                                                    await queryWorkspacesRecordOnce(
+                                                  queryBuilder:
+                                                      (workspacesRecord) =>
+                                                          workspacesRecord
+                                                              .where(
+                                                    'workspace_ref',
+                                                    isEqualTo:
+                                                        widget.workspaceRef,
+                                                  ),
+                                                  singleRecord: true,
+                                                ).then((s) => s.firstOrNull);
+                                                setState(() {
+                                                  _model.currentStatusController
+                                                          ?.text =
+                                                      _model
+                                                          .currentWorkspace!
+                                                          .overview
+                                                          .currentStatus;
+                                                });
+                                                setState(() {
+                                                  _model.loanAmountController
+                                                      ?.text = formatNumber(
+                                                    _model.currentWorkspace!
+                                                        .overview.loanAmount,
+                                                    formatType:
+                                                        FormatType.custom,
+                                                    currency: '\$',
+                                                    format: '0.00',
+                                                    locale: 'en_US',
+                                                  );
+                                                });
+                                                setState(() {
+                                                  _model.communicationNotesController
+                                                          ?.text =
+                                                      _model
+                                                          .currentWorkspace!
+                                                          .overview
+                                                          .communicationNotes;
+                                                });
 
-                                          setState(() {});
-                                        },
+                                                setState(() {});
+                                              },
                                         text: 'Save Changes',
                                         options: FFButtonOptions(
-                                          width: 160.0,
-                                          height: 50.0,
+                                          width: 160,
+                                          height: 50,
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                                  0, 0, 0, 0),
                                           iconPadding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                                  0, 0, 0, 0),
                                           color: FlutterFlowTheme.of(context)
                                               .accent1,
                                           textStyle:
@@ -918,20 +934,23 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                   .override(
                                                     fontFamily: 'Inter',
                                                     color: Colors.white,
-                                                    fontSize: 16.0,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.w500,
                                                   ),
-                                          elevation: 0.0,
+                                          elevation: 0,
                                           borderSide: BorderSide(
                                             color: FlutterFlowTheme.of(context)
                                                 .accent2,
-                                            width: 1.0,
+                                            width: 1,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(8.0),
+                                              BorderRadius.circular(8),
+                                          disabledColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
                                         ),
                                       ),
-                                    ].divide(SizedBox(width: 20.0)),
+                                    ].divide(SizedBox(width: 20)),
                                   ),
                                 ),
                               ),
@@ -941,21 +960,20 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(25, 0, 25, 0),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: Color(0xADDDDDDD),
-                            width: 1.0,
+                            width: 1,
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              25.0, 25.0, 25.0, 25.0),
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(25, 25, 25, 25),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -972,7 +990,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                           fontFamily: 'Inter',
                                           color: FlutterFlowTheme.of(context)
                                               .darkGrey3,
-                                          fontSize: 15.0,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.normal,
                                           lineHeight: 1.5,
                                         ),
@@ -986,7 +1004,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                           fontFamily: 'Inter',
                                           color: FlutterFlowTheme.of(context)
                                               .primary,
-                                          fontSize: 15.0,
+                                          fontSize: 15,
                                           decoration: TextDecoration.underline,
                                           lineHeight: 1.5,
                                         ),
@@ -997,9 +1015,9 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                 alignment: AlignmentDirectional(-1.00, -1.00),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      10.0, 20.0, 10.0, 0.0),
-                                  child: FutureBuilder<List<UsersRecord>>(
-                                    future: queryUsersRecordOnce(
+                                      10, 20, 10, 0),
+                                  child: StreamBuilder<List<UsersRecord>>(
+                                    stream: queryUsersRecord(
                                       queryBuilder: (usersRecord) =>
                                           usersRecord.whereIn('user_ref',
                                               widget.workspaceMembers),
@@ -1009,8 +1027,8 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                       if (!snapshot.hasData) {
                                         return Center(
                                           child: SizedBox(
-                                            width: 50.0,
-                                            height: 50.0,
+                                            width: 50,
+                                            height: 50,
                                             child: CircularProgressIndicator(
                                               valueColor:
                                                   AlwaysStoppedAnimation<Color>(
@@ -1043,19 +1061,17 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                               children: [
                                                 ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(
-                                                          5.0),
+                                                      BorderRadius.circular(5),
                                                   child: Image.network(
                                                     rowUsersRecord.photoUrl,
-                                                    width: 40.0,
-                                                    height: 40.0,
+                                                    width: 40,
+                                                    height: 40,
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
                                                 Padding(
                                                   padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          10.0, 0.0, 0.0, 0.0),
+                                                      .fromSTEB(10, 0, 0, 0),
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
@@ -1089,7 +1105,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 ),
                                               ],
                                             );
-                                          }).divide(SizedBox(width: 75.0)),
+                                          }).divide(SizedBox(width: 75)),
                                         ),
                                       );
                                     },
@@ -1102,21 +1118,20 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(25.0, 0.0, 25.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(25, 0, 25, 0),
                       child: Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(8.0),
+                          borderRadius: BorderRadius.circular(8),
                           border: Border.all(
                             color: Color(0xADDDDDDD),
-                            width: 1.0,
+                            width: 1,
                           ),
                         ),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              35.0, 25.0, 35.0, 25.0),
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(35, 25, 35, 25),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -1135,7 +1150,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             fontFamily: 'Inter',
                                             color: FlutterFlowTheme.of(context)
                                                 .darkGrey3,
-                                            fontSize: 15.0,
+                                            fontSize: 15,
                                             fontWeight: FontWeight.normal,
                                             lineHeight: 1.5,
                                           ),
@@ -1144,8 +1159,8 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                 ),
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 20.0, 0.0, 0.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                                 child: Builder(
                                   builder: (context) {
                                     final workspaceFiles =
@@ -1168,18 +1183,17 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                           children: [
                                             ClipRRect(
                                               borderRadius:
-                                                  BorderRadius.circular(5.0),
+                                                  BorderRadius.circular(5),
                                               child: Image.network(
                                                 workspaceFilesItem.fileThumnail,
-                                                width: 40.0,
-                                                height: 40.0,
+                                                width: 40,
+                                                height: 40,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      10.0, 0.0, 0.0, 0.0),
+                                                  .fromSTEB(10, 0, 0, 0),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 crossAxisAlignment:
@@ -1210,7 +1224,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             ),
                                           ],
                                         );
-                                      }).divide(SizedBox(width: 75.0)),
+                                      }).divide(SizedBox(width: 75)),
                                     );
                                   },
                                 ),
@@ -1220,11 +1234,11 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                         ),
                       ),
                     ),
-                  ].divide(SizedBox(height: 25.0)),
+                  ].divide(SizedBox(height: 25)),
                 ),
               ),
             ),
-          ].addToEnd(SizedBox(height: 75.0)),
+          ].addToEnd(SizedBox(height: 75)),
         ),
       ),
     );

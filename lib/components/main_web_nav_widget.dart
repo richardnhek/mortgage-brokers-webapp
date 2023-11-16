@@ -1,16 +1,20 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/user_profiile_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'main_web_nav_model.dart';
 export 'main_web_nav_model.dart';
 
@@ -21,8 +25,25 @@ class MainWebNavWidget extends StatefulWidget {
   _MainWebNavWidgetState createState() => _MainWebNavWidgetState();
 }
 
-class _MainWebNavWidgetState extends State<MainWebNavWidget> {
+class _MainWebNavWidgetState extends State<MainWebNavWidget>
+    with TickerProviderStateMixin {
   late MainWebNavModel _model;
+
+  final animationsMap = {
+    'containerOnActionTriggerAnimation': AnimationInfo(
+      trigger: AnimationTrigger.onActionTrigger,
+      applyInitialState: true,
+      effects: [
+        MoveEffect(
+          curve: Curves.easeIn,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: Offset(0, 0),
+          end: Offset(0, 60),
+        ),
+      ],
+    ),
+  };
 
   @override
   void setState(VoidCallback callback) {
@@ -34,6 +55,13 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => MainWebNavModel());
+
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -61,12 +89,12 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
         children: [
           Container(
             width: double.infinity,
-            height: 75.0,
+            height: 75,
             decoration: BoxDecoration(
               color: Colors.transparent,
             ),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+              padding: EdgeInsetsDirectional.fromSTEB(25, 25, 25, 25),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,27 +104,27 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                     textAlign: TextAlign.start,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
-                          fontSize: 16.0,
+                          fontSize: 16,
                           fontWeight: FontWeight.normal,
                         ),
                   ),
                   FaIcon(
                     FontAwesomeIcons.bell,
                     color: FlutterFlowTheme.of(context).secondaryText,
-                    size: 18.0,
+                    size: 18,
                   ),
                 ],
               ),
             ),
           ),
           Divider(
-            height: 0.0,
-            thickness: 1.0,
+            height: 0,
+            thickness: 1,
             color: FlutterFlowTheme.of(context).secondaryBackground,
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+              padding: EdgeInsetsDirectional.fromSTEB(25, 25, 25, 25),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -105,81 +133,122 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: double.infinity,
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 4.0,
-                              color: Color(0x10000000),
-                              offset: Offset(0.0, 4.0),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(
-                            color: FlutterFlowTheme.of(context).tertiary,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 10.0, 10.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.inbox_outlined,
-                                color: FlutterFlowTheme.of(context).secondary,
-                                size: 21.0,
+                      Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 4,
+                                  color: Color(0x10000000),
+                                  offset: Offset(0, 4),
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: FlutterFlowTheme.of(context).tertiary,
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'Workspaces',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Inter',
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 25.0, 10.0, 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.chat_bubble_outline,
-                              color: FlutterFlowTheme.of(context).secondary,
-                              size: 21.0,
                             ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  12.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'Chat',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Inter',
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.normal,
+                          ).animateOnActionTrigger(
+                            animationsMap['containerOnActionTriggerAnimation']!,
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                if (animationsMap[
+                                        'containerOnActionTriggerAnimation'] !=
+                                    null) {
+                                  await animationsMap[
+                                          'containerOnActionTriggerAnimation']!
+                                      .controller
+                                      .reverse();
+                                }
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.inbox_outlined,
+                                    color:
+                                        FlutterFlowTheme.of(context).secondary,
+                                    size: 21,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        12, 0, 0, 0),
+                                    child: Text(
+                                      'Workspaces',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Inter',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                          ),
                                     ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(10, 75, 10, 0),
+                            child: InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                if (animationsMap[
+                                        'containerOnActionTriggerAnimation'] !=
+                                    null) {
+                                  await animationsMap[
+                                          'containerOnActionTriggerAnimation']!
+                                      .controller
+                                      .forward(from: 0.0);
+                                }
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Icon(
+                                    Icons.chat_bubble_outline,
+                                    color:
+                                        FlutterFlowTheme.of(context).secondary,
+                                    size: 21,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        12, 0, 0, 0),
+                                    child: Text(
+                                      'Chat',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Inter',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.normal,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -189,8 +258,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                     children: [
                       Builder(
                         builder: (context) => Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              10.0, 0.0, 10.0, 0.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
                           child: InkWell(
                             splashColor: Colors.transparent,
                             focusColor: Colors.transparent,
@@ -209,9 +277,9 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                                 context: context,
                                 isGlobal: true,
                                 avoidOverflow: false,
-                                targetAnchor: AlignmentDirectional(0.0, 0.0)
+                                targetAnchor: AlignmentDirectional(0, 0)
                                     .resolve(Directionality.of(context)),
-                                followerAnchor: AlignmentDirectional(0.0, 0.0)
+                                followerAnchor: AlignmentDirectional(0, 0)
                                     .resolve(Directionality.of(context)),
                                 builder: (dialogContext) {
                                   return Material(
@@ -230,11 +298,11 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                               children: [
                                 AuthUserStreamWidget(
                                   builder: (context) => ClipRRect(
-                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderRadius: BorderRadius.circular(5),
                                     child: Image.network(
                                       currentUserPhoto,
-                                      width: 40.0,
-                                      height: 40.0,
+                                      width: 40,
+                                      height: 40,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -242,7 +310,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        10.0, 0.0, 0.0, 0.0),
+                                        10, 0, 0, 0),
                                     child: AuthUserStreamWidget(
                                       builder: (context) => Text(
                                         currentUserDisplayName,
@@ -250,7 +318,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Inter',
-                                              fontSize: 16.0,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.normal,
                                             ),
                                       ),
@@ -263,8 +331,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 25.0, 10.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 25, 10, 0),
                         child: InkWell(
                           splashColor: Colors.transparent,
                           focusColor: Colors.transparent,
@@ -284,18 +351,18 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget> {
                               Icon(
                                 Icons.logout_rounded,
                                 color: FlutterFlowTheme.of(context).secondary,
-                                size: 21.0,
+                                size: 21,
                               ),
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    8.0, 0.0, 0.0, 0.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                                 child: Text(
                                   'Log out',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Inter',
-                                        fontSize: 16.0,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.normal,
                                       ),
                                 ),
