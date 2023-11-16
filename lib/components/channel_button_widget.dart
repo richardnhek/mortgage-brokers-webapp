@@ -74,31 +74,33 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                       borderRadius: BorderRadius.circular(3.0),
                     ),
                   ),
-                  Align(
-                    alignment: AlignmentDirectional(0.80, 0.80),
-                    child: Container(
-                      width: 15.0,
-                      height: 15.0,
-                      decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).primary,
-                        borderRadius: BorderRadius.circular(2.0),
-                      ),
-                      child: Align(
-                        alignment: AlignmentDirectional(0.00, 0.00),
-                        child: Text(
-                          '3',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    fontSize: 8.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
+                  if (false)
+                    Align(
+                      alignment: AlignmentDirectional(0.80, 0.80),
+                      child: Container(
+                        width: 15.0,
+                        height: 15.0,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).primary,
+                          borderRadius: BorderRadius.circular(2.0),
+                        ),
+                        child: Align(
+                          alignment: AlignmentDirectional(0.00, 0.00),
+                          child: Text(
+                            '3',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  color: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  fontSize: 8.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),

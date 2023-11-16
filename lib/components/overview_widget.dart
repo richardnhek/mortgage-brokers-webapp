@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +22,14 @@ class OverviewWidget extends StatefulWidget {
     required this.workspaceMembers,
     required this.workspaceFiles,
     required this.workspaceRef,
+    required this.workspaceName,
   }) : super(key: key);
 
   final WorkspaceOverviewStruct? selectedWorkspaceOverview;
   final List<DocumentReference>? workspaceMembers;
   final List<WorkspaceFileStruct>? workspaceFiles;
   final DocumentReference? workspaceRef;
+  final String? workspaceName;
 
   @override
   _OverviewWidgetState createState() => _OverviewWidgetState();
@@ -45,6 +48,30 @@ class _OverviewWidgetState extends State<OverviewWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => OverviewModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        _model.communicationNotesController?.text =
+            widget.selectedWorkspaceOverview!.communicationNotes;
+      });
+      setState(() {
+        _model.loanAmountController?.text = formatNumber(
+          widget.selectedWorkspaceOverview!.loanAmount,
+          formatType: FormatType.custom,
+          currency: '\$',
+          format: '0.00',
+          locale: 'en_US',
+        );
+      });
+      setState(() {
+        _model.currentStatusController?.text =
+            widget.selectedWorkspaceOverview!.currentStatus;
+      });
+      setState(() {
+        _model.isChanged = false;
+      });
+    });
 
     _model.textController1 ??= TextEditingController();
     _model.textFieldFocusNode1 ??= FocusNode();
@@ -97,9 +124,9 @@ class _OverviewWidgetState extends State<OverviewWidget> {
             Align(
               alignment: AlignmentDirectional(-1.00, -1.00),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 0.0, 25.0),
+                padding: EdgeInsetsDirectional.fromSTEB(25.0, 27.5, 0.0, 27.5),
                 child: Text(
-                  'Overview',
+                  'Overview - ${widget.workspaceName}',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Inter',
                         fontSize: 16.0,
@@ -420,8 +447,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                     onChanged: (_) =>
                                                         EasyDebounce.debounce(
                                                       '_model.currentStatusController',
-                                                      Duration(
-                                                          milliseconds: 2000),
+                                                      Duration(milliseconds: 0),
                                                       () async {
                                                         setState(() {
                                                           _model.isChanged =
@@ -547,8 +573,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                     onChanged: (_) =>
                                                         EasyDebounce.debounce(
                                                       '_model.loanAmountController',
-                                                      Duration(
-                                                          milliseconds: 2000),
+                                                      Duration(milliseconds: 0),
                                                       () async {
                                                         setState(() {
                                                           _model.isChanged =
@@ -669,8 +694,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                   onChanged: (_) =>
                                                       EasyDebounce.debounce(
                                                     '_model.communicationNotesController',
-                                                    Duration(
-                                                        milliseconds: 2000),
+                                                    Duration(milliseconds: 0),
                                                     () async {
                                                       setState(() {
                                                         _model.isChanged = true;
@@ -787,29 +811,32 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       FFButtonWidget(
-                                        onPressed: () async {
-                                          setState(() {
-                                            _model.currentStatusController
-                                                    ?.text =
-                                                widget
-                                                    .selectedWorkspaceOverview!
-                                                    .currentStatus;
-                                          });
-                                          setState(() {
-                                            _model.loanAmountController?.text =
-                                                widget
-                                                    .selectedWorkspaceOverview!
-                                                    .loanAmount
-                                                    .toString();
-                                          });
-                                          setState(() {
-                                            _model.communicationNotesController
-                                                    ?.text =
-                                                widget
-                                                    .selectedWorkspaceOverview!
-                                                    .communicationNotes;
-                                          });
-                                        },
+                                        onPressed: _model.isChanged == false
+                                            ? null
+                                            : () async {
+                                                setState(() {
+                                                  _model.currentStatusController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .currentStatus;
+                                                });
+                                                setState(() {
+                                                  _model.loanAmountController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .loanAmount
+                                                          .toString();
+                                                });
+                                                setState(() {
+                                                  _model.communicationNotesController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .communicationNotes;
+                                                });
+                                              },
                                         text: 'Dischard changes',
                                         options: FFButtonOptions(
                                           width: 160.0,
@@ -840,65 +867,77 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(8.0),
+                                          disabledTextColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
                                         ),
                                       ),
                                       FFButtonWidget(
-                                        onPressed: () async {
-                                          await widget.workspaceRef!.update(
-                                              createWorkspacesRecordData(
-                                            overview:
-                                                updateWorkspaceOverviewStruct(
-                                              WorkspaceOverviewStruct(
-                                                currentStatus: _model
-                                                    .currentStatusController
-                                                    .text,
-                                                loanAmount: double.tryParse(
-                                                    _model.loanAmountController
-                                                        .text),
-                                                communicationNotes: _model
-                                                    .communicationNotesController
-                                                    .text,
-                                              ),
-                                              clearUnsetFields: false,
-                                            ),
-                                          ));
-                                          _model.currentWorkspace =
-                                              await queryWorkspacesRecordOnce(
-                                            queryBuilder: (workspacesRecord) =>
-                                                workspacesRecord.where(
-                                              'workspace_ref',
-                                              isEqualTo: widget.workspaceRef,
-                                            ),
-                                            singleRecord: true,
-                                          ).then((s) => s.firstOrNull);
-                                          setState(() {
-                                            _model.currentStatusController
-                                                    ?.text =
-                                                _model.currentWorkspace!
-                                                    .overview.currentStatus;
-                                          });
-                                          setState(() {
-                                            _model.loanAmountController?.text =
-                                                formatNumber(
-                                              _model.currentWorkspace!.overview
-                                                  .loanAmount,
-                                              formatType: FormatType.custom,
-                                              currency: '\$',
-                                              format: '0.00',
-                                              locale: 'en_US',
-                                            );
-                                          });
-                                          setState(() {
-                                            _model.communicationNotesController
-                                                    ?.text =
-                                                _model
-                                                    .currentWorkspace!
-                                                    .overview
-                                                    .communicationNotes;
-                                          });
+                                        onPressed: _model.isChanged == false
+                                            ? null
+                                            : () async {
+                                                await widget.workspaceRef!.update(
+                                                    createWorkspacesRecordData(
+                                                  overview:
+                                                      updateWorkspaceOverviewStruct(
+                                                    WorkspaceOverviewStruct(
+                                                      currentStatus: _model
+                                                          .currentStatusController
+                                                          .text,
+                                                      loanAmount:
+                                                          double.tryParse(_model
+                                                              .loanAmountController
+                                                              .text),
+                                                      communicationNotes: _model
+                                                          .communicationNotesController
+                                                          .text,
+                                                    ),
+                                                    clearUnsetFields: false,
+                                                  ),
+                                                ));
+                                                _model.currentWorkspace =
+                                                    await queryWorkspacesRecordOnce(
+                                                  queryBuilder:
+                                                      (workspacesRecord) =>
+                                                          workspacesRecord
+                                                              .where(
+                                                    'workspace_ref',
+                                                    isEqualTo:
+                                                        widget.workspaceRef,
+                                                  ),
+                                                  singleRecord: true,
+                                                ).then((s) => s.firstOrNull);
+                                                setState(() {
+                                                  _model.currentStatusController
+                                                          ?.text =
+                                                      _model
+                                                          .currentWorkspace!
+                                                          .overview
+                                                          .currentStatus;
+                                                });
+                                                setState(() {
+                                                  _model.loanAmountController
+                                                      ?.text = formatNumber(
+                                                    _model.currentWorkspace!
+                                                        .overview.loanAmount,
+                                                    formatType:
+                                                        FormatType.custom,
+                                                    currency: '\$',
+                                                    format: '0.00',
+                                                    locale: 'en_US',
+                                                  );
+                                                });
+                                                setState(() {
+                                                  _model.communicationNotesController
+                                                          ?.text =
+                                                      _model
+                                                          .currentWorkspace!
+                                                          .overview
+                                                          .communicationNotes;
+                                                });
 
-                                          setState(() {});
-                                        },
+                                                setState(() {});
+                                              },
                                         text: 'Save Changes',
                                         options: FFButtonOptions(
                                           width: 160.0,
@@ -928,6 +967,9 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(8.0),
+                                          disabledColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryText,
                                         ),
                                       ),
                                     ].divide(SizedBox(width: 20.0)),
@@ -997,8 +1039,8 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       10.0, 20.0, 10.0, 0.0),
-                                  child: FutureBuilder<List<UsersRecord>>(
-                                    future: queryUsersRecordOnce(
+                                  child: StreamBuilder<List<UsersRecord>>(
+                                    stream: queryUsersRecord(
                                       queryBuilder: (usersRecord) =>
                                           usersRecord.whereIn('user_ref',
                                               widget.workspaceMembers),

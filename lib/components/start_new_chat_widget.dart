@@ -17,9 +17,9 @@ export 'start_new_chat_model.dart';
 class StartNewChatWidget extends StatefulWidget {
   const StartNewChatWidget({
     Key? key,
-    required this.workspaceRef,
-    required this.workspaceId,
-    required this.memberList,
+    this.workspaceRef,
+    this.workspaceId,
+    this.memberList,
   }) : super(key: key);
 
   final DocumentReference? workspaceRef;
