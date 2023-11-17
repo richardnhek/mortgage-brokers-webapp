@@ -70,6 +70,12 @@ class FFAppState extends ChangeNotifier {
   void insertAtIndexInSelectedMembers(int _index, DocumentReference _value) {
     _selectedMembers.insert(_index, _value);
   }
+
+  String _mainNavView = '';
+  String get mainNavView => _mainNavView;
+  set mainNavView(String _value) {
+    _mainNavView = _value;
+  }
 }
 
 LatLng? _latLngFromString(String? val) {

@@ -75,6 +75,7 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
   @override
   void didUpdateWidget(CustomChatContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
+
     if (widget.chatUser != oldWidget.chatUser ||
         widget.chatRef != oldWidget.chatRef ||
         widget.channelName != oldWidget.channelName) {

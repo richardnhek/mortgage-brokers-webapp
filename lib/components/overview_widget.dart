@@ -125,7 +125,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
             Align(
               alignment: AlignmentDirectional(-1.00, -1.00),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(25, 27.5, 0, 27.5),
+                padding: EdgeInsetsDirectional.fromSTEB(25.0, 27.5, 0.0, 27.5),
                 child: Text(
                   'Overview - ${widget.workspaceName}',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -434,8 +434,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                     onChanged: (_) =>
                                                         EasyDebounce.debounce(
                                                       '_model.currentStatusController',
-                                                      Duration(
-                                                          milliseconds: 2000),
+                                                      Duration(milliseconds: 0),
                                                       () async {
                                                         setState(() {
                                                           _model.isChanged =
@@ -556,8 +555,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                     onChanged: (_) =>
                                                         EasyDebounce.debounce(
                                                       '_model.loanAmountController',
-                                                      Duration(
-                                                          milliseconds: 2000),
+                                                      Duration(milliseconds: 0),
                                                       () async {
                                                         setState(() {
                                                           _model.isChanged =
@@ -674,8 +672,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                   onChanged: (_) =>
                                                       EasyDebounce.debounce(
                                                     '_model.communicationNotesController',
-                                                    Duration(
-                                                        milliseconds: 2000),
+                                                    Duration(milliseconds: 0),
                                                     () async {
                                                       setState(() {
                                                         _model.isChanged = true;
@@ -844,7 +841,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             width: 1,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(8.0),
                                           disabledTextColor:
                                               FlutterFlowTheme.of(context)
                                                   .secondaryText,
@@ -944,7 +941,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                             width: 1,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(8),
+                                              BorderRadius.circular(8.0),
                                           disabledColor:
                                               FlutterFlowTheme.of(context)
                                                   .secondaryText,
@@ -1015,7 +1012,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                 alignment: AlignmentDirectional(-1.00, -1.00),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      10, 20, 10, 0),
+                                      10.0, 20.0, 10.0, 0.0),
                                   child: StreamBuilder<List<UsersRecord>>(
                                     stream: queryUsersRecord(
                                       queryBuilder: (usersRecord) =>

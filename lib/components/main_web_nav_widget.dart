@@ -38,8 +38,8 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
           curve: Curves.easeIn,
           delay: 0.ms,
           duration: 600.ms,
-          begin: Offset(0, 0),
-          end: Offset(0, 60),
+          begin: Offset(0.0, 0.0),
+          end: Offset(0.0, 60.0),
         ),
       ],
     ),
@@ -137,18 +137,18 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                         children: [
                           Container(
                             width: double.infinity,
-                            height: 50,
+                            height: 50.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
                               boxShadow: [
                                 BoxShadow(
-                                  blurRadius: 4,
+                                  blurRadius: 4.0,
                                   color: Color(0x10000000),
-                                  offset: Offset(0, 4),
+                                  offset: Offset(0.0, 4.0),
                                 )
                               ],
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10.0),
                               border: Border.all(
                                 color: FlutterFlowTheme.of(context).tertiary,
                               ),
@@ -157,8 +157,8 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                             animationsMap['containerOnActionTriggerAnimation']!,
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                15.0, 15.0, 15.0, 15.0),
                             child: InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -173,6 +173,9 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                                       .controller
                                       .reverse();
                                 }
+                                FFAppState().update(() {
+                                  FFAppState().mainNavView = 'Workspace';
+                                });
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -182,18 +185,18 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                                     Icons.inbox_outlined,
                                     color:
                                         FlutterFlowTheme.of(context).secondary,
-                                    size: 21,
+                                    size: 21.0,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        12, 0, 0, 0),
+                                        12.0, 0.0, 0.0, 0.0),
                                     child: Text(
                                       'Workspaces',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
                                             fontFamily: 'Inter',
-                                            fontSize: 16,
+                                            fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
                                           ),
                                     ),
@@ -203,8 +206,8 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                             ),
                           ),
                           Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(10, 75, 10, 0),
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                10.0, 75.0, 10.0, 0.0),
                             child: InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -219,6 +222,9 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                                       .controller
                                       .forward(from: 0.0);
                                 }
+                                FFAppState().update(() {
+                                  FFAppState().mainNavView = 'Chats';
+                                });
                               },
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -228,18 +234,18 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                                     Icons.chat_bubble_outline,
                                     color:
                                         FlutterFlowTheme.of(context).secondary,
-                                    size: 21,
+                                    size: 21.0,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        12, 0, 0, 0),
+                                        12.0, 0.0, 0.0, 0.0),
                                     child: Text(
                                       'Chat',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
                                             fontFamily: 'Inter',
-                                            fontSize: 16,
+                                            fontSize: 16.0,
                                             fontWeight: FontWeight.normal,
                                           ),
                                     ),

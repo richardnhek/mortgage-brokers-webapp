@@ -165,17 +165,8 @@ class _FFChatWidgetState extends State<FFChatWidget> {
                   messages: widget.messages.reversed.toList(),
                   inputOptions: InputOptions(
                     textController: textEditingController,
+                    sendOnEnter: true,
                     onMention: (trigger, value, onMentionClick) async {
-                      // Debugging log
-                      print(
-                          "onMention Triggered: Trigger: $trigger, Value: $value");
-                      print(widget.otherUsers.length);
-                      print(widget.otherUsers
-                          .where((user) => user.firstName!
-                              .toLowerCase()
-                              .contains(value.toLowerCase()))
-                          .toList());
-
                       // Filter the list of users based on the input value.
                       List<ChatUser> mentionSuggestions = widget.otherUsers
                           .where((user) => user.firstName!
@@ -185,7 +176,6 @@ class _FFChatWidgetState extends State<FFChatWidget> {
 
                       // Check if suggestions are found
                       if (mentionSuggestions.isEmpty) {
-                        print("No suggestions found");
                         return [];
                       }
 
@@ -239,7 +229,6 @@ class _FFChatWidgetState extends State<FFChatWidget> {
                                   ]),
 
                                   onTap: () {
-                                    print("Mention clicked: ${user.firstName}");
                                     onMentionClick(user.firstName!);
                                   },
                                   contentPadding: const EdgeInsets.symmetric(
