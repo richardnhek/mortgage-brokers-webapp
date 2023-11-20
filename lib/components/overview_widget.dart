@@ -615,7 +615,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                         ),
                                                     keyboardType:
                                                         const TextInputType
-                                                                .numberWithOptions(
+                                                            .numberWithOptions(
                                                             decimal: true),
                                                     cursorColor:
                                                         FlutterFlowTheme.of(
