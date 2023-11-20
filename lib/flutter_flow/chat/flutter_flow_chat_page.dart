@@ -212,7 +212,7 @@ extension _ChatUserExtensions on UsersRecord {
           firstName: displayName.isNotEmpty ? displayName : 'Friend',
           lastName: displayName.isNotEmpty ? displayName : 'Friend',
           profileImage:
-              photoUrl.isNotEmpty || !photoUrl.isNull ? photoUrl : null,
+              photoUrl.isNotEmpty || !(photoUrl == null) ? photoUrl : null,
         )
       : ChatUser(
           id: reference.id,
