@@ -54,6 +54,10 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
 
     return Container(
       width: double.infinity,
+      constraints: BoxConstraints(
+        minWidth: 590.0,
+        maxWidth: 592.0,
+      ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
         boxShadow: [

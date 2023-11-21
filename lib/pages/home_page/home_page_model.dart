@@ -8,6 +8,8 @@ import '/components/empty_chat_widget_widget.dart';
 import '/components/main_web_nav_widget.dart';
 import '/components/overview_widget.dart';
 import '/components/start_new_chat_widget.dart';
+import '/components/user_details_widget.dart';
+import '/components/workspace_detail_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -77,9 +79,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   // State field(s) for Expandable widget.
   late ExpandableController expandableController4;
 
-  // State field(s) for Expandable widget.
-  late ExpandableController expandableController5;
-
   // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
   UsersRecord? selectedUserCopy;
   // Model for EmptyChatWidget component.
@@ -99,7 +98,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
     unfocusNode.dispose();
     mainWebNavModel.dispose();
     expandableController4.dispose();
-    expandableController5.dispose();
     emptyChatWidgetModel.dispose();
     overviewModel.dispose();
   }

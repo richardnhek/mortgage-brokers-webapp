@@ -22,6 +22,8 @@ class StartNewChatModel extends FlutterFlowModel<StartNewChatWidget> {
   String? Function(BuildContext, String?)? channelNameControllerValidator;
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
   List<ChatsRecord>? chatsInWorkspace;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  ChatsRecord? createdChat;
 
   /// Initialization and disposal methods.
 

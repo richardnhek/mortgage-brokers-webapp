@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: 4.8.0
   cloud_firestore_platform_interface: 5.15.0
   cloud_firestore_web: 3.6.0
-  collection: 1.17.1
+  collection: 1.17.2
   dash_chat: 
     git:
       url: https://github.com/FlutterFlow/flutterflow_dash_chat.git

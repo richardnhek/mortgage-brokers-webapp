@@ -382,7 +382,9 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                             if (_shouldSetState) setState(() {});
                             return;
                           } else {
-                            await ChatsRecord.collection.doc().set({
+                            var chatsRecordReference2 =
+                                ChatsRecord.collection.doc();
+                            await chatsRecordReference2.set({
                               ...createChatsRecordData(
                                 chatType: 'DM',
                                 workspaceId: '',
@@ -397,6 +399,28 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                 },
                               ),
                             });
+                            _model.createdChat =
+                                ChatsRecord.getDocumentFromData({
+                              ...createChatsRecordData(
+                                chatType: 'DM',
+                                workspaceId: '',
+                                channelName: _model.channelNameController.text,
+                                workspaceRef: widget.workspaceRef,
+                                userA: currentUserReference,
+                                userB: FFAppState().selectedMembers.first,
+                              ),
+                              ...mapToFirestore(
+                                {
+                                  'users': FFAppState().selectedMembers,
+                                },
+                              ),
+                            }, chatsRecordReference2);
+                            _shouldSetState = true;
+
+                            await _model.createdChat!.reference
+                                .update(createChatsRecordData(
+                              chatRef: _model.createdChat?.reference,
+                            ));
                           }
                         }
 
