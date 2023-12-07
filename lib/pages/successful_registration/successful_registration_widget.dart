@@ -85,13 +85,13 @@ class _SuccessfulRegistrationWidgetState
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'logo here',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Inter',
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.normal,
-                          ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(0.0),
+                      child: Image.asset(
+                        'assets/images/logo.jpeg',
+                        height: 50.0,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     Padding(
                       padding:

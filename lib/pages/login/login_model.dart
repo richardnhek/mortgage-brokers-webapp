@@ -6,6 +6,7 @@ import 'login_widget.dart' show LoginWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class LoginModel extends FlutterFlowModel<LoginWidget> {
@@ -15,6 +16,7 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
   // State field(s) for phoneNumber widget.
   FocusNode? phoneNumberFocusNode;
   TextEditingController? phoneNumberController;
+  final phoneNumberMask = MaskTextInputFormatter(mask: '+# (###) ###-##-##');
   String? Function(BuildContext, String?)? phoneNumberControllerValidator;
 
   /// Initialization and disposal methods.

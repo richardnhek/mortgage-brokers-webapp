@@ -98,14 +98,12 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Logo Here',
-                    textAlign: TextAlign.start,
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Inter',
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.normal,
-                        ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(0.0),
+                    child: Image.asset(
+                      'assets/images/logo.jpeg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   FaIcon(
                     FontAwesomeIcons.bell,

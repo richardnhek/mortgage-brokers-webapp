@@ -421,6 +421,15 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                 .update(createChatsRecordData(
                               chatRef: _model.createdChat?.reference,
                             ));
+
+                            await widget.workspaceRef!.update({
+                              ...mapToFirestore(
+                                {
+                                  'chat_refs': FieldValue.arrayUnion(
+                                      [_model.createdChat?.reference]),
+                                },
+                              ),
+                            });
                           }
                         }
 
@@ -430,7 +439,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                         Navigator.pop(context);
                         if (_shouldSetState) setState(() {});
                       },
-                text: 'Send Invite',
+                text: 'Start Chat',
                 options: FFButtonOptions(
                   width: double.infinity,
                   height: 56.0,

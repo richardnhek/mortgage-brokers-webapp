@@ -76,11 +76,8 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   late MainWebNavModel mainWebNavModel;
   // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
   UsersRecord? selectedUser;
-  // State field(s) for Expandable widget.
-  late ExpandableController expandableController4;
-
   // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
-  UsersRecord? selectedUserCopy;
+  UsersRecord? selectedUserChats;
   // Model for EmptyChatWidget component.
   late EmptyChatWidgetModel emptyChatWidgetModel;
   // Model for Overview component.
@@ -97,7 +94,6 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   void dispose() {
     unfocusNode.dispose();
     mainWebNavModel.dispose();
-    expandableController4.dispose();
     emptyChatWidgetModel.dispose();
     overviewModel.dispose();
   }

@@ -5,6 +5,7 @@ import '/components/add_new_member_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
@@ -25,6 +26,7 @@ class OverviewWidget extends StatefulWidget {
     required this.workspaceFiles,
     required this.workspaceRef,
     required this.workspaceName,
+    required this.chatRefs,
   }) : super(key: key);
 
   final WorkspaceOverviewStruct? selectedWorkspaceOverview;
@@ -32,6 +34,7 @@ class OverviewWidget extends StatefulWidget {
   final List<WorkspaceFileStruct>? workspaceFiles;
   final DocumentReference? workspaceRef;
   final String? workspaceName;
+  final List<DocumentReference>? chatRefs;
 
   @override
   _OverviewWidgetState createState() => _OverviewWidgetState();
@@ -226,6 +229,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                     focusNode: _model
                                                         .textFieldFocusNode1,
                                                     autofocus: true,
+                                                    readOnly: true,
                                                     obscureText: false,
                                                     decoration: InputDecoration(
                                                       labelStyle:
@@ -1193,6 +1197,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                               35.0, 25.0, 35.0, 25.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Align(
                                 alignment: AlignmentDirectional(-1.00, -1.00),
@@ -1220,71 +1225,161 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 20.0, 0.0, 0.0),
-                                child: Builder(
-                                  builder: (context) {
-                                    final workspaceFiles =
-                                        widget.workspaceFiles!.toList();
-                                    return Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children:
-                                          List.generate(workspaceFiles.length,
-                                              (workspaceFilesIndex) {
-                                        final workspaceFilesItem =
-                                            workspaceFiles[workspaceFilesIndex];
-                                        return Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              child: Image.network(
-                                                workspaceFilesItem.fileThumnail,
-                                                width: 40.0,
-                                                height: 40.0,
-                                                fit: BoxFit.cover,
-                                              ),
+                                child: StreamBuilder<List<ChatMessagesRecord>>(
+                                  stream: queryChatMessagesRecord(
+                                    queryBuilder: (chatMessagesRecord) =>
+                                        chatMessagesRecord.whereIn(
+                                            'chat', widget.chatRefs),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50.0,
+                                          height: 50.0,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
                                             ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      10.0, 0.0, 0.0, 0.0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    workspaceFilesItem.fileName,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium,
-                                                  ),
-                                                  Text(
-                                                    valueOrDefault<String>(
-                                                      'Shared by ${workspaceFilesItem.sharedBy?.id}on ${dateTimeFormat('yMMMd', workspaceFilesItem.sentDateTime)}',
-                                                      'N/A',
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    List<ChatMessagesRecord>
+                                        containerChatMessagesRecordList =
+                                        snapshot.data!;
+                                    return Container(
+                                      decoration: BoxDecoration(),
+                                      child: Builder(
+                                        builder: (context) {
+                                          final workspaceFiles =
+                                              containerChatMessagesRecordList
+                                                  .where((e) =>
+                                                      e.image != null &&
+                                                      e.image != '')
+                                                  .toList();
+                                          return SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: List.generate(
+                                                  workspaceFiles.length,
+                                                  (workspaceFilesIndex) {
+                                                final workspaceFilesItem =
+                                                    workspaceFiles[
+                                                        workspaceFilesIndex];
+                                                return Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      child: Image.network(
+                                                        workspaceFilesItem
+                                                            .image,
+                                                        width: 40.0,
+                                                        height: 40.0,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Inter',
-                                                          color:
-                                                              Color(0xFFB0B2B2),
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  10.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              functions.getFileName(
+                                                                  workspaceFilesItem
+                                                                      .image),
+                                                              'File.png',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium,
+                                                          ),
+                                                          FutureBuilder<
+                                                              UsersRecord>(
+                                                            future: UsersRecord
+                                                                .getDocumentOnce(
+                                                                    workspaceFilesItem
+                                                                        .user!),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              // Customize what your widget looks like when it's loading.
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 50.0,
+                                                                    height:
+                                                                        50.0,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      valueColor:
+                                                                          AlwaysStoppedAnimation<
+                                                                              Color>(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .primary,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+                                                              final textUsersRecord =
+                                                                  snapshot
+                                                                      .data!;
+                                                              return Text(
+                                                                valueOrDefault<
+                                                                    String>(
+                                                                  'Shared by ${textUsersRecord.displayName} on ${dateTimeFormat('yMMMd', workspaceFilesItem.timestamp)}',
+                                                                  'N/A',
+                                                                ),
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      fontFamily:
+                                                                          'Inter',
+                                                                      color: Color(
+                                                                          0xFFB0B2B2),
+                                                                    ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }).divide(SizedBox(width: 75.0)),
                                             ),
-                                          ],
-                                        );
-                                      }).divide(SizedBox(width: 75.0)),
+                                          );
+                                        },
+                                      ),
                                     );
                                   },
                                 ),

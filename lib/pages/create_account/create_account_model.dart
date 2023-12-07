@@ -24,6 +24,10 @@ class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
   FocusNode? phoneNumberFocusNode;
   TextEditingController? phoneNumberController;
   String? Function(BuildContext, String?)? phoneNumberControllerValidator;
+  // State field(s) for companyName widget.
+  FocusNode? companyNameFocusNode;
+  TextEditingController? companyNameController;
+  String? Function(BuildContext, String?)? companyNameControllerValidator;
 
   /// Initialization and disposal methods.
 
@@ -39,6 +43,9 @@ class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
 
     phoneNumberFocusNode?.dispose();
     phoneNumberController?.dispose();
+
+    companyNameFocusNode?.dispose();
+    companyNameController?.dispose();
   }
 
   /// Action blocks are added here.
