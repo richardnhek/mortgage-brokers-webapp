@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -56,8 +57,8 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
     return Container(
       width: double.infinity,
       constraints: BoxConstraints(
-        minWidth: 590,
-        maxWidth: 592,
+        minWidth: 590.0,
+        maxWidth: 592.0,
       ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
@@ -141,6 +142,11 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                   child: TextFormField(
                                     controller: _model.textController1,
                                     focusNode: _model.textFieldFocusNode1,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      '_model.textController1',
+                                      Duration(milliseconds: 100),
+                                      () => setState(() {}),
+                                    ),
                                     autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -215,6 +221,11 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                   child: TextFormField(
                                     controller: _model.textController2,
                                     focusNode: _model.textFieldFocusNode2,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      '_model.textController2',
+                                      Duration(milliseconds: 100),
+                                      () => setState(() {}),
+                                    ),
                                     autofocus: true,
                                     obscureText: false,
                                     decoration: InputDecoration(
@@ -292,6 +303,11 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                             child: TextFormField(
                               controller: _model.textController3,
                               focusNode: _model.textFieldFocusNode3,
+                              onChanged: (_) => EasyDebounce.debounce(
+                                '_model.textController3',
+                                Duration(milliseconds: 100),
+                                () => setState(() {}),
+                              ),
                               autofocus: true,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -333,9 +349,16 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
               child: FFButtonWidget(
-                onPressed: () {
-                  print('Button pressed ...');
-                },
+                onPressed: !((_model.textController1.text != null &&
+                            _model.textController1.text != '') &&
+                        (_model.textController2.text != null &&
+                            _model.textController2.text != '') &&
+                        (_model.textController3.text != null &&
+                            _model.textController3.text != ''))
+                    ? null
+                    : () {
+                        print('Button pressed ...');
+                      },
                 text: 'Add Member',
                 options: FFButtonOptions(
                   width: double.infinity,
@@ -355,7 +378,8 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                     color: Colors.transparent,
                     width: 0,
                   ),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.0),
+                  disabledColor: FlutterFlowTheme.of(context).secondaryText,
                 ),
               ),
             ),

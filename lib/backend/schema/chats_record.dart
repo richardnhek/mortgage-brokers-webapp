@@ -72,6 +72,11 @@ class ChatsRecord extends FirestoreRecord {
   DocumentReference? get workspaceRef => _workspaceRef;
   bool hasWorkspaceRef() => _workspaceRef != null;
 
+  // "chat_ref" field.
+  DocumentReference? _chatRef;
+  DocumentReference? get chatRef => _chatRef;
+  bool hasChatRef() => _chatRef != null;
+
   void _initializeFields() {
     _users = getDataList(snapshotData['users']);
     _userA = snapshotData['user_a'] as DocumentReference?;
@@ -85,6 +90,7 @@ class ChatsRecord extends FirestoreRecord {
     _workspaceId = snapshotData['workspace_id'] as String?;
     _channelName = snapshotData['channel_name'] as String?;
     _workspaceRef = snapshotData['workspace_ref'] as DocumentReference?;
+    _chatRef = snapshotData['chat_ref'] as DocumentReference?;
   }
 
   static CollectionReference get collection =>
@@ -130,6 +136,7 @@ Map<String, dynamic> createChatsRecordData({
   String? workspaceId,
   String? channelName,
   DocumentReference? workspaceRef,
+  DocumentReference? chatRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -142,6 +149,7 @@ Map<String, dynamic> createChatsRecordData({
       'workspace_id': workspaceId,
       'channel_name': channelName,
       'workspace_ref': workspaceRef,
+      'chat_ref': chatRef,
     }.withoutNulls,
   );
 
@@ -164,7 +172,8 @@ class ChatsRecordDocumentEquality implements Equality<ChatsRecord> {
         e1?.chatType == e2?.chatType &&
         e1?.workspaceId == e2?.workspaceId &&
         e1?.channelName == e2?.channelName &&
-        e1?.workspaceRef == e2?.workspaceRef;
+        e1?.workspaceRef == e2?.workspaceRef &&
+        e1?.chatRef == e2?.chatRef;
   }
 
   @override
@@ -179,7 +188,8 @@ class ChatsRecordDocumentEquality implements Equality<ChatsRecord> {
         e?.chatType,
         e?.workspaceId,
         e?.channelName,
-        e?.workspaceRef
+        e?.workspaceRef,
+        e?.chatRef
       ]);
 
   @override

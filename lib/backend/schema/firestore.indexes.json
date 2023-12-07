@@ -43,20 +43,6 @@
         {
           "fieldPath": "users",
           "arrayConfig": "CONTAINS"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "chats",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "chat_type",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "users",
-          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "last_message_time",
@@ -90,6 +76,24 @@
         {
           "order": "ASCENDING",
           "queryScope": "COLLECTION_GROUP"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "chats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "workspace_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "chat_type",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "users",
+          "arrayConfig": "CONTAINS"
         }
       ]
     }

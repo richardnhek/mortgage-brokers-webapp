@@ -1,9 +1,11 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:stop_watch_timer/stop_watch_timer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,6 +43,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
     super.initState();
     _model = createModel(context, () => CodeVerificationModel());
 
+    authManager.handlePhoneAuthStateChanges(context);
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -90,13 +93,13 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      'logo here',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Inter',
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.normal,
-                          ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(0.0),
+                      child: Image.asset(
+                        'assets/images/logo.jpeg',
+                        height: 50.0,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     Padding(
                       padding:
@@ -197,6 +200,11 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                     ),
                                     controller: _model.pinCodeController,
                                     onChanged: (_) {},
+                                    onCompleted: (_) async {
+                                      setState(() {
+                                        _model.isComplete = true;
+                                      });
+                                    },
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
                                     validator: _model.pinCodeControllerValidator
@@ -206,16 +214,135 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 20.0, 0.0, 0.0),
-                                  child: Text(
-                                    'Resend Code',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Inter',
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w500,
-                                          decoration: TextDecoration.underline,
-                                        ),
+                                  child: Builder(
+                                    builder: (context) {
+                                      if (_model.isSent == true) {
+                                        return InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            setState(() {
+                                              _model.isSent = true;
+                                            });
+                                            final phoneNumberVal =
+                                                widget.phoneNumber;
+                                            if (phoneNumberVal == null ||
+                                                phoneNumberVal.isEmpty ||
+                                                !phoneNumberVal
+                                                    .startsWith('+')) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                      'Phone Number is required and has to start with +.'),
+                                                ),
+                                              );
+                                              return;
+                                            }
+                                            await authManager.beginPhoneAuth(
+                                              context: context,
+                                              phoneNumber: phoneNumberVal,
+                                              onCodeSent: (context) async {
+                                                context.goNamedAuth(
+                                                  'CodeVerification',
+                                                  context.mounted,
+                                                  queryParameters: {
+                                                    'phoneNumber':
+                                                        serializeParam(
+                                                      widget.phoneNumber,
+                                                      ParamType.String,
+                                                    ),
+                                                    'authType': serializeParam(
+                                                      widget.authType,
+                                                      ParamType.String,
+                                                    ),
+                                                  }.withoutNulls,
+                                                  ignoreRedirect: true,
+                                                );
+                                              },
+                                            );
+                                          },
+                                          child: Text(
+                                            'Resend Code',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Inter',
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w500,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                          ),
+                                        );
+                                      } else {
+                                        return Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            FlutterFlowTimer(
+                                              initialTime:
+                                                  _model.timerMilliseconds,
+                                              getDisplayTime: (value) =>
+                                                  StopWatchTimer.getDisplayTime(
+                                                value,
+                                                hours: false,
+                                                minute: false,
+                                                milliSecond: false,
+                                              ),
+                                              controller:
+                                                  _model.timerController,
+                                              updateStateInterval:
+                                                  Duration(milliseconds: 1000),
+                                              onChanged: (value, displayTime,
+                                                  shouldUpdate) {
+                                                _model.timerMilliseconds =
+                                                    value;
+                                                _model.timerValue = displayTime;
+                                                if (shouldUpdate)
+                                                  setState(() {});
+                                              },
+                                              onEnded: () async {
+                                                setState(() {
+                                                  _model.isSent = false;
+                                                });
+                                              },
+                                              textAlign: TextAlign.start,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .headlineSmall
+                                                      .override(
+                                                        fontFamily: 'Inter',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        fontSize: 12.0,
+                                                      ),
+                                            ),
+                                            Text(
+                                              's',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Inter',
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        fontSize: 12.0,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                               ],
@@ -225,42 +352,46 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 100.0, 0.0, 0.0),
                             child: FFButtonWidget(
-                              onPressed: () async {
-                                Function() _navigate = () {};
-                                GoRouter.of(context).prepareAuthEvent();
-                                final smsCodeVal =
-                                    _model.pinCodeController!.text;
-                                if (smsCodeVal == null || smsCodeVal.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content:
-                                          Text('Enter SMS verification code.'),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                final phoneVerifiedUser =
-                                    await authManager.verifySmsCode(
-                                  context: context,
-                                  smsCode: smsCodeVal,
-                                );
-                                if (phoneVerifiedUser == null) {
-                                  return;
-                                }
+                              onPressed: _model.isComplete == false
+                                  ? null
+                                  : () async {
+                                      Function() _navigate = () {};
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      final smsCodeVal =
+                                          _model.pinCodeController!.text;
+                                      if (smsCodeVal == null ||
+                                          smsCodeVal.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                                'Enter SMS verification code.'),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      final phoneVerifiedUser =
+                                          await authManager.verifySmsCode(
+                                        context: context,
+                                        smsCode: smsCodeVal,
+                                      );
+                                      if (phoneVerifiedUser == null) {
+                                        return;
+                                      }
 
-                                _navigate = () => context.goNamedAuth(
-                                    'HomePage', context.mounted);
-                                if (widget.authType == 'Create') {
-                                  await currentUserReference!
-                                      .update(createUsersRecordData(
-                                    email: widget.userEmail,
-                                    displayName: widget.displayName,
-                                    userRef: currentUserReference,
-                                  ));
-                                }
+                                      _navigate = () => context.goNamedAuth(
+                                          'HomePage', context.mounted);
+                                      if (widget.authType == 'Create') {
+                                        await currentUserReference!
+                                            .update(createUsersRecordData(
+                                          email: widget.userEmail,
+                                          displayName: widget.displayName,
+                                          userRef: currentUserReference,
+                                        ));
+                                      }
 
-                                _navigate();
-                              },
+                                      _navigate();
+                                    },
                               text: 'Confirm',
                               options: FFButtonOptions(
                                 width: double.infinity,
@@ -284,6 +415,8 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                   width: 0.0,
                                 ),
                                 borderRadius: BorderRadius.circular(8.0),
+                                disabledColor:
+                                    FlutterFlowTheme.of(context).secondaryText,
                               ),
                             ),
                           ),

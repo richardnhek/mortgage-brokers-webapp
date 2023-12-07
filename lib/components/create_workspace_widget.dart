@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -202,6 +203,11 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                               child: TextFormField(
                                 controller: _model.workspaceNameController,
                                 focusNode: _model.workspaceNameFocusNode,
+                                onChanged: (_) => EasyDebounce.debounce(
+                                  '_model.workspaceNameController',
+                                  Duration(milliseconds: 100),
+                                  () => setState(() {}),
+                                ),
                                 autofocus: true,
                                 obscureText: false,
                                 decoration: InputDecoration(
@@ -313,6 +319,12 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                               _model.channelNameController,
                                           focusNode:
                                               _model.channelNameFocusNode,
+                                          onChanged: (_) =>
+                                              EasyDebounce.debounce(
+                                            '_model.channelNameController',
+                                            Duration(milliseconds: 100),
+                                            () => setState(() {}),
+                                          ),
                                           autofocus: true,
                                           obscureText: false,
                                           decoration: InputDecoration(
@@ -487,81 +499,93 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                       ),
                     ),
                     FFButtonWidget(
-                      onPressed: () async {
-                        var workspacesRecordReference =
-                            WorkspacesRecord.collection.doc();
-                        await workspacesRecordReference.set({
-                          ...createWorkspacesRecordData(
-                            name: _model.workspaceNameController.text,
-                            id: random_data.randomString(
-                              10,
-                              15,
-                              true,
-                              true,
-                              true,
-                            ),
-                          ),
-                          ...mapToFirestore(
-                            {
-                              'members': FFAppState().selectedMembers,
-                            },
-                          ),
-                        });
-                        _model.createdWorkspace =
-                            WorkspacesRecord.getDocumentFromData({
-                          ...createWorkspacesRecordData(
-                            name: _model.workspaceNameController.text,
-                            id: random_data.randomString(
-                              10,
-                              15,
-                              true,
-                              true,
-                              true,
-                            ),
-                          ),
-                          ...mapToFirestore(
-                            {
-                              'members': FFAppState().selectedMembers,
-                            },
-                          ),
-                        }, workspacesRecordReference);
+                      onPressed: !((_model.workspaceNameController.text !=
+                                          null &&
+                                      _model.workspaceNameController.text !=
+                                          '') &&
+                                  (_model.channelNameController.text != null &&
+                                      _model.channelNameController.text !=
+                                          '')) ||
+                              (FFAppState().selectedMembers.length < 2)
+                          ? null
+                          : () async {
+                              var workspacesRecordReference =
+                                  WorkspacesRecord.collection.doc();
+                              await workspacesRecordReference.set({
+                                ...createWorkspacesRecordData(
+                                  name: _model.workspaceNameController.text,
+                                  id: random_data.randomString(
+                                    10,
+                                    15,
+                                    true,
+                                    true,
+                                    true,
+                                  ),
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'members': FFAppState().selectedMembers,
+                                  },
+                                ),
+                              });
+                              _model.createdWorkspace =
+                                  WorkspacesRecord.getDocumentFromData({
+                                ...createWorkspacesRecordData(
+                                  name: _model.workspaceNameController.text,
+                                  id: random_data.randomString(
+                                    10,
+                                    15,
+                                    true,
+                                    true,
+                                    true,
+                                  ),
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'members': FFAppState().selectedMembers,
+                                  },
+                                ),
+                              }, workspacesRecordReference);
 
-                        await _model.createdWorkspace!.reference.update({
-                          ...createWorkspacesRecordData(
-                            workspaceRef: _model.createdWorkspace?.reference,
-                          ),
-                          ...mapToFirestore(
-                            {
-                              'members':
-                                  FieldValue.arrayUnion([currentUserReference]),
-                            },
-                          ),
-                        });
-                        setState(() {
-                          FFAppState()
-                              .addToSelectedMembers(currentUserReference!);
-                        });
+                              await _model.createdWorkspace!.reference.update({
+                                ...createWorkspacesRecordData(
+                                  workspaceRef:
+                                      _model.createdWorkspace?.reference,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'members': FieldValue.arrayUnion(
+                                        [currentUserReference]),
+                                  },
+                                ),
+                              });
+                              setState(() {
+                                FFAppState().addToSelectedMembers(
+                                    currentUserReference!);
+                              });
 
-                        await ChatsRecord.collection.doc().set({
-                          ...createChatsRecordData(
-                            chatType: 'Channel',
-                            workspaceId: _model.createdWorkspace?.id,
-                            channelName: _model.channelNameController.text,
-                            workspaceRef: _model.createdWorkspace?.reference,
-                          ),
-                          ...mapToFirestore(
-                            {
-                              'users': FFAppState().selectedMembers,
-                            },
-                          ),
-                        });
-                        _model.updatePage(() {
-                          FFAppState().selectedMembers = [];
-                        });
-                        Navigator.pop(context);
+                              await ChatsRecord.collection.doc().set({
+                                ...createChatsRecordData(
+                                  chatType: 'Channel',
+                                  workspaceId: _model.createdWorkspace?.id,
+                                  channelName:
+                                      _model.channelNameController.text,
+                                  workspaceRef:
+                                      _model.createdWorkspace?.reference,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'users': FFAppState().selectedMembers,
+                                  },
+                                ),
+                              });
+                              _model.updatePage(() {
+                                FFAppState().selectedMembers = [];
+                              });
+                              Navigator.pop(context);
 
-                        setState(() {});
-                      },
+                              setState(() {});
+                            },
                       text: 'Create Workplace',
                       options: FFButtonOptions(
                         width: double.infinity,
@@ -581,7 +605,9 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                           color: Colors.transparent,
                           width: 0,
                         ),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.0),
+                        disabledColor:
+                            FlutterFlowTheme.of(context).secondaryText,
                       ),
                     ),
                   ],
