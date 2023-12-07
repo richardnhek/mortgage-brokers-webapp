@@ -125,7 +125,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
             Align(
               alignment: AlignmentDirectional(-1.00, -1.00),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(25.0, 27.5, 0.0, 27.5),
+                padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.5, 0.0, 25.5),
                 child: Text(
                   'Overview - ${widget.workspaceName}',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -615,7 +615,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                         ),
                                                     keyboardType:
                                                         const TextInputType
-                                                                .numberWithOptions(
+                                                            .numberWithOptions(
                                                             decimal: true),
                                                     cursorColor:
                                                         FlutterFlowTheme.of(

@@ -8,6 +8,8 @@ import '/components/empty_chat_widget_widget.dart';
 import '/components/main_web_nav_widget.dart';
 import '/components/overview_widget.dart';
 import '/components/start_new_chat_widget.dart';
+import '/components/user_details_widget.dart';
+import '/components/workspace_detail_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -1285,20 +1287,470 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         builder: (context) {
                           if (!((FFAppState().currentChatRef == null) &&
                               (FFAppState().currentChatUserRef == null))) {
-                            return Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              child: custom_widgets.CustomChatContainer(
-                                width: double.infinity,
-                                height: double.infinity,
-                                chatUser: _model.chatUser,
-                                chatRef: FFAppState().currentChatRef,
-                                channelName: _model.selectedChannel,
-                                // CUSTOM_CODE_STARTED
-                                key: ValueKey(
-                                    '${_model.chatUser}-${_model.chatRef?.id}-${_model.selectedChannel}'),
-                                // CUSTOM_CODE_ENDED
-                              ),
+                            return Stack(
+                              children: [
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    width: double.infinity,
+                                    height:
+                                        MediaQuery.of(context).size.height - 50,
+                                    child: custom_widgets.CustomChatContainer(
+                                      width: double.infinity,
+                                      height:
+                                          MediaQuery.of(context).size.height -
+                                              50,
+                                      chatUser: _model.chatUser,
+                                      chatRef: FFAppState().currentChatRef,
+                                      channelName: _model.selectedChannel,
+                                      // CUSTOM_CODE_STARTED
+                                      key: ValueKey(
+                                          '${_model.chatUser}-${_model.chatRef?.id}-${_model.selectedChannel}'),
+                                      // CUSTOM_CODE_ENDED
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  height: 75,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Builder(
+                                        builder: (context) {
+                                          if (_model.chatUser != null) {
+                                            return Builder(
+                                              builder: (context) => Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(25, 25, 0, 0),
+                                                child: FutureBuilder<
+                                                    List<UsersRecord>>(
+                                                  future: queryUsersRecordOnce(
+                                                    queryBuilder:
+                                                        (usersRecord) =>
+                                                            usersRecord.where(
+                                                      'user_ref',
+                                                      isEqualTo: _model
+                                                          .chatUser?.reference,
+                                                    ),
+                                                    singleRecord: true,
+                                                  ),
+                                                  builder: (context, snapshot) {
+                                                    // Customize what your widget looks like when it's loading.
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          width: 50,
+                                                          height: 50,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            valueColor:
+                                                                AlwaysStoppedAnimation<
+                                                                    Color>(
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primary,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                    List<UsersRecord>
+                                                        rowUsersRecordList =
+                                                        snapshot.data!;
+                                                    // Return an empty Container when the item does not exist.
+                                                    if (snapshot
+                                                        .data!.isEmpty) {
+                                                      return Container();
+                                                    }
+                                                    final rowUsersRecord =
+                                                        rowUsersRecordList
+                                                                .isNotEmpty
+                                                            ? rowUsersRecordList
+                                                                .first
+                                                            : null;
+                                                    return InkWell(
+                                                      splashColor:
+                                                          Colors.transparent,
+                                                      focusColor:
+                                                          Colors.transparent,
+                                                      hoverColor:
+                                                          Colors.transparent,
+                                                      highlightColor:
+                                                          Colors.transparent,
+                                                      onTap: () async {
+                                                        await showAlignedDialog(
+                                                          context: context,
+                                                          isGlobal: true,
+                                                          avoidOverflow: false,
+                                                          targetAnchor:
+                                                              AlignmentDirectional(
+                                                                      0, 0)
+                                                                  .resolve(
+                                                                      Directionality.of(
+                                                                          context)),
+                                                          followerAnchor:
+                                                              AlignmentDirectional(
+                                                                      0, 0)
+                                                                  .resolve(
+                                                                      Directionality.of(
+                                                                          context)),
+                                                          builder:
+                                                              (dialogContext) {
+                                                            return Material(
+                                                              color: Colors
+                                                                  .transparent,
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () => _model
+                                                                        .unfocusNode
+                                                                        .canRequestFocus
+                                                                    ? FocusScope.of(
+                                                                            context)
+                                                                        .requestFocus(_model
+                                                                            .unfocusNode)
+                                                                    : FocusScope.of(
+                                                                            context)
+                                                                        .unfocus(),
+                                                                child:
+                                                                    UserDetailsWidget(
+                                                                  userDocs:
+                                                                      rowUsersRecord!,
+                                                                  chatRef:
+                                                                      FFAppState()
+                                                                          .currentChatRef!,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ).then((value) =>
+                                                            setState(() {}));
+                                                      },
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        3),
+                                                            child:
+                                                                Image.network(
+                                                              rowUsersRecord!
+                                                                  .photoUrl,
+                                                              width: 25,
+                                                              height: 25,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        10,
+                                                                        0,
+                                                                        0,
+                                                                        0),
+                                                            child: Text(
+                                                              rowUsersRecord!
+                                                                  .displayName
+                                                                  .maybeHandleOverflow(
+                                                                maxChars: 18,
+                                                                replacement:
+                                                                    '…',
+                                                              ),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Inter',
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            return Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(25, 25, 25, 0),
+                                              child: StreamBuilder<
+                                                  List<ChatsRecord>>(
+                                                stream: queryChatsRecord(
+                                                  queryBuilder: (chatsRecord) =>
+                                                      chatsRecord.where(
+                                                    'chat_ref',
+                                                    isEqualTo: FFAppState()
+                                                        .currentChatRef,
+                                                  ),
+                                                  singleRecord: true,
+                                                ),
+                                                builder: (context, snapshot) {
+                                                  // Customize what your widget looks like when it's loading.
+                                                  if (!snapshot.hasData) {
+                                                    return Center(
+                                                      child: SizedBox(
+                                                        width: 50,
+                                                        height: 50,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation<
+                                                                  Color>(
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primary,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                  List<ChatsRecord>
+                                                      rowChatsRecordList =
+                                                      snapshot.data!;
+                                                  // Return an empty Container when the item does not exist.
+                                                  if (snapshot.data!.isEmpty) {
+                                                    return Container();
+                                                  }
+                                                  final rowChatsRecord =
+                                                      rowChatsRecordList
+                                                              .isNotEmpty
+                                                          ? rowChatsRecordList
+                                                              .first
+                                                          : null;
+                                                  return Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Builder(
+                                                        builder: (context) =>
+                                                            InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          onTap: () async {
+                                                            await showAlignedDialog(
+                                                              context: context,
+                                                              isGlobal: true,
+                                                              avoidOverflow:
+                                                                  false,
+                                                              targetAnchor:
+                                                                  AlignmentDirectional(
+                                                                          0, 0)
+                                                                      .resolve(
+                                                                          Directionality.of(
+                                                                              context)),
+                                                              followerAnchor:
+                                                                  AlignmentDirectional(
+                                                                          0, 0)
+                                                                      .resolve(
+                                                                          Directionality.of(
+                                                                              context)),
+                                                              builder:
+                                                                  (dialogContext) {
+                                                                return Material(
+                                                                  color: Colors
+                                                                      .transparent,
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () => _model
+                                                                            .unfocusNode
+                                                                            .canRequestFocus
+                                                                        ? FocusScope.of(context).requestFocus(_model
+                                                                            .unfocusNode)
+                                                                        : FocusScope.of(context)
+                                                                            .unfocus(),
+                                                                    child:
+                                                                        WorkspaceDetailWidget(
+                                                                      chatRef:
+                                                                          rowChatsRecord!
+                                                                              .reference,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ).then((value) =>
+                                                                setState(
+                                                                    () {}));
+                                                          },
+                                                          child: Text(
+                                                            rowChatsRecord!
+                                                                .channelName
+                                                                .maybeHandleOverflow(
+                                                              maxChars: 18,
+                                                              replacement: '…',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Inter',
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          StreamBuilder<
+                                                              List<
+                                                                  UsersRecord>>(
+                                                            stream:
+                                                                queryUsersRecord(
+                                                              queryBuilder: (usersRecord) =>
+                                                                  usersRecord.whereIn(
+                                                                      'user_ref',
+                                                                      rowChatsRecord
+                                                                          ?.users),
+                                                              limit: 3,
+                                                            ),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              // Customize what your widget looks like when it's loading.
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      valueColor:
+                                                                          AlwaysStoppedAnimation<
+                                                                              Color>(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .primary,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+                                                              List<UsersRecord>
+                                                                  rowUsersRecordList =
+                                                                  snapshot
+                                                                      .data!;
+                                                              return Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                children: List.generate(
+                                                                    rowUsersRecordList
+                                                                        .length,
+                                                                    (rowIndex) {
+                                                                  final rowUsersRecord =
+                                                                      rowUsersRecordList[
+                                                                          rowIndex];
+                                                                  return ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(3),
+                                                                    child: Image
+                                                                        .network(
+                                                                      rowUsersRecord
+                                                                          .photoUrl,
+                                                                      width: 25,
+                                                                      height:
+                                                                          25,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  );
+                                                                }).divide(
+                                                                    SizedBox(
+                                                                        width:
+                                                                            5)),
+                                                              );
+                                                            },
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        20,
+                                                                        0,
+                                                                        0,
+                                                                        0),
+                                                            child: Text(
+                                                              valueOrDefault<
+                                                                  String>(
+                                                                rowChatsRecord
+                                                                    ?.users
+                                                                    ?.length
+                                                                    ?.toString(),
+                                                                'N/A',
+                                                              ).maybeHandleOverflow(
+                                                                maxChars: 18,
+                                                                replacement:
+                                                                    '…',
+                                                              ),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Inter',
+                                                                    fontSize:
+                                                                        16,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                      Divider(
+                                        height: 0,
+                                        thickness: 1,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             );
                           } else {
                             return wrapWithModel(

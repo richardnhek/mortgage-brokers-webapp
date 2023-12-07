@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'add_new_member_model.dart';
 export 'add_new_member_model.dart';
 
@@ -54,19 +55,23 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
 
     return Container(
       width: double.infinity,
+      constraints: BoxConstraints(
+        minWidth: 590,
+        maxWidth: 592,
+      ),
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).primaryBackground,
         boxShadow: [
           BoxShadow(
-            blurRadius: 4.0,
+            blurRadius: 4,
             color: Color(0x25090F13),
-            offset: Offset(0.0, 2.0),
+            offset: Offset(0, 2),
           )
         ],
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+        padding: EdgeInsetsDirectional.fromSTEB(25, 25, 25, 25),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +84,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                   'Add member',
                   style: FlutterFlowTheme.of(context).headlineSmall.override(
                         fontFamily: 'Inter',
-                        fontSize: 20.0,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                         lineHeight: 1.2,
                       ),
@@ -88,16 +93,15 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                   'Invite new members to the workspace.',
                   style: FlutterFlowTheme.of(context).labelMedium,
                 ),
-              ].divide(SizedBox(height: 20.0)),
+              ].divide(SizedBox(height: 20)),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 20),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
@@ -107,29 +111,29 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: Text(
                                   'First Name',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Inter',
-                                        fontSize: 15.0,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.normal,
                                         lineHeight: 1.5,
                                       ),
                                 ),
                               ),
                               Container(
-                                height: 56.0,
+                                height: 56,
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
                                     color:
                                         FlutterFlowTheme.of(context).darkGrey4,
-                                    width: 1.0,
+                                    width: 1,
                                   ),
                                 ),
                                 child: Container(
@@ -151,7 +155,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                           .labelMedium
                                           .override(
                                             fontFamily: 'Inter',
-                                            fontSize: 16.0,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.normal,
                                             lineHeight: 1.5,
                                           ),
@@ -161,7 +165,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                       focusedErrorBorder: InputBorder.none,
                                       contentPadding:
                                           EdgeInsetsDirectional.fromSTEB(
-                                              16.0, 0.0, 16.0, 0.0),
+                                              16, 0, 16, 0),
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyMedium,
@@ -181,29 +185,29 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 10.0),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                                 child: Text(
                                   'Last Name',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Inter',
-                                        fontSize: 15.0,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.normal,
                                         lineHeight: 1.5,
                                       ),
                                 ),
                               ),
                               Container(
-                                height: 56.0,
+                                height: 56,
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(4),
                                   border: Border.all(
                                     color:
                                         FlutterFlowTheme.of(context).darkGrey4,
-                                    width: 1.0,
+                                    width: 1,
                                   ),
                                 ),
                                 child: Container(
@@ -225,7 +229,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                           .labelMedium
                                           .override(
                                             fontFamily: 'Inter',
-                                            fontSize: 16.0,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.normal,
                                             lineHeight: 1.5,
                                           ),
@@ -235,7 +239,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                       focusedErrorBorder: InputBorder.none,
                                       contentPadding:
                                           EdgeInsetsDirectional.fromSTEB(
-                                              16.0, 0.0, 16.0, 0.0),
+                                              16, 0, 16, 0),
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyMedium,
@@ -249,7 +253,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                             ],
                           ),
                         ),
-                      ].divide(SizedBox(width: 15.0)),
+                      ].divide(SizedBox(width: 15)),
                     ),
                   ),
                   Align(
@@ -259,15 +263,14 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 10.0),
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                           child: Text(
                             'Member',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
                                   fontFamily: 'Inter',
-                                  fontSize: 15.0,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.normal,
                                   lineHeight: 1.5,
                                 ),
@@ -275,13 +278,13 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                         ),
                         Container(
                           width: double.infinity,
-                          height: 56.0,
+                          height: 56,
                           decoration: BoxDecoration(
                             color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(4.0),
+                            borderRadius: BorderRadius.circular(4),
                             border: Border.all(
                               color: FlutterFlowTheme.of(context).darkGrey4,
-                              width: 1.0,
+                              width: 1,
                             ),
                           ),
                           child: Container(
@@ -303,7 +306,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                     .labelMedium
                                     .override(
                                       fontFamily: 'Inter',
-                                      fontSize: 16.0,
+                                      fontSize: 16,
                                       fontWeight: FontWeight.normal,
                                       lineHeight: 1.5,
                                     ),
@@ -312,7 +315,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                                 errorBorder: InputBorder.none,
                                 focusedErrorBorder: InputBorder.none,
                                 contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 16.0, 0.0),
+                                    16, 0, 16, 0),
                               ),
                               style: FlutterFlowTheme.of(context).bodyMedium,
                               cursorColor: FlutterFlowTheme.of(context).primary,
@@ -328,7 +331,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(0, 50, 0, 0),
               child: FFButtonWidget(
                 onPressed: () {
                   print('Button pressed ...');
@@ -336,24 +339,23 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                 text: 'Add Member',
                 options: FFButtonOptions(
                   width: double.infinity,
-                  height: 56.0,
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                  iconPadding:
-                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  height: 56,
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                  iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                   color: FlutterFlowTheme.of(context).primary,
                   textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                         fontFamily: 'Inter',
                         color: FlutterFlowTheme.of(context).primaryBackground,
-                        fontSize: 16.0,
+                        fontSize: 16,
                         fontWeight: FontWeight.w500,
                         lineHeight: 1.2,
                       ),
-                  elevation: 0.0,
+                  elevation: 0,
                   borderSide: BorderSide(
                     color: Colors.transparent,
-                    width: 0.0,
+                    width: 0,
                   ),
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),

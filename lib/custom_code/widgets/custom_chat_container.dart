@@ -75,13 +75,15 @@ class _CustomChatContainerState extends State<CustomChatContainer> {
   @override
   void didUpdateWidget(CustomChatContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
+    // print("oldWidget.chatUser: ${oldWidget.chatUser}");
+    // print("widget.chatUser: ${widget.chatUser}");
+    print("oldWidget.chatRef: ${oldWidget.chatRef}");
+    print("widget.chatRef: ${widget.chatRef}");
+    // print("oldWidget.channelName: ${oldWidget.channelName}");
+    // print("widget.channelName: ${widget.channelName}");
 
-    if (widget.chatUser != oldWidget.chatUser ||
-        widget.chatRef != oldWidget.chatRef ||
-        widget.channelName != oldWidget.channelName) {
-      // If the user or chat reference has changed, re-subscribe to the chat info
-      _chatInfoSubscription?.cancel(); // Cancel the existing subscription
-
+    if (widget.chatRef != oldWidget.chatRef) {
+      _chatInfoSubscription?.cancel();
       _chatInfoSubscription = FFChatManager.instance
           .getChatInfo(
         otherUserRecord: widget.chatUser,

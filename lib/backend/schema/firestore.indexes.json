@@ -63,7 +63,9 @@
           "order": "DESCENDING"
         }
       ]
-    },
+    }
+  ],
+  "fieldOverrides": [
     {
       "collectionGroup": "chats",
       "queryScope": "COLLECTION",
