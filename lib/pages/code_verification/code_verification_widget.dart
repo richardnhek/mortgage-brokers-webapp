@@ -216,7 +216,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                       0.0, 20.0, 0.0, 0.0),
                                   child: Builder(
                                     builder: (context) {
-                                      if (_model.isSent == true) {
+                                      if (_model.isSent == false) {
                                         return InkWell(
                                           splashColor: Colors.transparent,
                                           focusColor: Colors.transparent,
@@ -226,6 +226,8 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                             setState(() {
                                               _model.isSent = true;
                                             });
+                                            _model.timerController
+                                                .onStartTimer();
                                             final phoneNumberVal =
                                                 widget.phoneNumber;
                                             if (phoneNumberVal == null ||
@@ -309,6 +311,8 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                 setState(() {
                                                   _model.isSent = false;
                                                 });
+                                                _model.timerController
+                                                    .onResetTimer();
                                               },
                                               textAlign: TextAlign.start,
                                               style:
