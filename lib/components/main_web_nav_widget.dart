@@ -161,19 +161,23 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
+                              // CUSTOM_CODE_STARTED
                               onTap: () async {
-                                if (animationsMap[
-                                        'containerOnActionTriggerAnimation'] !=
-                                    null) {
-                                  await animationsMap[
-                                          'containerOnActionTriggerAnimation']!
-                                      .controller
-                                      .reverse();
+                                if (FFAppState().mainNavView != 'Workspace') {
+                                  if (animationsMap[
+                                          'containerOnActionTriggerAnimation'] !=
+                                      null) {
+                                    await animationsMap[
+                                            'containerOnActionTriggerAnimation']!
+                                        .controller
+                                        .reverse();
+                                  }
+                                  FFAppState().update(() {
+                                    FFAppState().mainNavView = 'Workspace';
+                                  });
                                 }
-                                FFAppState().update(() {
-                                  FFAppState().mainNavView = 'Workspace';
-                                });
                               },
+                              // CUSTOM_CODE_ENDED
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -210,19 +214,23 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                               focusColor: Colors.transparent,
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
+                              // CUSTOM_CODE_STARTED
                               onTap: () async {
-                                if (animationsMap[
-                                        'containerOnActionTriggerAnimation'] !=
-                                    null) {
-                                  await animationsMap[
-                                          'containerOnActionTriggerAnimation']!
-                                      .controller
-                                      .forward(from: 0.0);
+                                if (FFAppState().mainNavView != 'Chats') {
+                                  if (animationsMap[
+                                          'containerOnActionTriggerAnimation'] !=
+                                      null) {
+                                    await animationsMap[
+                                            'containerOnActionTriggerAnimation']!
+                                        .controller
+                                        .forward(from: 0.0);
+                                  }
+                                  FFAppState().update(() {
+                                    FFAppState().mainNavView = 'Chats';
+                                  });
                                 }
-                                FFAppState().update(() {
-                                  FFAppState().mainNavView = 'Chats';
-                                });
                               },
+                              // CUSTOM_CODE_ENDED
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment: MainAxisAlignment.start,
