@@ -1,7 +1,9 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +13,12 @@ import 'create_account_model.dart';
 export 'create_account_model.dart';
 
 class CreateAccountWidget extends StatefulWidget {
-  const CreateAccountWidget({Key? key}) : super(key: key);
+  const CreateAccountWidget({
+    Key? key,
+    this.userRef,
+  }) : super(key: key);
+
+  final DocumentReference? userRef;
 
   @override
   _CreateAccountWidgetState createState() => _CreateAccountWidgetState();
@@ -703,58 +710,64 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                                       ''))
                                           ? null
                                           : () async {
-                                              final phoneNumberVal = _model
-                                                  .phoneNumberController.text;
-                                              if (phoneNumberVal == null ||
-                                                  phoneNumberVal.isEmpty ||
-                                                  !phoneNumberVal
-                                                      .startsWith('+')) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                        'Phone Number is required and has to start with +.'),
-                                                  ),
-                                                );
-                                                return;
-                                              }
-                                              await authManager.beginPhoneAuth(
-                                                context: context,
-                                                phoneNumber: phoneNumberVal,
-                                                onCodeSent: (context) async {
-                                                  context.goNamedAuth(
-                                                    'CodeVerification',
-                                                    context.mounted,
-                                                    queryParameters: {
-                                                      'phoneNumber':
-                                                          serializeParam(
-                                                        _model
-                                                            .phoneNumberController
-                                                            .text,
-                                                        ParamType.String,
-                                                      ),
-                                                      'userEmail':
-                                                          serializeParam(
-                                                        _model.emailController
-                                                            .text,
-                                                        ParamType.String,
-                                                      ),
-                                                      'displayName':
-                                                          serializeParam(
-                                                        _model.nameController
-                                                            .text,
-                                                        ParamType.String,
-                                                      ),
-                                                      'authType':
-                                                          serializeParam(
-                                                        'Create',
-                                                        ParamType.String,
-                                                      ),
-                                                    }.withoutNulls,
-                                                    ignoreRedirect: true,
+                                              if (widget.userRef != null) {
+                                                await widget.userRef!.update(
+                                                    createUsersRecordData());
+                                              } else {
+                                                final phoneNumberVal = _model
+                                                    .phoneNumberController.text;
+                                                if (phoneNumberVal == null ||
+                                                    phoneNumberVal.isEmpty ||
+                                                    !phoneNumberVal
+                                                        .startsWith('+')) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                          'Phone Number is required and has to start with +.'),
+                                                    ),
                                                   );
-                                                },
-                                              );
+                                                  return;
+                                                }
+                                                await authManager
+                                                    .beginPhoneAuth(
+                                                  context: context,
+                                                  phoneNumber: phoneNumberVal,
+                                                  onCodeSent: (context) async {
+                                                    context.goNamedAuth(
+                                                      'CodeVerification',
+                                                      context.mounted,
+                                                      queryParameters: {
+                                                        'phoneNumber':
+                                                            serializeParam(
+                                                          _model
+                                                              .phoneNumberController
+                                                              .text,
+                                                          ParamType.String,
+                                                        ),
+                                                        'userEmail':
+                                                            serializeParam(
+                                                          _model.emailController
+                                                              .text,
+                                                          ParamType.String,
+                                                        ),
+                                                        'displayName':
+                                                            serializeParam(
+                                                          _model.nameController
+                                                              .text,
+                                                          ParamType.String,
+                                                        ),
+                                                        'authType':
+                                                            serializeParam(
+                                                          'Create',
+                                                          ParamType.String,
+                                                        ),
+                                                      }.withoutNulls,
+                                                      ignoreRedirect: true,
+                                                    );
+                                                  },
+                                                );
+                                              }
                                             },
                                       text: 'Create an account',
                                       options: FFButtonOptions(

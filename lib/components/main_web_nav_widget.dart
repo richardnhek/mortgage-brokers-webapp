@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'main_web_nav_model.dart';
@@ -105,8 +104,8 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                       fit: BoxFit.cover,
                     ),
                   ),
-                  FaIcon(
-                    FontAwesomeIcons.bell,
+                  Icon(
+                    FFIcons.knotification,
                     color: FlutterFlowTheme.of(context).secondaryText,
                     size: 18.0,
                   ),
@@ -179,10 +178,10 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Icon(
-                                    Icons.inbox_outlined,
+                                    FFIcons.kworkspace,
                                     color:
                                         FlutterFlowTheme.of(context).secondary,
-                                    size: 21.0,
+                                    size: 16.0,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
@@ -204,7 +203,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                           ),
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 75.0, 10.0, 0.0),
+                                15.0, 75.0, 15.0, 0.0),
                             child: InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -228,10 +227,10 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Icon(
-                                    Icons.chat_bubble_outline,
+                                    FFIcons.kchats,
                                     color:
                                         FlutterFlowTheme.of(context).secondary,
-                                    size: 21.0,
+                                    size: 18.0,
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
@@ -354,7 +353,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Icon(
-                                Icons.logout_rounded,
+                                FFIcons.klogout,
                                 color: FlutterFlowTheme.of(context).secondary,
                                 size: 21.0,
                               ),

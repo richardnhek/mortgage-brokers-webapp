@@ -199,7 +199,11 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                               .secondary,
                                     ),
                                     controller: _model.pinCodeController,
-                                    onChanged: (_) {},
+                                    onChanged: (_) async {
+                                      setState(() {
+                                        _model.isComplete = false;
+                                      });
+                                    },
                                     onCompleted: (_) async {
                                       setState(() {
                                         _model.isComplete = true;
@@ -229,7 +233,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                             _model.timerController
                                                 .onStartTimer();
                                             final phoneNumberVal =
-                                                widget.phoneNumber;
+                                                '+${widget.phoneNumber}';
                                             if (phoneNumberVal == null ||
                                                 phoneNumberVal.isEmpty ||
                                                 !phoneNumberVal
@@ -292,7 +296,6 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                   StopWatchTimer.getDisplayTime(
                                                 value,
                                                 hours: false,
-                                                minute: false,
                                                 milliSecond: false,
                                               ),
                                               controller:
@@ -327,21 +330,24 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                         fontSize: 12.0,
                                                       ),
                                             ),
-                                            Text(
-                                              's',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        fontSize: 12.0,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(1.0, 0.0, 0.0, 0.0),
+                                              child: Text(
+                                                's',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryText,
+                                                          fontSize: 12.0,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                              ),
                                             ),
                                           ],
                                         );
