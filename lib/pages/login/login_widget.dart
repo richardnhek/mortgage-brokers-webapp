@@ -2,6 +2,7 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -177,6 +178,12 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                     .phoneNumberController,
                                                 focusNode:
                                                     _model.phoneNumberFocusNode,
+                                                onChanged: (_) =>
+                                                    EasyDebounce.debounce(
+                                                  '_model.phoneNumberController',
+                                                  Duration(milliseconds: 100),
+                                                  () => setState(() {}),
+                                                ),
                                                 onFieldSubmitted: (_) async {
                                                   final phoneNumberVal = _model
                                                       .phoneNumberController

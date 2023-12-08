@@ -2,6 +2,7 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -180,6 +181,12 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                             child: TextFormField(
                                               controller: _model.nameController,
                                               focusNode: _model.nameFocusNode,
+                                              onChanged: (_) =>
+                                                  EasyDebounce.debounce(
+                                                '_model.nameController',
+                                                Duration(milliseconds: 100),
+                                                () => setState(() {}),
+                                              ),
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -307,6 +314,12 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                               controller:
                                                   _model.emailController,
                                               focusNode: _model.emailFocusNode,
+                                              onChanged: (_) =>
+                                                  EasyDebounce.debounce(
+                                                '_model.emailController',
+                                                Duration(milliseconds: 100),
+                                                () => setState(() {}),
+                                              ),
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -436,6 +449,12 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                                   _model.phoneNumberController,
                                               focusNode:
                                                   _model.phoneNumberFocusNode,
+                                              onChanged: (_) =>
+                                                  EasyDebounce.debounce(
+                                                '_model.phoneNumberController',
+                                                Duration(milliseconds: 100),
+                                                () => setState(() {}),
+                                              ),
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -564,6 +583,12 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget> {
                                                   _model.companyNameController,
                                               focusNode:
                                                   _model.companyNameFocusNode,
+                                              onChanged: (_) =>
+                                                  EasyDebounce.debounce(
+                                                '_model.companyNameController',
+                                                Duration(milliseconds: 100),
+                                                () => setState(() {}),
+                                              ),
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(

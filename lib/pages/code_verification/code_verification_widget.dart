@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
 import 'code_verification_model.dart';
 export 'code_verification_model.dart';
 
@@ -82,28 +83,27 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
               width: double.infinity,
               height: MediaQuery.sizeOf(context).height * 0.825,
               constraints: BoxConstraints(
-                maxWidth: 440.0,
+                maxWidth: 440,
               ),
               decoration: BoxDecoration(
                 color: Colors.transparent,
               ),
               child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(0.0),
+                      borderRadius: BorderRadius.circular(0),
                       child: Image.asset(
                         'assets/images/logo.jpeg',
-                        height: 50.0,
+                        height: 50,
                         fit: BoxFit.cover,
                       ),
                     ),
                     Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,13 +115,13 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                 .bodyMedium
                                 .override(
                                   fontFamily: 'Inter',
-                                  fontSize: 32.0,
+                                  fontSize: 32,
                                   fontWeight: FontWeight.w500,
                                 ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 15.0, 0.0, 0.0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
                             child: Text(
                               widget.phoneNumber!,
                               style: FlutterFlowTheme.of(context)
@@ -130,14 +130,14 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                     fontFamily: 'Inter',
                                     color: FlutterFlowTheme.of(context)
                                         .secondaryText,
-                                    fontSize: 17.0,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.normal,
                                   ),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 75.0, 0.0, 0.0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 75, 0, 0),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
@@ -155,7 +155,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 8.0, 0.0, 0.0),
+                                      0, 8, 0, 0),
                                   child: PinCodeTextField(
                                     autoDisposeControllers: false,
                                     appContext: context,
@@ -167,7 +167,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                     enableActiveFill: false,
                                     autoFocus: true,
                                     enablePinAutofill: false,
-                                    errorTextSpace: 0.0,
+                                    errorTextSpace: 0,
                                     showCursor: true,
                                     cursorColor:
                                         FlutterFlowTheme.of(context).secondary,
@@ -175,10 +175,10 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                     hintCharacter: '*',
                                     keyboardType: TextInputType.number,
                                     pinTheme: PinTheme(
-                                      fieldHeight: 60.0,
-                                      fieldWidth: 60.0,
-                                      borderWidth: 1.0,
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      fieldHeight: 60,
+                                      fieldWidth: 60,
+                                      borderWidth: 1,
+                                      borderRadius: BorderRadius.circular(8),
                                       shape: PinCodeFieldShape.box,
                                       activeColor: FlutterFlowTheme.of(context)
                                           .primaryText,
@@ -213,10 +213,10 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 20.0, 0.0, 0.0),
+                                      0, 20, 0, 0),
                                   child: Builder(
                                     builder: (context) {
-                                      if (_model.isSent == true) {
+                                      if (_model.isSent == false) {
                                         return InkWell(
                                           splashColor: Colors.transparent,
                                           focusColor: Colors.transparent,
@@ -226,8 +226,10 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                             setState(() {
                                               _model.isSent = true;
                                             });
+                                            _model.timerController
+                                                .onStartTimer();
                                             final phoneNumberVal =
-                                                widget.phoneNumber;
+                                                '+${widget.phoneNumber}';
                                             if (phoneNumberVal == null ||
                                                 phoneNumberVal.isEmpty ||
                                                 !phoneNumberVal
@@ -270,7 +272,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                 .bodyMedium
                                                 .override(
                                                   fontFamily: 'Inter',
-                                                  fontSize: 12.0,
+                                                  fontSize: 12,
                                                   fontWeight: FontWeight.w500,
                                                   decoration:
                                                       TextDecoration.underline,
@@ -290,7 +292,6 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                   StopWatchTimer.getDisplayTime(
                                                 value,
                                                 hours: false,
-                                                minute: false,
                                                 milliSecond: false,
                                               ),
                                               controller:
@@ -309,6 +310,8 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                 setState(() {
                                                   _model.isSent = false;
                                                 });
+                                                _model.timerController
+                                                    .onResetTimer();
                                               },
                                               textAlign: TextAlign.start,
                                               style:
@@ -320,24 +323,27 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .secondaryText,
-                                                        fontSize: 12.0,
+                                                        fontSize: 12,
                                                       ),
                                             ),
-                                            Text(
-                                              's',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        fontSize: 12.0,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(1, 0, 0, 0),
+                                              child: Text(
+                                                's',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryText,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.normal,
+                                                        ),
+                                              ),
                                             ),
                                           ],
                                         );
@@ -349,8 +355,8 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 100.0, 0.0, 0.0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
                             child: FFButtonWidget(
                               onPressed: _model.isComplete == false
                                   ? null
@@ -395,26 +401,26 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                               text: 'Confirm',
                               options: FFButtonOptions(
                                 width: double.infinity,
-                                height: 50.0,
+                                height: 50,
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    24.0, 0.0, 24.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
+                                    24, 0, 24, 0),
+                                iconPadding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                                 color: FlutterFlowTheme.of(context).primary,
                                 textStyle: FlutterFlowTheme.of(context)
                                     .titleSmall
                                     .override(
                                       fontFamily: 'Inter',
                                       color: Colors.white,
-                                      fontSize: 16.0,
+                                      fontSize: 16,
                                       lineHeight: 1.5,
                                     ),
-                                elevation: 0.0,
+                                elevation: 0,
                                 borderSide: BorderSide(
                                   color: Colors.transparent,
-                                  width: 0.0,
+                                  width: 0,
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
+                                borderRadius: BorderRadius.circular(8),
                                 disabledColor:
                                     FlutterFlowTheme.of(context).secondaryText,
                               ),
