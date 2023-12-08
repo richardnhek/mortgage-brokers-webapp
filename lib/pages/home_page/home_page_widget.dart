@@ -146,868 +146,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         builder: (context) {
                           if (FFAppState().mainNavView == 'Workspace') {
                             return Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 25, 0, 0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          FutureBuilder<List<WorkspacesRecord>>(
-                                            future: queryWorkspacesRecordOnce(
-                                              queryBuilder:
-                                                  (workspacesRecord) =>
-                                                      workspacesRecord.where(
-                                                'members',
-                                                arrayContains:
-                                                    currentUserReference,
-                                              ),
-                                            ),
-                                            builder: (context, snapshot) {
-                                              // Customize what your widget looks like when it's loading.
-                                              if (!snapshot.hasData) {
-                                                return Center(
-                                                  child: SizedBox(
-                                                    width: 50,
-                                                    height: 50,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                      valueColor:
-                                                          AlwaysStoppedAnimation<
-                                                              Color>(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .primary,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              }
-                                              List<WorkspacesRecord>
-                                                  columnWorkspacesRecordList =
-                                                  snapshot.data!;
-                                              return Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: List.generate(
-                                                    columnWorkspacesRecordList
-                                                        .length, (columnIndex) {
-                                                  final columnWorkspacesRecord =
-                                                      columnWorkspacesRecordList[
-                                                          columnIndex];
-                                                  return Container(
-                                                    width: double.infinity,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .darkGray1,
-                                                    child: ExpandableNotifier(
-                                                      child: ExpandablePanel(
-                                                        header: Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(
-                                                                      25,
-                                                                      25,
-                                                                      0,
-                                                                      25),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .lock_outline,
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .secondary,
-                                                                size: 21,
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            10,
-                                                                            0,
-                                                                            0,
-                                                                            0),
-                                                                child: Text(
-                                                                  columnWorkspacesRecord
-                                                                      .name,
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .displaySmall
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Inter',
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.normal,
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        collapsed: Container(),
-                                                        expanded: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          25,
-                                                                          0,
-                                                                          25,
-                                                                          0),
-                                                              child: InkWell(
-                                                                splashColor: Colors
-                                                                    .transparent,
-                                                                focusColor: Colors
-                                                                    .transparent,
-                                                                hoverColor: Colors
-                                                                    .transparent,
-                                                                highlightColor:
-                                                                    Colors
-                                                                        .transparent,
-                                                                onTap:
-                                                                    () async {
-                                                                  FFAppState()
-                                                                      .update(
-                                                                          () {
-                                                                    FFAppState()
-                                                                        .currentMainView = '';
-                                                                  });
-                                                                  setState(() {
-                                                                    _model.selectedOverview =
-                                                                        null;
-                                                                    _model.workspaceMembers =
-                                                                        [];
-                                                                    _model.workspaceFiles =
-                                                                        [];
-                                                                    _model.workspaceRef =
-                                                                        null;
-                                                                  });
-                                                                  await Future.delayed(
-                                                                      const Duration(
-                                                                          milliseconds:
-                                                                              500));
-                                                                  setState(() {
-                                                                    _model.selectedOverview =
-                                                                        columnWorkspacesRecord
-                                                                            .overview;
-                                                                    _model.workspaceMembers = columnWorkspacesRecord
-                                                                        .members
-                                                                        .toList()
-                                                                        .cast<
-                                                                            DocumentReference>();
-                                                                    _model.workspaceFiles = columnWorkspacesRecord
-                                                                        .files
-                                                                        .toList()
-                                                                        .cast<
-                                                                            WorkspaceFileStruct>();
-                                                                    _model.workspaceRef =
-                                                                        columnWorkspacesRecord
-                                                                            .reference;
-                                                                  });
-                                                                  FFAppState()
-                                                                      .update(
-                                                                          () {
-                                                                    FFAppState()
-                                                                            .currentMainView =
-                                                                        'Overview';
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    Container(
-                                                                  width: double
-                                                                      .infinity,
-                                                                  height: 40,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .primaryBackground,
-                                                                    boxShadow: [
-                                                                      BoxShadow(
-                                                                        blurRadius:
-                                                                            4,
-                                                                        color: Color(
-                                                                            0x0E000000),
-                                                                        offset: Offset(
-                                                                            0,
-                                                                            4),
-                                                                      )
-                                                                    ],
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(5),
-                                                                    border:
-                                                                        Border
-                                                                            .all(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .tertiary,
-                                                                      width: 1,
-                                                                    ),
-                                                                  ),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            5,
-                                                                            5,
-                                                                            5,
-                                                                            5),
-                                                                    child: Row(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .max,
-                                                                      children: [
-                                                                        Icon(
-                                                                          Icons
-                                                                              .auto_awesome_outlined,
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).secondary,
-                                                                          size:
-                                                                              21,
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: EdgeInsetsDirectional.fromSTEB(
-                                                                              10,
-                                                                              0,
-                                                                              0,
-                                                                              0),
-                                                                          child:
-                                                                              Text(
-                                                                            'Overview',
-                                                                            style: FlutterFlowTheme.of(context).displaySmall.override(
-                                                                                  fontFamily: 'Inter',
-                                                                                  color: Colors.black,
-                                                                                  fontSize: 15,
-                                                                                  fontWeight: FontWeight.normal,
-                                                                                ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0,
-                                                                          25,
-                                                                          0,
-                                                                          0),
-                                                              child: Container(
-                                                                width: double
-                                                                    .infinity,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryBackground,
-                                                                ),
-                                                                child:
-                                                                    Container(
-                                                                  width: double
-                                                                      .infinity,
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  child:
-                                                                      ExpandableNotifier(
-                                                                    child:
-                                                                        ExpandablePanel(
-                                                                      header:
-                                                                          Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            25,
-                                                                            0,
-                                                                            0,
-                                                                            0),
-                                                                        child:
-                                                                            Text(
-                                                                          'Channels',
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                              .displaySmall
-                                                                              .override(
-                                                                                fontFamily: 'Inter',
-                                                                                color: FlutterFlowTheme.of(context).secondaryText,
-                                                                                fontSize: 15,
-                                                                                fontWeight: FontWeight.normal,
-                                                                              ),
-                                                                        ),
-                                                                      ),
-                                                                      collapsed:
-                                                                          Container(),
-                                                                      expanded:
-                                                                          Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            25,
-                                                                            20,
-                                                                            25,
-                                                                            0),
-                                                                        child: FutureBuilder<
-                                                                            List<ChatsRecord>>(
-                                                                          future:
-                                                                              queryChatsRecordOnce(
-                                                                            queryBuilder: (chatsRecord) => chatsRecord
-                                                                                .where(
-                                                                                  'chat_type',
-                                                                                  isEqualTo: 'Channel',
-                                                                                )
-                                                                                .where(
-                                                                                  'users',
-                                                                                  arrayContains: currentUserReference,
-                                                                                )
-                                                                                .where(
-                                                                                  'workspace_ref',
-                                                                                  isEqualTo: columnWorkspacesRecord.workspaceRef,
-                                                                                )
-                                                                                .orderBy('last_message_time', descending: true),
-                                                                          ),
-                                                                          builder:
-                                                                              (context, snapshot) {
-                                                                            // Customize what your widget looks like when it's loading.
-                                                                            if (!snapshot.hasData) {
-                                                                              return Center(
-                                                                                child: SizedBox(
-                                                                                  width: 50,
-                                                                                  height: 50,
-                                                                                  child: CircularProgressIndicator(
-                                                                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                                                                      FlutterFlowTheme.of(context).primary,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            }
-                                                                            List<ChatsRecord>
-                                                                                columnChatsRecordList =
-                                                                                snapshot.data!;
-                                                                            return Column(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: List.generate(columnChatsRecordList.length, (columnIndex) {
-                                                                                final columnChatsRecord = columnChatsRecordList[columnIndex];
-                                                                                return InkWell(
-                                                                                  splashColor: Colors.transparent,
-                                                                                  focusColor: Colors.transparent,
-                                                                                  hoverColor: Colors.transparent,
-                                                                                  highlightColor: Colors.transparent,
-                                                                                  onTap: () async {
-                                                                                    setState(() {
-                                                                                      FFAppState().currentChatRef = columnChatsRecord.reference;
-                                                                                      FFAppState().currentChatUserRef = null;
-                                                                                    });
-                                                                                    setState(() {
-                                                                                      _model.chatUser = null;
-                                                                                      _model.selectedChannel = columnChatsRecord.channelName;
-                                                                                    });
-                                                                                    setState(() {
-                                                                                      FFAppState().currentMainView = 'Chat';
-                                                                                    });
-                                                                                  },
-                                                                                  child: ChannelButtonWidget(
-                                                                                    key: Key('Keyed1_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                                                    channelName: columnChatsRecord.channelName,
-                                                                                  ),
-                                                                                );
-                                                                              }).divide(SizedBox(height: 5)),
-                                                                            );
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                      theme:
-                                                                          ExpandableThemeData(
-                                                                        tapHeaderToExpand:
-                                                                            true,
-                                                                        tapBodyToExpand:
-                                                                            false,
-                                                                        tapBodyToCollapse:
-                                                                            false,
-                                                                        headerAlignment:
-                                                                            ExpandablePanelHeaderAlignment.center,
-                                                                        hasIcon:
-                                                                            true,
-                                                                        expandIcon:
-                                                                            Icons.keyboard_arrow_right_rounded,
-                                                                        collapseIcon:
-                                                                            Icons.keyboard_arrow_down_rounded,
-                                                                        iconColor:
-                                                                            FlutterFlowTheme.of(context).secondaryText,
-                                                                        iconPadding: EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            0,
-                                                                            25,
-                                                                            0),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0,
-                                                                          25,
-                                                                          0,
-                                                                          0),
-                                                              child: Container(
-                                                                width: double
-                                                                    .infinity,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryBackground,
-                                                                ),
-                                                                child:
-                                                                    Container(
-                                                                  width: double
-                                                                      .infinity,
-                                                                  color: Colors
-                                                                      .transparent,
-                                                                  child:
-                                                                      ExpandableNotifier(
-                                                                    child:
-                                                                        ExpandablePanel(
-                                                                      header:
-                                                                          Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            25,
-                                                                            0,
-                                                                            0,
-                                                                            0),
-                                                                        child:
-                                                                            Text(
-                                                                          'Direct messages',
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                              .displaySmall
-                                                                              .override(
-                                                                                fontFamily: 'Inter',
-                                                                                color: FlutterFlowTheme.of(context).secondaryText,
-                                                                                fontSize: 15,
-                                                                                fontWeight: FontWeight.normal,
-                                                                              ),
-                                                                        ),
-                                                                      ),
-                                                                      collapsed:
-                                                                          Container(),
-                                                                      expanded:
-                                                                          Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            25,
-                                                                            20,
-                                                                            25,
-                                                                            0),
-                                                                        child: FutureBuilder<
-                                                                            List<ChatsRecord>>(
-                                                                          future:
-                                                                              queryChatsRecordOnce(
-                                                                            queryBuilder: (chatsRecord) => chatsRecord
-                                                                                .where(
-                                                                                  'chat_type',
-                                                                                  isEqualTo: 'DM',
-                                                                                )
-                                                                                .where(
-                                                                                  'users',
-                                                                                  arrayContains: currentUserReference,
-                                                                                )
-                                                                                .where(
-                                                                                  'workspace_ref',
-                                                                                  isEqualTo: columnWorkspacesRecord.workspaceRef,
-                                                                                )
-                                                                                .orderBy('last_message_time', descending: true),
-                                                                          ),
-                                                                          builder:
-                                                                              (context, snapshot) {
-                                                                            // Customize what your widget looks like when it's loading.
-                                                                            if (!snapshot.hasData) {
-                                                                              return Center(
-                                                                                child: SizedBox(
-                                                                                  width: 50,
-                                                                                  height: 50,
-                                                                                  child: CircularProgressIndicator(
-                                                                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                                                                      FlutterFlowTheme.of(context).primary,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            }
-                                                                            List<ChatsRecord>
-                                                                                columnChatsRecordList =
-                                                                                snapshot.data!;
-                                                                            return Column(
-                                                                              mainAxisSize: MainAxisSize.max,
-                                                                              children: List.generate(columnChatsRecordList.length, (columnIndex) {
-                                                                                final columnChatsRecord = columnChatsRecordList[columnIndex];
-                                                                                return InkWell(
-                                                                                  splashColor: Colors.transparent,
-                                                                                  focusColor: Colors.transparent,
-                                                                                  hoverColor: Colors.transparent,
-                                                                                  highlightColor: Colors.transparent,
-                                                                                  onTap: () async {
-                                                                                    setState(() {
-                                                                                      FFAppState().currentChatRef = columnChatsRecord.reference;
-                                                                                      FFAppState().currentChatUserRef = columnChatsRecord.users.where((e) => e != currentUserReference).toList().first;
-                                                                                    });
-                                                                                    _model.selectedUser = await queryUsersRecordOnce(
-                                                                                      queryBuilder: (usersRecord) => usersRecord.where(
-                                                                                        'user_ref',
-                                                                                        isEqualTo: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
-                                                                                      ),
-                                                                                      singleRecord: true,
-                                                                                    ).then((s) => s.firstOrNull);
-                                                                                    setState(() {
-                                                                                      _model.chatUser = _model.selectedUser;
-                                                                                    });
-                                                                                    setState(() {
-                                                                                      FFAppState().currentMainView = 'Chat';
-                                                                                    });
-
-                                                                                    setState(() {});
-                                                                                  },
-                                                                                  child: DirectMessageButtonWidget(
-                                                                                    key: Key('Key19u_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                                                    userRef: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
-                                                                                  ),
-                                                                                );
-                                                                              }).divide(SizedBox(height: 5)),
-                                                                            );
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                      theme:
-                                                                          ExpandableThemeData(
-                                                                        tapHeaderToExpand:
-                                                                            true,
-                                                                        tapBodyToExpand:
-                                                                            false,
-                                                                        tapBodyToCollapse:
-                                                                            false,
-                                                                        headerAlignment:
-                                                                            ExpandablePanelHeaderAlignment.center,
-                                                                        hasIcon:
-                                                                            true,
-                                                                        expandIcon:
-                                                                            Icons.keyboard_arrow_right_rounded,
-                                                                        collapseIcon:
-                                                                            Icons.keyboard_arrow_down_rounded,
-                                                                        iconColor:
-                                                                            FlutterFlowTheme.of(context).secondaryText,
-                                                                        iconPadding: EdgeInsets.fromLTRB(
-                                                                            0,
-                                                                            0,
-                                                                            25,
-                                                                            0),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Builder(
-                                                              builder:
-                                                                  (context) =>
-                                                                      Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            25,
-                                                                            25,
-                                                                            25,
-                                                                            0),
-                                                                child: InkWell(
-                                                                  splashColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  focusColor: Colors
-                                                                      .transparent,
-                                                                  hoverColor: Colors
-                                                                      .transparent,
-                                                                  highlightColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  onTap:
-                                                                      () async {
-                                                                    await showAlignedDialog(
-                                                                      barrierColor:
-                                                                          Color(
-                                                                              0x25000000),
-                                                                      barrierDismissible:
-                                                                          false,
-                                                                      context:
-                                                                          context,
-                                                                      isGlobal:
-                                                                          true,
-                                                                      avoidOverflow:
-                                                                          false,
-                                                                      targetAnchor: AlignmentDirectional(
-                                                                              0,
-                                                                              0)
-                                                                          .resolve(
-                                                                              Directionality.of(context)),
-                                                                      followerAnchor: AlignmentDirectional(
-                                                                              0,
-                                                                              0)
-                                                                          .resolve(
-                                                                              Directionality.of(context)),
-                                                                      builder:
-                                                                          (dialogContext) {
-                                                                        return Material(
-                                                                          color:
-                                                                              Colors.transparent,
-                                                                          child:
-                                                                              GestureDetector(
-                                                                            onTap: () => _model.unfocusNode.canRequestFocus
-                                                                                ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-                                                                                : FocusScope.of(context).unfocus(),
-                                                                            child:
-                                                                                StartNewChatWidget(
-                                                                              workspaceRef: columnWorkspacesRecord.reference,
-                                                                              workspaceId: columnWorkspacesRecord.id,
-                                                                              memberList: columnWorkspacesRecord.members,
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ).then((value) =>
-                                                                        setState(
-                                                                            () {}));
-                                                                  },
-                                                                  child: Row(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .max,
-                                                                    children: [
-                                                                      Container(
-                                                                        width:
-                                                                            20,
-                                                                        height:
-                                                                            20,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color:
-                                                                              Color(0xFF32176D),
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(2),
-                                                                        ),
-                                                                        child:
-                                                                            Icon(
-                                                                          Icons
-                                                                              .add_rounded,
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).primaryBackground,
-                                                                          size:
-                                                                              12,
-                                                                        ),
-                                                                      ),
-                                                                      Padding(
-                                                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                                                            10,
-                                                                            0,
-                                                                            0,
-                                                                            0),
-                                                                        child:
-                                                                            Text(
-                                                                          'New chat',
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .override(
-                                                                                fontFamily: 'Inter',
-                                                                                fontSize: 16,
-                                                                                fontWeight: FontWeight.normal,
-                                                                              ),
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ].addToEnd(SizedBox(
-                                                              height: 25)),
-                                                        ),
-                                                        theme:
-                                                            ExpandableThemeData(
-                                                          tapHeaderToExpand:
-                                                              true,
-                                                          tapBodyToExpand:
-                                                              false,
-                                                          tapBodyToCollapse:
-                                                              false,
-                                                          headerAlignment:
-                                                              ExpandablePanelHeaderAlignment
-                                                                  .center,
-                                                          hasIcon: true,
-                                                          expandIcon: Icons
-                                                              .keyboard_arrow_right_rounded,
-                                                          collapseIcon: Icons
-                                                              .keyboard_arrow_down_rounded,
-                                                          iconColor:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .secondary,
-                                                          iconPadding:
-                                                              EdgeInsets
-                                                                  .fromLTRB(0,
-                                                                      0, 25, 0),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }).divide(SizedBox(height: 10)),
-                                              );
-                                            },
-                                          ),
-                                          Builder(
-                                            builder: (context) => Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(25, 25, 25, 0),
-                                              child: InkWell(
-                                                splashColor: Colors.transparent,
-                                                focusColor: Colors.transparent,
-                                                hoverColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
-                                                onTap: () async {
-                                                  await showAlignedDialog(
-                                                    barrierColor:
-                                                        Color(0x25000000),
-                                                    barrierDismissible: false,
-                                                    context: context,
-                                                    isGlobal: true,
-                                                    avoidOverflow: false,
-                                                    targetAnchor:
-                                                        AlignmentDirectional(
-                                                                0, 0)
-                                                            .resolve(
-                                                                Directionality.of(
-                                                                    context)),
-                                                    followerAnchor:
-                                                        AlignmentDirectional(
-                                                                0, 0)
-                                                            .resolve(
-                                                                Directionality.of(
-                                                                    context)),
-                                                    builder: (dialogContext) {
-                                                      return Material(
-                                                        color:
-                                                            Colors.transparent,
-                                                        child: GestureDetector(
-                                                          onTap: () => _model
-                                                                  .unfocusNode
-                                                                  .canRequestFocus
-                                                              ? FocusScope.of(
-                                                                      context)
-                                                                  .requestFocus(
-                                                                      _model
-                                                                          .unfocusNode)
-                                                              : FocusScope.of(
-                                                                      context)
-                                                                  .unfocus(),
-                                                          child:
-                                                              CreateWorkspaceWidget(),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ).then((value) =>
-                                                      setState(() {}));
-                                                },
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Container(
-                                                      width: 20,
-                                                      height: 20,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primary,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(2),
-                                                      ),
-                                                      child: Icon(
-                                                        Icons.add_rounded,
-                                                        color: FlutterFlowTheme
-                                                                .of(context)
-                                                            .primaryBackground,
-                                                        size: 12,
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  10, 0, 0, 0),
-                                                      child: Text(
-                                                        'Add workspace',
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Inter',
-                                                                  fontSize: 16,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ].addToEnd(SizedBox(height: 25)),
-                              ),
-                            );
-                          } else {
-                            return Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 25.0, 0.0, 0.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        25.0, 0.0, 25.0, 0.0),
-                                    child: FutureBuilder<List<ChatsRecord>>(
-                                      future: queryChatsRecordOnce(
-                                        queryBuilder: (chatsRecord) =>
-                                            chatsRecord
-                                                .where(
-                                                  'users',
-                                                  arrayContains:
-                                                      currentUserReference,
-                                                )
-                                                .orderBy('last_message_time',
-                                                    descending: true),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    FutureBuilder<List<WorkspacesRecord>>(
+                                      future: queryWorkspacesRecordOnce(
+                                        queryBuilder: (workspacesRecord) =>
+                                            workspacesRecord.where(
+                                          'members',
+                                          arrayContains: currentUserReference,
+                                        ),
                                       ),
                                       builder: (context, snapshot) {
                                         // Customize what your widget looks like when it's loading.
@@ -1027,222 +178,1121 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                             ),
                                           );
                                         }
-                                        List<ChatsRecord>
-                                            columnChatsRecordList =
+                                        List<WorkspacesRecord>
+                                            columnWorkspacesRecordList =
                                             snapshot.data!;
                                         return Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: List.generate(
-                                              columnChatsRecordList.length,
+                                              columnWorkspacesRecordList.length,
                                               (columnIndex) {
-                                            final columnChatsRecord =
-                                                columnChatsRecordList[
+                                            final columnWorkspacesRecord =
+                                                columnWorkspacesRecordList[
                                                     columnIndex];
-                                            return Builder(
-                                              builder: (context) {
-                                                if (columnChatsRecord
-                                                        .chatType ==
-                                                    'Channel') {
-                                                  return InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    highlightColor:
-                                                        Colors.transparent,
-                                                    onTap: () async {
-                                                      setState(() {
-                                                        FFAppState()
-                                                                .currentChatRef =
-                                                            columnChatsRecord
-                                                                .reference;
-                                                        FFAppState()
-                                                                .currentChatUserRef =
-                                                            null;
-                                                      });
-                                                      setState(() {
-                                                        _model.chatUser = null;
-                                                        _model.selectedChannel =
-                                                            columnChatsRecord
-                                                                .channelName;
-                                                      });
-                                                      setState(() {
-                                                        FFAppState()
-                                                                .currentMainView =
-                                                            'Chat';
-                                                      });
-                                                    },
-                                                    child: ChannelButtonWidget(
-                                                      key: Key(
-                                                          'Keytaz_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                      channelName:
-                                                          columnChatsRecord
-                                                              .channelName,
+                                            return Container(
+                                              width: double.infinity,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .darkGray1,
+                                              child: ExpandableNotifier(
+                                                child: ExpandablePanel(
+                                                  header: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                25.0,
+                                                                25.0,
+                                                                0.0,
+                                                                25.0),
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Icon(
+                                                          Icons.lock_outline,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondary,
+                                                          size: 21.0,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      10.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Text(
+                                                            columnWorkspacesRecord
+                                                                .name,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .displaySmall
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Inter',
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      16.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  );
-                                                } else {
-                                                  return InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    highlightColor:
-                                                        Colors.transparent,
-                                                    onTap: () async {
-                                                      setState(() {
-                                                        FFAppState()
-                                                                .currentChatRef =
-                                                            columnChatsRecord
-                                                                .reference;
-                                                        FFAppState()
-                                                                .currentChatUserRef =
-                                                            columnChatsRecord
-                                                                .users
-                                                                .where((e) =>
-                                                                    e !=
-                                                                    currentUserReference)
-                                                                .toList()
-                                                                .first;
-                                                      });
-                                                      _model.selectedUserChats =
-                                                          await queryUsersRecordOnce(
-                                                        queryBuilder:
-                                                            (usersRecord) =>
-                                                                usersRecord
-                                                                    .where(
-                                                          'user_ref',
-                                                          isEqualTo:
+                                                  ),
+                                                  collapsed: Container(),
+                                                  expanded: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    25.0,
+                                                                    0.0,
+                                                                    25.0,
+                                                                    0.0),
+                                                        child: InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          onTap: () async {
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState()
+                                                                  .currentMainView = '';
+                                                            });
+                                                            setState(() {
+                                                              _model.selectedOverview =
+                                                                  null;
+                                                              _model.workspaceMembers =
+                                                                  [];
+                                                              _model.workspaceFiles =
+                                                                  [];
+                                                              _model.workspaceRef =
+                                                                  null;
+                                                            });
+                                                            await Future.delayed(
+                                                                const Duration(
+                                                                    milliseconds:
+                                                                        500));
+                                                            setState(() {
+                                                              _model.selectedOverview =
+                                                                  columnWorkspacesRecord
+                                                                      .overview;
+                                                              _model.workspaceMembers =
+                                                                  columnWorkspacesRecord
+                                                                      .members
+                                                                      .toList()
+                                                                      .cast<
+                                                                          DocumentReference>();
+                                                              _model.workspaceFiles =
+                                                                  columnWorkspacesRecord
+                                                                      .files
+                                                                      .toList()
+                                                                      .cast<
+                                                                          WorkspaceFileStruct>();
+                                                              _model.workspaceRef =
+                                                                  columnWorkspacesRecord
+                                                                      .reference;
+                                                            });
+                                                            FFAppState()
+                                                                .update(() {
+                                                              FFAppState()
+                                                                      .currentMainView =
+                                                                  'Overview';
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            height: 40.0,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryBackground,
+                                                              boxShadow: [
+                                                                BoxShadow(
+                                                                  blurRadius:
+                                                                      4.0,
+                                                                  color: Color(
+                                                                      0x0E000000),
+                                                                  offset:
+                                                                      Offset(
+                                                                          0.0,
+                                                                          4.0),
+                                                                )
+                                                              ],
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0),
+                                                              border:
+                                                                  Border.all(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .tertiary,
+                                                                width: 1.0,
+                                                              ),
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          5.0,
+                                                                          5.0,
+                                                                          5.0,
+                                                                          5.0),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                children: [
+                                                                  Icon(
+                                                                    Icons
+                                                                        .auto_awesome_outlined,
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .secondary,
+                                                                    size: 21.0,
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            10.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                    child: Text(
+                                                                      'Overview',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .displaySmall
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Inter',
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontSize:
+                                                                                15.0,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    25.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        child: Container(
+                                                          width:
+                                                              double.infinity,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryBackground,
+                                                          ),
+                                                          child: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            color: Colors
+                                                                .transparent,
+                                                            child:
+                                                                ExpandableNotifier(
+                                                              child:
+                                                                  ExpandablePanel(
+                                                                header: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          25.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Text(
+                                                                    'Channels',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .displaySmall
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Inter',
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).secondaryText,
+                                                                          fontSize:
+                                                                              15.0,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                collapsed:
+                                                                    Container(),
+                                                                expanded:
+                                                                    Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          25.0,
+                                                                          20.0,
+                                                                          25.0,
+                                                                          0.0),
+                                                                  child: FutureBuilder<
+                                                                      List<
+                                                                          ChatsRecord>>(
+                                                                    future:
+                                                                        queryChatsRecordOnce(
+                                                                      queryBuilder: (chatsRecord) => chatsRecord
+                                                                          .where(
+                                                                            'chat_type',
+                                                                            isEqualTo:
+                                                                                'Channel',
+                                                                          )
+                                                                          .where(
+                                                                            'users',
+                                                                            arrayContains:
+                                                                                currentUserReference,
+                                                                          )
+                                                                          .where(
+                                                                            'workspace_ref',
+                                                                            isEqualTo:
+                                                                                columnWorkspacesRecord.workspaceRef,
+                                                                          )
+                                                                          .orderBy('last_message_time', descending: true),
+                                                                    ),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      // Customize what your widget looks like when it's loading.
+                                                                      if (!snapshot
+                                                                          .hasData) {
+                                                                        return Center(
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                50.0,
+                                                                            height:
+                                                                                50.0,
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                                                FlutterFlowTheme.of(context).primary,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      }
+                                                                      List<ChatsRecord>
+                                                                          columnChatsRecordList =
+                                                                          snapshot
+                                                                              .data!;
+                                                                      return Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        children: List.generate(
+                                                                            columnChatsRecordList.length,
+                                                                            (columnIndex) {
+                                                                          final columnChatsRecord =
+                                                                              columnChatsRecordList[columnIndex];
+                                                                          return InkWell(
+                                                                            splashColor:
+                                                                                Colors.transparent,
+                                                                            focusColor:
+                                                                                Colors.transparent,
+                                                                            hoverColor:
+                                                                                Colors.transparent,
+                                                                            highlightColor:
+                                                                                Colors.transparent,
+                                                                            onTap:
+                                                                                () async {
+                                                                              setState(() {
+                                                                                FFAppState().currentChatRef = columnChatsRecord.reference;
+                                                                                FFAppState().currentChatUserRef = null;
+                                                                              });
+                                                                              setState(() {
+                                                                                _model.chatUser = null;
+                                                                                _model.selectedChannel = columnChatsRecord.channelName;
+                                                                              });
+                                                                              setState(() {
+                                                                                FFAppState().currentMainView = 'Chat';
+                                                                              });
+                                                                            },
+                                                                            child:
+                                                                                ChannelButtonWidget(
+                                                                              key: Key('Keyed1_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                                              channelName: columnChatsRecord.channelName,
+                                                                            ),
+                                                                          );
+                                                                        }).divide(SizedBox(
+                                                                            height:
+                                                                                5.0)),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                theme:
+                                                                    ExpandableThemeData(
+                                                                  tapHeaderToExpand:
+                                                                      true,
+                                                                  tapBodyToExpand:
+                                                                      false,
+                                                                  tapBodyToCollapse:
+                                                                      false,
+                                                                  headerAlignment:
+                                                                      ExpandablePanelHeaderAlignment
+                                                                          .center,
+                                                                  hasIcon: true,
+                                                                  expandIcon: Icons
+                                                                      .keyboard_arrow_right_rounded,
+                                                                  collapseIcon:
+                                                                      Icons
+                                                                          .keyboard_arrow_down_rounded,
+                                                                  iconColor: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .secondaryText,
+                                                                  iconPadding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          25.0,
+                                                                          0.0),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    25.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        child: Container(
+                                                          width:
+                                                              double.infinity,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryBackground,
+                                                          ),
+                                                          child: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            color: Colors
+                                                                .transparent,
+                                                            child:
+                                                                ExpandableNotifier(
+                                                              child:
+                                                                  ExpandablePanel(
+                                                                header: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          25.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Text(
+                                                                    'Direct messages',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .displaySmall
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Inter',
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).secondaryText,
+                                                                          fontSize:
+                                                                              15.0,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                collapsed:
+                                                                    Container(),
+                                                                expanded:
+                                                                    Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          25.0,
+                                                                          20.0,
+                                                                          25.0,
+                                                                          0.0),
+                                                                  child: FutureBuilder<
+                                                                      List<
+                                                                          ChatsRecord>>(
+                                                                    future:
+                                                                        queryChatsRecordOnce(
+                                                                      queryBuilder: (chatsRecord) => chatsRecord
+                                                                          .where(
+                                                                            'chat_type',
+                                                                            isEqualTo:
+                                                                                'DM',
+                                                                          )
+                                                                          .where(
+                                                                            'users',
+                                                                            arrayContains:
+                                                                                currentUserReference,
+                                                                          )
+                                                                          .where(
+                                                                            'workspace_ref',
+                                                                            isEqualTo:
+                                                                                columnWorkspacesRecord.workspaceRef,
+                                                                          )
+                                                                          .orderBy('last_message_time', descending: true),
+                                                                    ),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      // Customize what your widget looks like when it's loading.
+                                                                      if (!snapshot
+                                                                          .hasData) {
+                                                                        return Center(
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                50.0,
+                                                                            height:
+                                                                                50.0,
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                                                FlutterFlowTheme.of(context).primary,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      }
+                                                                      List<ChatsRecord>
+                                                                          columnChatsRecordList =
+                                                                          snapshot
+                                                                              .data!;
+                                                                      return Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        children: List.generate(
+                                                                            columnChatsRecordList.length,
+                                                                            (columnIndex) {
+                                                                          final columnChatsRecord =
+                                                                              columnChatsRecordList[columnIndex];
+                                                                          return InkWell(
+                                                                            splashColor:
+                                                                                Colors.transparent,
+                                                                            focusColor:
+                                                                                Colors.transparent,
+                                                                            hoverColor:
+                                                                                Colors.transparent,
+                                                                            highlightColor:
+                                                                                Colors.transparent,
+                                                                            onTap:
+                                                                                () async {
+                                                                              setState(() {
+                                                                                FFAppState().currentChatRef = columnChatsRecord.reference;
+                                                                                FFAppState().currentChatUserRef = columnChatsRecord.users.where((e) => e != currentUserReference).toList().first;
+                                                                              });
+                                                                              _model.selectedUser = await queryUsersRecordOnce(
+                                                                                queryBuilder: (usersRecord) => usersRecord.where(
+                                                                                  'user_ref',
+                                                                                  isEqualTo: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
+                                                                                ),
+                                                                                singleRecord: true,
+                                                                              ).then((s) => s.firstOrNull);
+                                                                              setState(() {
+                                                                                _model.chatUser = _model.selectedUser;
+                                                                              });
+                                                                              setState(() {
+                                                                                FFAppState().currentMainView = 'Chat';
+                                                                              });
+
+                                                                              setState(() {});
+                                                                            },
+                                                                            child:
+                                                                                DirectMessageButtonWidget(
+                                                                              key: Key('Key19u_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                                              userRef: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
+                                                                            ),
+                                                                          );
+                                                                        }).divide(SizedBox(
+                                                                            height:
+                                                                                5.0)),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                theme:
+                                                                    ExpandableThemeData(
+                                                                  tapHeaderToExpand:
+                                                                      true,
+                                                                  tapBodyToExpand:
+                                                                      false,
+                                                                  tapBodyToCollapse:
+                                                                      false,
+                                                                  headerAlignment:
+                                                                      ExpandablePanelHeaderAlignment
+                                                                          .center,
+                                                                  hasIcon: true,
+                                                                  expandIcon: Icons
+                                                                      .keyboard_arrow_right_rounded,
+                                                                  collapseIcon:
+                                                                      Icons
+                                                                          .keyboard_arrow_down_rounded,
+                                                                  iconColor: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .secondaryText,
+                                                                  iconPadding: EdgeInsets
+                                                                      .fromLTRB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          25.0,
+                                                                          0.0),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Builder(
+                                                        builder: (context) =>
+                                                            Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      25.0,
+                                                                      25.0,
+                                                                      25.0,
+                                                                      0.0),
+                                                          child: InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              await showAlignedDialog(
+                                                                barrierColor: Color(
+                                                                    0x25000000),
+                                                                barrierDismissible:
+                                                                    false,
+                                                                context:
+                                                                    context,
+                                                                isGlobal: true,
+                                                                avoidOverflow:
+                                                                    false,
+                                                                targetAnchor:
+                                                                    AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0)
+                                                                        .resolve(
+                                                                            Directionality.of(context)),
+                                                                followerAnchor:
+                                                                    AlignmentDirectional(
+                                                                            0.0,
+                                                                            0.0)
+                                                                        .resolve(
+                                                                            Directionality.of(context)),
+                                                                builder:
+                                                                    (dialogContext) {
+                                                                  return Material(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    child:
+                                                                        GestureDetector(
+                                                                      onTap: () => _model
+                                                                              .unfocusNode
+                                                                              .canRequestFocus
+                                                                          ? FocusScope.of(context).requestFocus(_model
+                                                                              .unfocusNode)
+                                                                          : FocusScope.of(context)
+                                                                              .unfocus(),
+                                                                      child:
+                                                                          StartNewChatWidget(
+                                                                        workspaceRef:
+                                                                            columnWorkspacesRecord.reference,
+                                                                        workspaceId:
+                                                                            columnWorkspacesRecord.id,
+                                                                        memberList:
+                                                                            columnWorkspacesRecord.members,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              ).then((value) =>
+                                                                  setState(
+                                                                      () {}));
+                                                            },
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              children: [
+                                                                Container(
+                                                                  width: 20.0,
+                                                                  height: 20.0,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Color(
+                                                                        0xFF32176D),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            2.0),
+                                                                  ),
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .add_rounded,
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .primaryBackground,
+                                                                    size: 12.0,
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          10.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Text(
+                                                                    'New chat',
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Inter',
+                                                                          fontSize:
+                                                                              16.0,
+                                                                          fontWeight:
+                                                                              FontWeight.normal,
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ].addToEnd(
+                                                        SizedBox(height: 25.0)),
+                                                  ),
+                                                  theme: ExpandableThemeData(
+                                                    tapHeaderToExpand: true,
+                                                    tapBodyToExpand: false,
+                                                    tapBodyToCollapse: false,
+                                                    headerAlignment:
+                                                        ExpandablePanelHeaderAlignment
+                                                            .center,
+                                                    hasIcon: true,
+                                                    expandIcon: Icons
+                                                        .keyboard_arrow_right_rounded,
+                                                    collapseIcon: Icons
+                                                        .keyboard_arrow_down_rounded,
+                                                    iconColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .secondary,
+                                                    iconPadding:
+                                                        EdgeInsets.fromLTRB(0.0,
+                                                            0.0, 25.0, 0.0),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }).divide(SizedBox(height: 10.0)),
+                                        );
+                                      },
+                                    ),
+                                    Builder(
+                                      builder: (context) => Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            25.0, 25.0, 25.0, 25.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            await showAlignedDialog(
+                                              barrierColor: Color(0x25000000),
+                                              barrierDismissible: false,
+                                              context: context,
+                                              isGlobal: true,
+                                              avoidOverflow: false,
+                                              targetAnchor:
+                                                  AlignmentDirectional(0.0, 0.0)
+                                                      .resolve(
+                                                          Directionality.of(
+                                                              context)),
+                                              followerAnchor:
+                                                  AlignmentDirectional(0.0, 0.0)
+                                                      .resolve(
+                                                          Directionality.of(
+                                                              context)),
+                                              builder: (dialogContext) {
+                                                return Material(
+                                                  color: Colors.transparent,
+                                                  child: GestureDetector(
+                                                    onTap: () => _model
+                                                            .unfocusNode
+                                                            .canRequestFocus
+                                                        ? FocusScope.of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode)
+                                                        : FocusScope.of(context)
+                                                            .unfocus(),
+                                                    child:
+                                                        CreateWorkspaceWidget(),
+                                                  ),
+                                                );
+                                              },
+                                            ).then((value) => setState(() {}));
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 20.0,
+                                                height: 20.0,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          2.0),
+                                                ),
+                                                child: Icon(
+                                                  Icons.add_rounded,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  size: 12.0,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        10.0, 0.0, 0.0, 0.0),
+                                                child: Text(
+                                                  'Add workspace',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Inter',
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 25.0, 0.0, 0.0),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          25.0, 0.0, 25.0, 0.0),
+                                      child: FutureBuilder<List<ChatsRecord>>(
+                                        future: queryChatsRecordOnce(
+                                          queryBuilder: (chatsRecord) =>
+                                              chatsRecord
+                                                  .where(
+                                                    'users',
+                                                    arrayContains:
+                                                        currentUserReference,
+                                                  )
+                                                  .orderBy('last_message_time',
+                                                      descending: true),
+                                        ),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          List<ChatsRecord>
+                                              columnChatsRecordList =
+                                              snapshot.data!;
+                                          return SingleChildScrollView(
+                                            primary: false,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: List.generate(
+                                                  columnChatsRecordList.length,
+                                                  (columnIndex) {
+                                                final columnChatsRecord =
+                                                    columnChatsRecordList[
+                                                        columnIndex];
+                                                return Builder(
+                                                  builder: (context) {
+                                                    if (columnChatsRecord
+                                                            .chatType ==
+                                                        'Channel') {
+                                                      return InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            FFAppState()
+                                                                    .currentChatRef =
+                                                                columnChatsRecord
+                                                                    .reference;
+                                                            FFAppState()
+                                                                    .currentChatUserRef =
+                                                                null;
+                                                          });
+                                                          setState(() {
+                                                            _model.chatUser =
+                                                                null;
+                                                            _model.selectedChannel =
+                                                                columnChatsRecord
+                                                                    .channelName;
+                                                          });
+                                                          setState(() {
+                                                            FFAppState()
+                                                                    .currentMainView =
+                                                                'Chat';
+                                                          });
+                                                        },
+                                                        child:
+                                                            ChannelButtonWidget(
+                                                          key: Key(
+                                                              'Keytaz_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                          channelName:
                                                               columnChatsRecord
+                                                                  .channelName,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          setState(() {
+                                                            FFAppState()
+                                                                    .currentChatRef =
+                                                                columnChatsRecord
+                                                                    .reference;
+                                                            FFAppState()
+                                                                    .currentChatUserRef =
+                                                                columnChatsRecord
+                                                                    .users
+                                                                    .where((e) =>
+                                                                        e !=
+                                                                        currentUserReference)
+                                                                    .toList()
+                                                                    .first;
+                                                          });
+                                                          _model.selectedUserChats =
+                                                              await queryUsersRecordOnce(
+                                                            queryBuilder:
+                                                                (usersRecord) =>
+                                                                    usersRecord
+                                                                        .where(
+                                                              'user_ref',
+                                                              isEqualTo: columnChatsRecord
                                                                   .users
                                                                   .where((e) =>
                                                                       e !=
                                                                       currentUserReference)
                                                                   .toList()
                                                                   .first,
-                                                        ),
-                                                        singleRecord: true,
-                                                      ).then((s) =>
-                                                              s.firstOrNull);
-                                                      setState(() {
-                                                        _model.chatUser = _model
-                                                            .selectedUserChats;
-                                                      });
-                                                      setState(() {
-                                                        FFAppState()
-                                                                .currentMainView =
-                                                            'Chat';
-                                                      });
+                                                            ),
+                                                            singleRecord: true,
+                                                          ).then((s) => s
+                                                                  .firstOrNull);
+                                                          setState(() {
+                                                            _model.chatUser = _model
+                                                                .selectedUserChats;
+                                                          });
+                                                          setState(() {
+                                                            FFAppState()
+                                                                    .currentMainView =
+                                                                'Chat';
+                                                          });
 
-                                                      setState(() {});
-                                                    },
-                                                    child:
-                                                        DirectMessageButtonWidget(
-                                                      key: Key(
-                                                          'Keykj8_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                      userRef: columnChatsRecord
-                                                          .users
-                                                          .where((e) =>
-                                                              e !=
-                                                              currentUserReference)
-                                                          .toList()
-                                                          .first,
-                                                    ),
-                                                  );
-                                                }
-                                              },
-                                            );
-                                          }),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  Builder(
-                                    builder: (context) => Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          25, 25, 25, 0),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          await showAlignedDialog(
-                                            barrierColor: Color(0x25000000),
-                                            barrierDismissible: false,
-                                            context: context,
-                                            isGlobal: true,
-                                            avoidOverflow: false,
-                                            targetAnchor: AlignmentDirectional(
-                                                    0, 0)
-                                                .resolve(
-                                                    Directionality.of(context)),
-                                            followerAnchor:
-                                                AlignmentDirectional(0, 0)
-                                                    .resolve(Directionality.of(
-                                                        context)),
-                                            builder: (dialogContext) {
-                                              return Material(
-                                                color: Colors.transparent,
-                                                child: GestureDetector(
-                                                  onTap: () => _model
-                                                          .unfocusNode
-                                                          .canRequestFocus
-                                                      ? FocusScope.of(context)
-                                                          .requestFocus(_model
-                                                              .unfocusNode)
-                                                      : FocusScope.of(context)
-                                                          .unfocus(),
-                                                  child: StartNewChatWidget(),
-                                                ),
-                                              );
-                                            },
-                                          ).then((value) => setState(() {}));
-                                        },
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Container(
-                                              width: 20,
-                                              height: 20,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFF32176D),
-                                                borderRadius:
-                                                    BorderRadius.circular(2),
-                                              ),
-                                              child: Icon(
-                                                Icons.add_rounded,
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                                size: 12,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(10, 0, 0, 0),
-                                              child: Text(
-                                                'New chat',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily: 'Inter',
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.normal,
+                                                          setState(() {});
+                                                        },
+                                                        child:
+                                                            DirectMessageButtonWidget(
+                                                          key: Key(
+                                                              'Keykj8_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                          userRef: columnChatsRecord
+                                                              .users
+                                                              .where((e) =>
+                                                                  e !=
+                                                                  currentUserReference)
+                                                              .toList()
+                                                              .first,
                                                         ),
-                                              ),
+                                                      );
+                                                    }
+                                                  },
+                                                );
+                                              }),
                                             ),
-                                          ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    Builder(
+                                      builder: (context) => Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            25.0, 25.0, 25.0, 25.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            await showAlignedDialog(
+                                              barrierColor: Color(0x25000000),
+                                              barrierDismissible: false,
+                                              context: context,
+                                              isGlobal: true,
+                                              avoidOverflow: false,
+                                              targetAnchor:
+                                                  AlignmentDirectional(0.0, 0.0)
+                                                      .resolve(
+                                                          Directionality.of(
+                                                              context)),
+                                              followerAnchor:
+                                                  AlignmentDirectional(0.0, 0.0)
+                                                      .resolve(
+                                                          Directionality.of(
+                                                              context)),
+                                              builder: (dialogContext) {
+                                                return Material(
+                                                  color: Colors.transparent,
+                                                  child: GestureDetector(
+                                                    onTap: () => _model
+                                                            .unfocusNode
+                                                            .canRequestFocus
+                                                        ? FocusScope.of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode)
+                                                        : FocusScope.of(context)
+                                                            .unfocus(),
+                                                    child: StartNewChatWidget(),
+                                                  ),
+                                                );
+                                              },
+                                            ).then((value) => setState(() {}));
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 20.0,
+                                                height: 20.0,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xFF32176D),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          2.0),
+                                                ),
+                                                child: Icon(
+                                                  Icons.add_rounded,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  size: 12.0,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        10.0, 0.0, 0.0, 0.0),
+                                                child: Text(
+                                                  'New chat',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Inter',
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           }

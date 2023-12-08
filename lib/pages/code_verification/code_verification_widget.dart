@@ -199,7 +199,11 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                               .secondary,
                                     ),
                                     controller: _model.pinCodeController,
-                                    onChanged: (_) {},
+                                    onChanged: (_) async {
+                                      setState(() {
+                                        _model.isComplete = false;
+                                      });
+                                    },
                                     onCompleted: (_) async {
                                       setState(() {
                                         _model.isComplete = true;
@@ -328,7 +332,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional
-                                                  .fromSTEB(1, 0, 0, 0),
+                                                  .fromSTEB(1.0, 0.0, 0.0, 0.0),
                                               child: Text(
                                                 's',
                                                 style:
@@ -339,7 +343,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                           color: FlutterFlowTheme
                                                                   .of(context)
                                                               .secondaryText,
-                                                          fontSize: 12,
+                                                          fontSize: 12.0,
                                                           fontWeight:
                                                               FontWeight.normal,
                                                         ),

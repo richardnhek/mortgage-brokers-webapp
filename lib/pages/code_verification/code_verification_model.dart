@@ -31,7 +31,6 @@ class CodeVerificationModel extends FlutterFlowModel<CodeVerificationWidget> {
   String timerValue = StopWatchTimer.getDisplayTime(
     60000,
     hours: false,
-    minute: false,
     milliSecond: false,
   );
   FlutterFlowTimerController timerController =

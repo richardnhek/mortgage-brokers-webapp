@@ -113,10 +113,8 @@ class _UserDetailsWidgetState extends State<UserDetailsWidget> {
                   Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                        child: Container(
+                      if (false)
+                        Container(
                           width: 74.0,
                           height: 40.0,
                           decoration: BoxDecoration(
@@ -134,11 +132,11 @@ class _UserDetailsWidgetState extends State<UserDetailsWidget> {
                             children: [
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 5.0, 0.0),
+                                    0.0, 0.0, 8.0, 0.0),
                                 child: Icon(
-                                  Icons.push_pin_outlined,
+                                  FFIcons.kpin,
                                   color: FlutterFlowTheme.of(context).secondary,
-                                  size: 18.0,
+                                  size: 14.0,
                                 ),
                               ),
                               Text(
@@ -148,7 +146,6 @@ class _UserDetailsWidgetState extends State<UserDetailsWidget> {
                             ],
                           ),
                         ),
-                      ),
                       Container(
                         width: 89.0,
                         height: 40.0,
@@ -167,11 +164,11 @@ class _UserDetailsWidgetState extends State<UserDetailsWidget> {
                           children: [
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 5.0, 0.0),
+                                  0.0, 0.0, 12.0, 0.0),
                               child: Icon(
-                                Icons.notifications_off_outlined,
+                                FFIcons.kmute,
                                 color: FlutterFlowTheme.of(context).secondary,
-                                size: 20.0,
+                                size: 12.0,
                               ),
                             ),
                             Text(
@@ -181,7 +178,7 @@ class _UserDetailsWidgetState extends State<UserDetailsWidget> {
                           ],
                         ),
                       ),
-                    ],
+                    ].divide(SizedBox(width: 10.0)),
                   ),
                   Padding(
                     padding:
@@ -210,12 +207,12 @@ class _UserDetailsWidgetState extends State<UserDetailsWidget> {
                                 children: [
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 10.0, 0.0),
+                                        0.0, 0.0, 12.0, 0.0),
                                     child: Icon(
-                                      Icons.mail_outline_rounded,
+                                      FFIcons.kworkspace,
                                       color: FlutterFlowTheme.of(context)
                                           .secondary4,
-                                      size: 21.0,
+                                      size: 16.0,
                                     ),
                                   ),
                                   Text(
