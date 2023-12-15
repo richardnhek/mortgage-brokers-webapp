@@ -11,9 +11,11 @@ class ChannelButtonWidget extends StatefulWidget {
   const ChannelButtonWidget({
     Key? key,
     required this.channelName,
+    required this.isRead,
   }) : super(key: key);
 
   final String? channelName;
+  final bool? isRead;
 
   @override
   _ChannelButtonWidgetState createState() => _ChannelButtonWidgetState();
@@ -51,10 +53,10 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
       width: double.infinity,
       height: 40.0,
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: widget.isRead == true ? Colors.transparent : Color(0x1AFF6B78),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+        padding: EdgeInsetsDirectional.fromSTEB(25.0, 5.0, 25.0, 5.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -64,44 +66,13 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
               decoration: BoxDecoration(
                 color: Colors.transparent,
               ),
-              child: Stack(
-                children: [
-                  Container(
-                    width: 25.0,
-                    height: 25.0,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFB253),
-                      borderRadius: BorderRadius.circular(3.0),
-                    ),
-                  ),
-                  if (false)
-                    Align(
-                      alignment: AlignmentDirectional(0.80, 0.80),
-                      child: Container(
-                        width: 15.0,
-                        height: 15.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).primary,
-                          borderRadius: BorderRadius.circular(2.0),
-                        ),
-                        child: Align(
-                          alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text(
-                            '3',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Inter',
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  fontSize: 8.0,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
+              child: Container(
+                width: 25.0,
+                height: 25.0,
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFB253),
+                  borderRadius: BorderRadius.circular(3.0),
+                ),
               ),
             ),
             Expanded(

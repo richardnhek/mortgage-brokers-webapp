@@ -75,12 +75,12 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
         ),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+        padding: EdgeInsets.all(25.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Align(
-              alignment: AlignmentDirectional(-1.00, 0.00),
+              alignment: AlignmentDirectional(-1.0, 0.0),
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),
                 child: Column(
@@ -146,12 +146,12 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Align(
-                    alignment: AlignmentDirectional(-1.00, 0.00),
+                    alignment: AlignmentDirectional(-1.0, 0.0),
                     child: Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 15.0),
                       child: Text(
-                        'Channel name',
+                        'Channel name (At least 3 members)',
                         textAlign: TextAlign.start,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               fontFamily: 'Inter',
@@ -162,61 +162,90 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                       ),
                     ),
                   ),
-                  Container(
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).primaryBackground,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x14000000),
-                          offset: Offset(0.0, 2.0),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(
-                        color: FlutterFlowTheme.of(context).secondaryBackground,
-                        width: 1.0,
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      if (FFAppState().selectedMembers.length < 2) {
+                        await showDialog(
+                          context: context,
+                          builder: (alertDialogContext) {
+                            return AlertDialog(
+                              title: Text('Info'),
+                              content: Text(
+                                  'Please add at least 2 members to start a channel.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext),
+                                  child: Text('Ok'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
+                    },
+                    child: Container(
+                      height: 50.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).primaryBackground,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 4.0,
+                            color: Color(0x14000000),
+                            offset: Offset(0.0, 2.0),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          width: 1.0,
+                        ),
                       ),
-                    ),
-                    child: TextFormField(
-                      controller: _model.channelNameController,
-                      focusNode: _model.channelNameFocusNode,
-                      onChanged: (_) => EasyDebounce.debounce(
-                        '_model.channelNameController',
-                        Duration(milliseconds: 100),
-                        () => setState(() {}),
-                      ),
-                      autofocus: true,
-                      readOnly: FFAppState().selectedMembers.length < 2,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        hintText: 'Whole team',
-                        hintStyle: FlutterFlowTheme.of(context)
-                            .headlineMedium
-                            .override(
-                              fontFamily: 'Inter',
-                              color: FlutterFlowTheme.of(context).darkGrey2,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.normal,
-                            ),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        focusedErrorBorder: InputBorder.none,
-                        contentPadding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 0.0, 10.0, 0.0),
-                      ),
-                      style:
-                          FlutterFlowTheme.of(context).headlineMedium.override(
+                      child: TextFormField(
+                        controller: _model.channelNameController,
+                        focusNode: _model.channelNameFocusNode,
+                        onChanged: (_) => EasyDebounce.debounce(
+                          '_model.channelNameController',
+                          Duration(milliseconds: 100),
+                          () => setState(() {}),
+                        ),
+                        autofocus: true,
+                        readOnly: FFAppState().selectedMembers.length < 2,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          hintText: 'Whole team',
+                          hintStyle: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .override(
                                 fontFamily: 'Inter',
-                                color: FlutterFlowTheme.of(context).primaryText,
+                                color: FlutterFlowTheme.of(context).darkGrey2,
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.normal,
                               ),
-                      maxLines: null,
-                      validator: _model.channelNameControllerValidator
-                          .asValidator(context),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                          contentPadding: EdgeInsetsDirectional.fromSTEB(
+                              10.0, 0.0, 10.0, 0.0),
+                        ),
+                        style: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .override(
+                              fontFamily: 'Inter',
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.normal,
+                            ),
+                        maxLines: null,
+                        validator: _model.channelNameControllerValidator
+                            .asValidator(context),
+                      ),
                     ),
                   ),
                 ],
@@ -229,7 +258,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Align(
-                    alignment: AlignmentDirectional(-1.00, 0.00),
+                    alignment: AlignmentDirectional(-1.0, 0.0),
                     child: Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 15.0),
@@ -443,7 +472,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                 options: FFButtonOptions(
                   width: double.infinity,
                   height: 56.0,
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  padding: EdgeInsets.all(0.0),
                   iconPadding:
                       EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                   color: FlutterFlowTheme.of(context).primary,

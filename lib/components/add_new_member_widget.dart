@@ -71,7 +71,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+        padding: EdgeInsets.all(25.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,7 +268,7 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                     ),
                   ),
                   Align(
-                    alignment: AlignmentDirectional(-1.00, -1.00),
+                    alignment: AlignmentDirectional(-1.0, -1.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,

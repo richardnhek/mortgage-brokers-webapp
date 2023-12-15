@@ -52,6 +52,11 @@ class WorkspacesRecord extends FirestoreRecord {
   List<DocumentReference> get chatRefs => _chatRefs ?? const [];
   bool hasChatRefs() => _chatRefs != null;
 
+  // "created_time" field.
+  DateTime? _createdTime;
+  DateTime? get createdTime => _createdTime;
+  bool hasCreatedTime() => _createdTime != null;
+
   void _initializeFields() {
     _members = getDataList(snapshotData['members']);
     _name = snapshotData['name'] as String?;
@@ -63,6 +68,7 @@ class WorkspacesRecord extends FirestoreRecord {
     _id = snapshotData['id'] as String?;
     _workspaceRef = snapshotData['workspace_ref'] as DocumentReference?;
     _chatRefs = getDataList(snapshotData['chat_refs']);
+    _createdTime = snapshotData['created_time'] as DateTime?;
   }
 
   static CollectionReference get collection =>
@@ -104,6 +110,7 @@ Map<String, dynamic> createWorkspacesRecordData({
   WorkspaceOverviewStruct? overview,
   String? id,
   DocumentReference? workspaceRef,
+  DateTime? createdTime,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -111,6 +118,7 @@ Map<String, dynamic> createWorkspacesRecordData({
       'overview': WorkspaceOverviewStruct().toMap(),
       'id': id,
       'workspace_ref': workspaceRef,
+      'created_time': createdTime,
     }.withoutNulls,
   );
 
@@ -132,7 +140,8 @@ class WorkspacesRecordDocumentEquality implements Equality<WorkspacesRecord> {
         listEquality.equals(e1?.files, e2?.files) &&
         e1?.id == e2?.id &&
         e1?.workspaceRef == e2?.workspaceRef &&
-        listEquality.equals(e1?.chatRefs, e2?.chatRefs);
+        listEquality.equals(e1?.chatRefs, e2?.chatRefs) &&
+        e1?.createdTime == e2?.createdTime;
   }
 
   @override
@@ -143,7 +152,8 @@ class WorkspacesRecordDocumentEquality implements Equality<WorkspacesRecord> {
         e?.files,
         e?.id,
         e?.workspaceRef,
-        e?.chatRefs
+        e?.chatRefs,
+        e?.createdTime
       ]);
 
   @override

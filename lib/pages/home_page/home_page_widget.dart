@@ -113,8 +113,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                         color: FlutterFlowTheme.of(context).alternate,
                       ),
                       child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            25.0, 25.0, 25.0, 25.0),
+                        padding: EdgeInsets.all(25.0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -152,6 +151,95 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
+                                    Builder(
+                                      builder: (context) => Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            25.0, 12.5, 25.0, 25.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            await showAlignedDialog(
+                                              barrierColor: Color(0x25000000),
+                                              barrierDismissible: false,
+                                              context: context,
+                                              isGlobal: true,
+                                              avoidOverflow: false,
+                                              targetAnchor:
+                                                  AlignmentDirectional(0.0, 0.0)
+                                                      .resolve(
+                                                          Directionality.of(
+                                                              context)),
+                                              followerAnchor:
+                                                  AlignmentDirectional(0.0, 0.0)
+                                                      .resolve(
+                                                          Directionality.of(
+                                                              context)),
+                                              builder: (dialogContext) {
+                                                return Material(
+                                                  color: Colors.transparent,
+                                                  child: GestureDetector(
+                                                    onTap: () => _model
+                                                            .unfocusNode
+                                                            .canRequestFocus
+                                                        ? FocusScope.of(context)
+                                                            .requestFocus(_model
+                                                                .unfocusNode)
+                                                        : FocusScope.of(context)
+                                                            .unfocus(),
+                                                    child:
+                                                        CreateWorkspaceWidget(),
+                                                  ),
+                                                );
+                                              },
+                                            ).then((value) => setState(() {}));
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 20.0,
+                                                height: 20.0,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          2.0),
+                                                ),
+                                                child: Icon(
+                                                  Icons.add_rounded,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  size: 12.0,
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        10.0, 0.0, 0.0, 0.0),
+                                                child: Text(
+                                                  'Add workspace',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Inter',
+                                                        fontSize: 16.0,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                     FutureBuilder<List<WorkspacesRecord>>(
                                       future: queryWorkspacesRecordOnce(
                                         queryBuilder: (workspacesRecord) =>
@@ -349,12 +437,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                             ),
                                                             child: Padding(
                                                               padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          5.0,
-                                                                          5.0,
-                                                                          5.0,
-                                                                          5.0),
+                                                                  EdgeInsets
+                                                                      .all(5.0),
                                                               child: Row(
                                                                 mainAxisSize:
                                                                     MainAxisSize
@@ -403,7 +487,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                             EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                                     0.0,
-                                                                    25.0,
+                                                                    20.0,
                                                                     0.0,
                                                                     0.0),
                                                         child: Container(
@@ -415,364 +499,157 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                     .of(context)
                                                                 .secondaryBackground,
                                                           ),
-                                                          child: Container(
-                                                            width:
-                                                                double.infinity,
-                                                            color: Colors
-                                                                .transparent,
-                                                            child:
-                                                                ExpandableNotifier(
-                                                              child:
-                                                                  ExpandablePanel(
-                                                                header: Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          25.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child: Text(
-                                                                    'Channels',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .displaySmall
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Inter',
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).secondaryText,
-                                                                          fontSize:
-                                                                              15.0,
-                                                                          fontWeight:
-                                                                              FontWeight.normal,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                collapsed:
-                                                                    Container(),
-                                                                expanded:
-                                                                    Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          25.0,
-                                                                          20.0,
-                                                                          25.0,
-                                                                          0.0),
-                                                                  child: FutureBuilder<
-                                                                      List<
-                                                                          ChatsRecord>>(
-                                                                    future:
-                                                                        queryChatsRecordOnce(
-                                                                      queryBuilder: (chatsRecord) => chatsRecord
-                                                                          .where(
-                                                                            'chat_type',
-                                                                            isEqualTo:
-                                                                                'Channel',
-                                                                          )
-                                                                          .where(
-                                                                            'users',
-                                                                            arrayContains:
-                                                                                currentUserReference,
-                                                                          )
-                                                                          .where(
-                                                                            'workspace_ref',
-                                                                            isEqualTo:
-                                                                                columnWorkspacesRecord.workspaceRef,
-                                                                          )
-                                                                          .orderBy('last_message_time', descending: true),
-                                                                    ),
-                                                                    builder:
-                                                                        (context,
-                                                                            snapshot) {
-                                                                      // Customize what your widget looks like when it's loading.
-                                                                      if (!snapshot
-                                                                          .hasData) {
-                                                                        return Center(
-                                                                          child:
-                                                                              SizedBox(
-                                                                            width:
-                                                                                50.0,
-                                                                            height:
-                                                                                50.0,
-                                                                            child:
-                                                                                CircularProgressIndicator(
-                                                                              valueColor: AlwaysStoppedAnimation<Color>(
-                                                                                FlutterFlowTheme.of(context).primary,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      }
-                                                                      List<ChatsRecord>
-                                                                          columnChatsRecordList =
-                                                                          snapshot
-                                                                              .data!;
-                                                                      return Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        children: List.generate(
-                                                                            columnChatsRecordList.length,
-                                                                            (columnIndex) {
-                                                                          final columnChatsRecord =
-                                                                              columnChatsRecordList[columnIndex];
-                                                                          return InkWell(
-                                                                            splashColor:
-                                                                                Colors.transparent,
-                                                                            focusColor:
-                                                                                Colors.transparent,
-                                                                            hoverColor:
-                                                                                Colors.transparent,
-                                                                            highlightColor:
-                                                                                Colors.transparent,
-                                                                            onTap:
-                                                                                () async {
-                                                                              setState(() {
-                                                                                FFAppState().currentChatRef = columnChatsRecord.reference;
-                                                                                FFAppState().currentChatUserRef = null;
-                                                                              });
-                                                                              setState(() {
-                                                                                _model.chatUser = null;
-                                                                                _model.selectedChannel = columnChatsRecord.channelName;
-                                                                              });
-                                                                              setState(() {
-                                                                                FFAppState().currentMainView = 'Chat';
-                                                                              });
-                                                                            },
-                                                                            child:
-                                                                                ChannelButtonWidget(
-                                                                              key: Key('Keyed1_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                                              channelName: columnChatsRecord.channelName,
-                                                                            ),
-                                                                          );
-                                                                        }).divide(SizedBox(
-                                                                            height:
-                                                                                5.0)),
-                                                                      );
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                                theme:
-                                                                    ExpandableThemeData(
-                                                                  tapHeaderToExpand:
-                                                                      true,
-                                                                  tapBodyToExpand:
-                                                                      false,
-                                                                  tapBodyToCollapse:
-                                                                      false,
-                                                                  headerAlignment:
-                                                                      ExpandablePanelHeaderAlignment
-                                                                          .center,
-                                                                  hasIcon: true,
-                                                                  expandIcon: Icons
-                                                                      .keyboard_arrow_right_rounded,
-                                                                  collapseIcon:
-                                                                      Icons
-                                                                          .keyboard_arrow_down_rounded,
-                                                                  iconColor: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
-                                                                  iconPadding: EdgeInsets
-                                                                      .fromLTRB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          25.0,
-                                                                          0.0),
-                                                                ),
-                                                              ),
+                                                          child: StreamBuilder<
+                                                              List<
+                                                                  ChatsRecord>>(
+                                                            stream:
+                                                                queryChatsRecord(
+                                                              queryBuilder: (chatsRecord) =>
+                                                                  chatsRecord
+                                                                      .where(
+                                                                        'users',
+                                                                        arrayContains:
+                                                                            currentUserReference,
+                                                                      )
+                                                                      .where(
+                                                                        'workspace_ref',
+                                                                        isEqualTo:
+                                                                            columnWorkspacesRecord.workspaceRef,
+                                                                      )
+                                                                      .orderBy(
+                                                                          'last_message_time',
+                                                                          descending:
+                                                                              true),
                                                             ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    25.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Container(
-                                                          width:
-                                                              double.infinity,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryBackground,
-                                                          ),
-                                                          child: Container(
-                                                            width:
-                                                                double.infinity,
-                                                            color: Colors
-                                                                .transparent,
-                                                            child:
-                                                                ExpandableNotifier(
-                                                              child:
-                                                                  ExpandablePanel(
-                                                                header: Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          25.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child: Text(
-                                                                    'Direct messages',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .displaySmall
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Inter',
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).secondaryText,
-                                                                          fontSize:
-                                                                              15.0,
-                                                                          fontWeight:
-                                                                              FontWeight.normal,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                collapsed:
-                                                                    Container(),
-                                                                expanded:
-                                                                    Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          25.0,
-                                                                          20.0,
-                                                                          25.0,
-                                                                          0.0),
-                                                                  child: FutureBuilder<
-                                                                      List<
-                                                                          ChatsRecord>>(
-                                                                    future:
-                                                                        queryChatsRecordOnce(
-                                                                      queryBuilder: (chatsRecord) => chatsRecord
-                                                                          .where(
-                                                                            'chat_type',
-                                                                            isEqualTo:
-                                                                                'DM',
-                                                                          )
-                                                                          .where(
-                                                                            'users',
-                                                                            arrayContains:
-                                                                                currentUserReference,
-                                                                          )
-                                                                          .where(
-                                                                            'workspace_ref',
-                                                                            isEqualTo:
-                                                                                columnWorkspacesRecord.workspaceRef,
-                                                                          )
-                                                                          .orderBy('last_message_time', descending: true),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              // Customize what your widget looks like when it's loading.
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 50.0,
+                                                                    height:
+                                                                        50.0,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      valueColor:
+                                                                          AlwaysStoppedAnimation<
+                                                                              Color>(
+                                                                        FlutterFlowTheme.of(context)
+                                                                            .primary,
+                                                                      ),
                                                                     ),
+                                                                  ),
+                                                                );
+                                                              }
+                                                              List<ChatsRecord>
+                                                                  columnChatsRecordList =
+                                                                  snapshot
+                                                                      .data!;
+                                                              return Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                children: List.generate(
+                                                                    columnChatsRecordList
+                                                                        .length,
+                                                                    (columnIndex) {
+                                                                  final columnChatsRecord =
+                                                                      columnChatsRecordList[
+                                                                          columnIndex];
+                                                                  return Builder(
                                                                     builder:
-                                                                        (context,
-                                                                            snapshot) {
-                                                                      // Customize what your widget looks like when it's loading.
-                                                                      if (!snapshot
-                                                                          .hasData) {
-                                                                        return Center(
+                                                                        (context) {
+                                                                      if (columnChatsRecord
+                                                                              .chatType ==
+                                                                          'Channel') {
+                                                                        return InkWell(
+                                                                          splashColor:
+                                                                              Colors.transparent,
+                                                                          focusColor:
+                                                                              Colors.transparent,
+                                                                          hoverColor:
+                                                                              Colors.transparent,
+                                                                          highlightColor:
+                                                                              Colors.transparent,
+                                                                          onTap:
+                                                                              () async {
+                                                                            setState(() {
+                                                                              FFAppState().currentChatRef = columnChatsRecord.reference;
+                                                                              FFAppState().currentChatUserRef = null;
+                                                                            });
+                                                                            setState(() {
+                                                                              _model.chatUser = null;
+                                                                              _model.selectedChannel = columnChatsRecord.channelName;
+                                                                            });
+                                                                            setState(() {
+                                                                              FFAppState().currentMainView = 'Chat';
+                                                                            });
+                                                                          },
                                                                           child:
-                                                                              SizedBox(
-                                                                            width:
-                                                                                50.0,
-                                                                            height:
-                                                                                50.0,
-                                                                            child:
-                                                                                CircularProgressIndicator(
-                                                                              valueColor: AlwaysStoppedAnimation<Color>(
-                                                                                FlutterFlowTheme.of(context).primary,
-                                                                              ),
-                                                                            ),
+                                                                              ChannelButtonWidget(
+                                                                            key:
+                                                                                Key('Key5l7_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                                            channelName:
+                                                                                columnChatsRecord.channelName,
+                                                                            isRead:
+                                                                                columnChatsRecord.lastMessageSeenBy.contains(currentUserReference) == true,
                                                                           ),
                                                                         );
-                                                                      }
-                                                                      List<ChatsRecord>
-                                                                          columnChatsRecordList =
-                                                                          snapshot
-                                                                              .data!;
-                                                                      return Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        children: List.generate(
-                                                                            columnChatsRecordList.length,
-                                                                            (columnIndex) {
-                                                                          final columnChatsRecord =
-                                                                              columnChatsRecordList[columnIndex];
-                                                                          return InkWell(
-                                                                            splashColor:
-                                                                                Colors.transparent,
-                                                                            focusColor:
-                                                                                Colors.transparent,
-                                                                            hoverColor:
-                                                                                Colors.transparent,
-                                                                            highlightColor:
-                                                                                Colors.transparent,
-                                                                            onTap:
-                                                                                () async {
-                                                                              setState(() {
-                                                                                FFAppState().currentChatRef = columnChatsRecord.reference;
-                                                                                FFAppState().currentChatUserRef = columnChatsRecord.users.where((e) => e != currentUserReference).toList().first;
-                                                                              });
-                                                                              _model.selectedUser = await queryUsersRecordOnce(
-                                                                                queryBuilder: (usersRecord) => usersRecord.where(
-                                                                                  'user_ref',
-                                                                                  isEqualTo: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
-                                                                                ),
-                                                                                singleRecord: true,
-                                                                              ).then((s) => s.firstOrNull);
-                                                                              setState(() {
-                                                                                _model.chatUser = _model.selectedUser;
-                                                                              });
-                                                                              setState(() {
-                                                                                FFAppState().currentMainView = 'Chat';
-                                                                              });
+                                                                      } else {
+                                                                        return InkWell(
+                                                                          splashColor:
+                                                                              Colors.transparent,
+                                                                          focusColor:
+                                                                              Colors.transparent,
+                                                                          hoverColor:
+                                                                              Colors.transparent,
+                                                                          highlightColor:
+                                                                              Colors.transparent,
+                                                                          onTap:
+                                                                              () async {
+                                                                            setState(() {
+                                                                              FFAppState().currentChatRef = columnChatsRecord.reference;
+                                                                              FFAppState().currentChatUserRef = columnChatsRecord.users.where((e) => e != currentUserReference).toList().first;
+                                                                            });
+                                                                            _model.selectedUser =
+                                                                                await queryUsersRecordOnce(
+                                                                              queryBuilder: (usersRecord) => usersRecord.where(
+                                                                                'user_ref',
+                                                                                isEqualTo: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
+                                                                              ),
+                                                                              singleRecord: true,
+                                                                            ).then((s) => s.firstOrNull);
+                                                                            setState(() {
+                                                                              _model.chatUser = _model.selectedUser;
+                                                                            });
+                                                                            setState(() {
+                                                                              FFAppState().currentMainView = 'Chat';
+                                                                            });
 
-                                                                              setState(() {});
-                                                                            },
-                                                                            child:
-                                                                                DirectMessageButtonWidget(
-                                                                              key: Key('Key19u_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                                              userRef: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
-                                                                            ),
-                                                                          );
-                                                                        }).divide(SizedBox(
-                                                                            height:
-                                                                                5.0)),
-                                                                      );
+                                                                            setState(() {});
+                                                                          },
+                                                                          child:
+                                                                              DirectMessageButtonWidget(
+                                                                            key:
+                                                                                Key('Key67z_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                                            userRef:
+                                                                                columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
+                                                                            isRead:
+                                                                                columnChatsRecord.lastMessageSeenBy.contains(currentUserReference) == true,
+                                                                          ),
+                                                                        );
+                                                                      }
                                                                     },
-                                                                  ),
-                                                                ),
-                                                                theme:
-                                                                    ExpandableThemeData(
-                                                                  tapHeaderToExpand:
-                                                                      true,
-                                                                  tapBodyToExpand:
-                                                                      false,
-                                                                  tapBodyToCollapse:
-                                                                      false,
-                                                                  headerAlignment:
-                                                                      ExpandablePanelHeaderAlignment
-                                                                          .center,
-                                                                  hasIcon: true,
-                                                                  expandIcon: Icons
-                                                                      .keyboard_arrow_right_rounded,
-                                                                  collapseIcon:
-                                                                      Icons
-                                                                          .keyboard_arrow_down_rounded,
-                                                                  iconColor: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
-                                                                  iconPadding: EdgeInsets
-                                                                      .fromLTRB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          25.0,
-                                                                          0.0),
-                                                                ),
-                                                              ),
-                                                            ),
+                                                                  );
+                                                                }).divide(
+                                                                    SizedBox(
+                                                                        height:
+                                                                            5.0)),
+                                                              );
+                                                            },
                                                           ),
                                                         ),
                                                       ),
@@ -931,95 +808,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         );
                                       },
                                     ),
-                                    Builder(
-                                      builder: (context) => Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            25.0, 25.0, 25.0, 25.0),
-                                        child: InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            await showAlignedDialog(
-                                              barrierColor: Color(0x25000000),
-                                              barrierDismissible: false,
-                                              context: context,
-                                              isGlobal: true,
-                                              avoidOverflow: false,
-                                              targetAnchor:
-                                                  AlignmentDirectional(0.0, 0.0)
-                                                      .resolve(
-                                                          Directionality.of(
-                                                              context)),
-                                              followerAnchor:
-                                                  AlignmentDirectional(0.0, 0.0)
-                                                      .resolve(
-                                                          Directionality.of(
-                                                              context)),
-                                              builder: (dialogContext) {
-                                                return Material(
-                                                  color: Colors.transparent,
-                                                  child: GestureDetector(
-                                                    onTap: () => _model
-                                                            .unfocusNode
-                                                            .canRequestFocus
-                                                        ? FocusScope.of(context)
-                                                            .requestFocus(_model
-                                                                .unfocusNode)
-                                                        : FocusScope.of(context)
-                                                            .unfocus(),
-                                                    child:
-                                                        CreateWorkspaceWidget(),
-                                                  ),
-                                                );
-                                              },
-                                            ).then((value) => setState(() {}));
-                                          },
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Container(
-                                                width: 20.0,
-                                                height: 20.0,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          2.0),
-                                                ),
-                                                child: Icon(
-                                                  Icons.add_rounded,
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  size: 12.0,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        10.0, 0.0, 0.0, 0.0),
-                                                child: Text(
-                                                  'Add workspace',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily: 'Inter',
-                                                        fontSize: 16.0,
-                                                        fontWeight:
-                                                            FontWeight.normal,
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
@@ -1034,181 +822,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          25.0, 0.0, 25.0, 0.0),
-                                      child: FutureBuilder<List<ChatsRecord>>(
-                                        future: queryChatsRecordOnce(
-                                          queryBuilder: (chatsRecord) =>
-                                              chatsRecord
-                                                  .where(
-                                                    'users',
-                                                    arrayContains:
-                                                        currentUserReference,
-                                                  )
-                                                  .orderBy('last_message_time',
-                                                      descending: true),
-                                        ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                          Color>(
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          List<ChatsRecord>
-                                              columnChatsRecordList =
-                                              snapshot.data!;
-                                          return SingleChildScrollView(
-                                            primary: false,
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: List.generate(
-                                                  columnChatsRecordList.length,
-                                                  (columnIndex) {
-                                                final columnChatsRecord =
-                                                    columnChatsRecordList[
-                                                        columnIndex];
-                                                return Builder(
-                                                  builder: (context) {
-                                                    if (columnChatsRecord
-                                                            .chatType ==
-                                                        'Channel') {
-                                                      return InkWell(
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        focusColor:
-                                                            Colors.transparent,
-                                                        hoverColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            Colors.transparent,
-                                                        onTap: () async {
-                                                          setState(() {
-                                                            FFAppState()
-                                                                    .currentChatRef =
-                                                                columnChatsRecord
-                                                                    .reference;
-                                                            FFAppState()
-                                                                    .currentChatUserRef =
-                                                                null;
-                                                          });
-                                                          setState(() {
-                                                            _model.chatUser =
-                                                                null;
-                                                            _model.selectedChannel =
-                                                                columnChatsRecord
-                                                                    .channelName;
-                                                          });
-                                                          setState(() {
-                                                            FFAppState()
-                                                                    .currentMainView =
-                                                                'Chat';
-                                                          });
-                                                        },
-                                                        child:
-                                                            ChannelButtonWidget(
-                                                          key: Key(
-                                                              'Keytaz_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                          channelName:
-                                                              columnChatsRecord
-                                                                  .channelName,
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      return InkWell(
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        focusColor:
-                                                            Colors.transparent,
-                                                        hoverColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            Colors.transparent,
-                                                        onTap: () async {
-                                                          setState(() {
-                                                            FFAppState()
-                                                                    .currentChatRef =
-                                                                columnChatsRecord
-                                                                    .reference;
-                                                            FFAppState()
-                                                                    .currentChatUserRef =
-                                                                columnChatsRecord
-                                                                    .users
-                                                                    .where((e) =>
-                                                                        e !=
-                                                                        currentUserReference)
-                                                                    .toList()
-                                                                    .first;
-                                                          });
-                                                          _model.selectedUserChats =
-                                                              await queryUsersRecordOnce(
-                                                            queryBuilder:
-                                                                (usersRecord) =>
-                                                                    usersRecord
-                                                                        .where(
-                                                              'user_ref',
-                                                              isEqualTo: columnChatsRecord
-                                                                  .users
-                                                                  .where((e) =>
-                                                                      e !=
-                                                                      currentUserReference)
-                                                                  .toList()
-                                                                  .first,
-                                                            ),
-                                                            singleRecord: true,
-                                                          ).then((s) => s
-                                                                  .firstOrNull);
-                                                          setState(() {
-                                                            _model.chatUser = _model
-                                                                .selectedUserChats;
-                                                          });
-                                                          setState(() {
-                                                            FFAppState()
-                                                                    .currentMainView =
-                                                                'Chat';
-                                                          });
-
-                                                          setState(() {});
-                                                        },
-                                                        child:
-                                                            DirectMessageButtonWidget(
-                                                          key: Key(
-                                                              'Keykj8_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                          userRef: columnChatsRecord
-                                                              .users
-                                                              .where((e) =>
-                                                                  e !=
-                                                                  currentUserReference)
-                                                              .toList()
-                                                              .first,
-                                                        ),
-                                                      );
-                                                    }
-                                                  },
-                                                );
-                                              }),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
                                     Builder(
                                       builder: (context) => Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            25.0, 25.0, 25.0, 25.0),
+                                            25.0, 12.5, 25.0, 20.0),
                                         child: InkWell(
                                           splashColor: Colors.transparent,
                                           focusColor: Colors.transparent,
@@ -1290,6 +907,183 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           ),
                                         ),
                                       ),
+                                    ),
+                                    FutureBuilder<List<ChatsRecord>>(
+                                      future: queryChatsRecordOnce(
+                                        queryBuilder: (chatsRecord) =>
+                                            chatsRecord
+                                                .where(
+                                                  'users',
+                                                  arrayContains:
+                                                      currentUserReference,
+                                                )
+                                                .orderBy('last_message_time',
+                                                    descending: true),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        List<ChatsRecord>
+                                            columnChatsRecordList =
+                                            snapshot.data!;
+                                        return SingleChildScrollView(
+                                          primary: false,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: List.generate(
+                                                columnChatsRecordList.length,
+                                                (columnIndex) {
+                                              final columnChatsRecord =
+                                                  columnChatsRecordList[
+                                                      columnIndex];
+                                              return Builder(
+                                                builder: (context) {
+                                                  if (columnChatsRecord
+                                                          .chatType ==
+                                                      'Channel') {
+                                                    return InkWell(
+                                                      splashColor:
+                                                          Colors.transparent,
+                                                      focusColor:
+                                                          Colors.transparent,
+                                                      hoverColor:
+                                                          Colors.transparent,
+                                                      highlightColor:
+                                                          Colors.transparent,
+                                                      onTap: () async {
+                                                        setState(() {
+                                                          FFAppState()
+                                                                  .currentChatRef =
+                                                              columnChatsRecord
+                                                                  .reference;
+                                                          FFAppState()
+                                                                  .currentChatUserRef =
+                                                              null;
+                                                        });
+                                                        setState(() {
+                                                          _model.chatUser =
+                                                              null;
+                                                          _model.selectedChannel =
+                                                              columnChatsRecord
+                                                                  .channelName;
+                                                        });
+                                                        setState(() {
+                                                          FFAppState()
+                                                                  .currentMainView =
+                                                              'Chat';
+                                                        });
+                                                      },
+                                                      child:
+                                                          ChannelButtonWidget(
+                                                        key: Key(
+                                                            'Keytaz_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                        channelName:
+                                                            columnChatsRecord
+                                                                .channelName,
+                                                        isRead: columnChatsRecord
+                                                                .lastMessageSeenBy
+                                                                .contains(
+                                                                    currentUserReference) ==
+                                                            true,
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    return InkWell(
+                                                      splashColor:
+                                                          Colors.transparent,
+                                                      focusColor:
+                                                          Colors.transparent,
+                                                      hoverColor:
+                                                          Colors.transparent,
+                                                      highlightColor:
+                                                          Colors.transparent,
+                                                      onTap: () async {
+                                                        setState(() {
+                                                          FFAppState()
+                                                                  .currentChatRef =
+                                                              columnChatsRecord
+                                                                  .reference;
+                                                          FFAppState()
+                                                                  .currentChatUserRef =
+                                                              columnChatsRecord
+                                                                  .users
+                                                                  .where((e) =>
+                                                                      e !=
+                                                                      currentUserReference)
+                                                                  .toList()
+                                                                  .first;
+                                                        });
+                                                        _model.selectedUserChats =
+                                                            await queryUsersRecordOnce(
+                                                          queryBuilder:
+                                                              (usersRecord) =>
+                                                                  usersRecord
+                                                                      .where(
+                                                            'user_ref',
+                                                            isEqualTo:
+                                                                columnChatsRecord
+                                                                    .users
+                                                                    .where((e) =>
+                                                                        e !=
+                                                                        currentUserReference)
+                                                                    .toList()
+                                                                    .first,
+                                                          ),
+                                                          singleRecord: true,
+                                                        ).then((s) =>
+                                                                s.firstOrNull);
+                                                        setState(() {
+                                                          _model.chatUser = _model
+                                                              .selectedUserChats;
+                                                        });
+                                                        setState(() {
+                                                          FFAppState()
+                                                                  .currentMainView =
+                                                              'Chat';
+                                                        });
+
+                                                        setState(() {});
+                                                      },
+                                                      child:
+                                                          DirectMessageButtonWidget(
+                                                        key: Key(
+                                                            'Keykj8_${columnIndex}_of_${columnChatsRecordList.length}'),
+                                                        userRef: columnChatsRecord
+                                                            .users
+                                                            .where((e) =>
+                                                                e !=
+                                                                currentUserReference)
+                                                            .toList()
+                                                            .first,
+                                                        isRead: columnChatsRecord
+                                                                .lastMessageSeenBy
+                                                                .contains(
+                                                                    currentUserReference) ==
+                                                            true,
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                            }).divide(SizedBox(height: 5.0)),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -1834,7 +1628,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       );
                     } else {
                       return Align(
-                        alignment: AlignmentDirectional(0.00, 0.00),
+                        alignment: AlignmentDirectional(0.0, 0.0),
                         child: Container(
                           width: 50.0,
                           height: 50.0,

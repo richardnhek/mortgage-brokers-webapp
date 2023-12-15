@@ -92,7 +92,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
               color: Colors.transparent,
             ),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+              padding: EdgeInsets.all(25.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,7 +120,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
           ),
           Expanded(
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+              padding: EdgeInsets.all(25.0),
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -153,8 +153,7 @@ class _MainWebNavWidgetState extends State<MainWebNavWidget>
                             animationsMap['containerOnActionTriggerAnimation']!,
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                15.0, 15.0, 15.0, 15.0),
+                            padding: EdgeInsets.all(15.0),
                             child: InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,

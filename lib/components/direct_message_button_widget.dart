@@ -14,9 +14,11 @@ class DirectMessageButtonWidget extends StatefulWidget {
   const DirectMessageButtonWidget({
     Key? key,
     required this.userRef,
+    required this.isRead,
   }) : super(key: key);
 
   final DocumentReference? userRef;
+  final bool? isRead;
 
   @override
   _DirectMessageButtonWidgetState createState() =>
@@ -87,10 +89,11 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
           width: double.infinity,
           height: 40.0,
           decoration: BoxDecoration(
-            color: Colors.transparent,
+            color:
+                widget.isRead == true ? Colors.transparent : Color(0x1AFF6B78),
           ),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+            padding: EdgeInsetsDirectional.fromSTEB(25.0, 5.0, 25.0, 5.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -98,8 +101,8 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
                   borderRadius: BorderRadius.circular(3.0),
                   child: Image.network(
                     containerUsersRecord!.photoUrl,
-                    width: 25.0,
-                    height: 25.0,
+                    width: 30.0,
+                    height: 30.0,
                     fit: BoxFit.cover,
                   ),
                 ),

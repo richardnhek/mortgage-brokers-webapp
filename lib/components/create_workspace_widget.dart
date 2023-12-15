@@ -226,9 +226,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                   focusedBorder: InputBorder.none,
                                   errorBorder: InputBorder.none,
                                   focusedErrorBorder: InputBorder.none,
-                                  contentPadding:
-                                      EdgeInsetsDirectional.fromSTEB(
-                                          10.0, 10.0, 10.0, 10.0),
+                                  contentPadding: EdgeInsets.all(10.0),
                                 ),
                                 style: FlutterFlowTheme.of(context)
                                     .headlineMedium
@@ -259,7 +257,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Create your first channel',
+                                'Create your first chat (at least 3 members)',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -283,7 +281,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 25.0, 0.0),
                                         child: Text(
-                                          'Channel name',
+                                          'Chat name',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -420,7 +418,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                                       .fromSTEB(
                                                           0.0, 0.0, 25.0, 0.0),
                                                   child: Text(
-                                                    'Channel members',
+                                                    'Chat members',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -525,6 +523,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                     true,
                                     true,
                                   ),
+                                  createdTime: getCurrentTimestamp,
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -543,6 +542,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                     true,
                                     true,
                                   ),
+                                  createdTime: getCurrentTimestamp,
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -563,7 +563,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                   },
                                 ),
                               });
-                              setState(() {
+                              _model.updatePage(() {
                                 FFAppState().addToSelectedMembers(
                                     currentUserReference!);
                               });
@@ -594,8 +594,7 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 56.0,
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        padding: EdgeInsets.all(0.0),
                         iconPadding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                         color: FlutterFlowTheme.of(context).primary,

@@ -44,7 +44,7 @@ class _EmptyChatWidgetWidgetState extends State<EmptyChatWidgetWidget> {
     context.watch<FFAppState>();
 
     return Align(
-      alignment: AlignmentDirectional(0.00, 0.00),
+      alignment: AlignmentDirectional(0.0, 0.0),
       child: Padding(
         padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 200.0),
         child: Column(

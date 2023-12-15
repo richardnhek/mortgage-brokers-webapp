@@ -13,7 +13,7 @@ class WorkspaceOverviewStruct extends FFFirebaseStruct {
     String? currentStatus,
     double? loanAmount,
     String? communicationNotes,
-    List<DocumentReference>? clients,
+    List<String>? clients,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _currentStatus = currentStatus,
         _loanAmount = loanAmount,
@@ -41,10 +41,10 @@ class WorkspaceOverviewStruct extends FFFirebaseStruct {
   bool hasCommunicationNotes() => _communicationNotes != null;
 
   // "clients" field.
-  List<DocumentReference>? _clients;
-  List<DocumentReference> get clients => _clients ?? const [];
-  set clients(List<DocumentReference>? val) => _clients = val;
-  void updateClients(Function(List<DocumentReference>) updateFn) =>
+  List<String>? _clients;
+  List<String> get clients => _clients ?? const [];
+  set clients(List<String>? val) => _clients = val;
+  void updateClients(Function(List<String>) updateFn) =>
       updateFn(_clients ??= []);
   bool hasClients() => _clients != null;
 
@@ -84,7 +84,7 @@ class WorkspaceOverviewStruct extends FFFirebaseStruct {
         ),
         'clients': serializeParam(
           _clients,
-          ParamType.DocumentReference,
+          ParamType.String,
           true,
         ),
       }.withoutNulls;
@@ -107,11 +107,10 @@ class WorkspaceOverviewStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
-        clients: deserializeParam<DocumentReference>(
+        clients: deserializeParam<String>(
           data['clients'],
-          ParamType.DocumentReference,
+          ParamType.String,
           true,
-          collectionNamePath: ['users'],
         ),
       );
 

@@ -125,8 +125,7 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                       ),
                     ),
                     child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+                      padding: EdgeInsets.all(5.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -238,6 +237,10 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                           'Keyg6r_${columnIndex}_of_${columnChatsRecordList.length}'),
                                       channelName:
                                           columnChatsRecord.channelName,
+                                      isRead: columnChatsRecord
+                                              .lastMessageSeenBy
+                                              .contains(currentUserReference) ==
+                                          true,
                                     ),
                                   );
                                 }).divide(SizedBox(height: 5.0)),
@@ -352,6 +355,10 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                               (e) => e != currentUserReference)
                                           .toList()
                                           .first,
+                                      isRead: columnChatsRecord
+                                              .lastMessageSeenBy
+                                              .contains(currentUserReference) ==
+                                          true,
                                     ),
                                   );
                                 }).divide(SizedBox(height: 5.0)),
