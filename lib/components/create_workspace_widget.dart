@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -8,6 +9,7 @@ import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +36,13 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CreateWorkspaceModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      FFAppState().update(() {
+        FFAppState().selectedMembers = [];
+      });
+    });
 
     _model.workspaceNameController ??= TextEditingController();
     _model.workspaceNameFocusNode ??= FocusNode();
@@ -326,6 +335,12 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                                             () => setState(() {}),
                                           ),
                                           autofocus: true,
+                                          textCapitalization:
+                                              TextCapitalization.none,
+                                          readOnly: FFAppState()
+                                                  .selectedMembers
+                                                  .length <
+                                              2,
                                           obscureText: false,
                                           decoration: InputDecoration(
                                             hintText: 'Whole team',
@@ -501,92 +516,153 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                       ),
                     ),
                     FFButtonWidget(
-                      onPressed: !((_model.workspaceNameController.text !=
-                                          null &&
-                                      _model.workspaceNameController.text !=
-                                          '') &&
-                                  (_model.channelNameController.text != null &&
-                                      _model.channelNameController.text !=
-                                          '')) ||
+                      onPressed: (_model.workspaceNameController.text == null ||
+                                  _model.workspaceNameController.text == '') ||
+                              (_model.channelNameController.text == null ||
+                                  _model.channelNameController.text == '') ||
                               (FFAppState().selectedMembers.length < 2)
                           ? null
                           : () async {
-                              var workspacesRecordReference =
-                                  WorkspacesRecord.collection.doc();
-                              await workspacesRecordReference.set({
-                                ...createWorkspacesRecordData(
-                                  name: _model.workspaceNameController.text,
-                                  id: random_data.randomString(
-                                    10,
-                                    15,
-                                    true,
-                                    true,
-                                    true,
-                                  ),
-                                  createdTime: getCurrentTimestamp,
-                                ),
-                                ...mapToFirestore(
-                                  {
-                                    'members': FFAppState().selectedMembers,
-                                  },
-                                ),
-                              });
-                              _model.createdWorkspace =
-                                  WorkspacesRecord.getDocumentFromData({
-                                ...createWorkspacesRecordData(
-                                  name: _model.workspaceNameController.text,
-                                  id: random_data.randomString(
-                                    10,
-                                    15,
-                                    true,
-                                    true,
-                                    true,
-                                  ),
-                                  createdTime: getCurrentTimestamp,
-                                ),
-                                ...mapToFirestore(
-                                  {
-                                    'members': FFAppState().selectedMembers,
-                                  },
-                                ),
-                              }, workspacesRecordReference);
+                              final firestoreBatch =
+                                  FirebaseFirestore.instance.batch();
+                              try {
+                                FFAppState().update(() {
+                                  FFAppState().addToSelectedMembers(
+                                      currentUserReference!);
+                                });
 
-                              await _model.createdWorkspace!.reference.update({
-                                ...createWorkspacesRecordData(
-                                  workspaceRef:
-                                      _model.createdWorkspace?.reference,
-                                ),
-                                ...mapToFirestore(
-                                  {
-                                    'members': FieldValue.arrayUnion(
-                                        [currentUserReference]),
-                                  },
-                                ),
-                              });
-                              _model.updatePage(() {
-                                FFAppState().addToSelectedMembers(
-                                    currentUserReference!);
-                              });
+                                var workspacesRecordReference =
+                                    WorkspacesRecord.collection.doc();
+                                firestoreBatch.set(workspacesRecordReference, {
+                                  ...createWorkspacesRecordData(
+                                    name: _model.workspaceNameController.text,
+                                    id: random_data.randomString(
+                                      10,
+                                      15,
+                                      true,
+                                      true,
+                                      true,
+                                    ),
+                                    createdTime: getCurrentTimestamp,
+                                    overview: createWorkspaceOverviewStruct(
+                                      currentStatus: 'N/A',
+                                      loanAmount: 0.0,
+                                      communicationNotes: 'N/A',
+                                      fieldValues: {
+                                        'clients': (String clientOne,
+                                            String clientTwo) {
+                                          return [clientOne, clientTwo];
+                                        }('#1', '#2'),
+                                      },
+                                      clearUnsetFields: false,
+                                      create: true,
+                                    ),
+                                  ),
+                                  ...mapToFirestore(
+                                    {
+                                      'members': FFAppState().selectedMembers,
+                                    },
+                                  ),
+                                });
+                                _model.thisWorkspace =
+                                    WorkspacesRecord.getDocumentFromData({
+                                  ...createWorkspacesRecordData(
+                                    name: _model.workspaceNameController.text,
+                                    id: random_data.randomString(
+                                      10,
+                                      15,
+                                      true,
+                                      true,
+                                      true,
+                                    ),
+                                    createdTime: getCurrentTimestamp,
+                                    overview: createWorkspaceOverviewStruct(
+                                      currentStatus: 'N/A',
+                                      loanAmount: 0.0,
+                                      communicationNotes: 'N/A',
+                                      fieldValues: {
+                                        'clients': (String clientOne,
+                                            String clientTwo) {
+                                          return [clientOne, clientTwo];
+                                        }('#1', '#2'),
+                                      },
+                                      clearUnsetFields: false,
+                                      create: true,
+                                    ),
+                                  ),
+                                  ...mapToFirestore(
+                                    {
+                                      'members': FFAppState().selectedMembers,
+                                    },
+                                  ),
+                                }, workspacesRecordReference);
+                                _model.updatePage(() {
+                                  _model.thisWorkspaceRef =
+                                      _model.thisWorkspace?.reference;
+                                  _model.thisWorkspaceId =
+                                      _model.thisWorkspace!.id;
+                                });
 
-                              await ChatsRecord.collection.doc().set({
-                                ...createChatsRecordData(
-                                  chatType: 'Channel',
-                                  workspaceId: _model.createdWorkspace?.id,
-                                  channelName:
-                                      _model.channelNameController.text,
-                                  workspaceRef:
-                                      _model.createdWorkspace?.reference,
-                                ),
-                                ...mapToFirestore(
-                                  {
-                                    'users': FFAppState().selectedMembers,
-                                  },
-                                ),
-                              });
-                              _model.updatePage(() {
-                                FFAppState().selectedMembers = [];
-                              });
-                              Navigator.pop(context);
+                                firestoreBatch.update(
+                                    _model.thisWorkspaceRef!,
+                                    createWorkspacesRecordData(
+                                      workspaceRef: _model.thisWorkspaceRef,
+                                    ));
+                                _model.createdGC =
+                                    await FFChatManager.instance.createChat(
+                                  FFAppState().selectedMembers.toList(),
+                                );
+
+                                var chatMessagesRecordReference =
+                                    ChatMessagesRecord.collection.doc();
+                                firestoreBatch.set(
+                                    chatMessagesRecordReference,
+                                    createChatMessagesRecordData(
+                                      user: currentUserReference,
+                                      chat: _model.createdGC?.reference,
+                                      text: 'Welcome everyone!',
+                                      timestamp: getCurrentTimestamp,
+                                    ));
+                                _model.createdChatMsg =
+                                    ChatMessagesRecord.getDocumentFromData(
+                                        createChatMessagesRecordData(
+                                          user: currentUserReference,
+                                          chat: _model.createdGC?.reference,
+                                          text: 'Welcome everyone!',
+                                          timestamp: getCurrentTimestamp,
+                                        ),
+                                        chatMessagesRecordReference);
+
+                                firestoreBatch.update(
+                                    _model.createdChatMsg!.reference,
+                                    createChatMessagesRecordData(
+                                      chatMessageRef:
+                                          _model.createdChatMsg?.reference,
+                                    ));
+
+                                firestoreBatch.update(
+                                    _model.createdGC!.reference,
+                                    createChatsRecordData(
+                                      chatType: 'Channel',
+                                      workspaceId: _model.thisWorkspaceId,
+                                      channelName:
+                                          _model.channelNameController.text,
+                                      workspaceRef: _model.thisWorkspaceRef,
+                                      chatRef: _model.createdGC?.reference,
+                                      createdTime: getCurrentTimestamp,
+                                      lastMessage: _model.createdChatMsg?.text,
+                                      lastMessageTime:
+                                          _model.createdChatMsg?.timestamp,
+                                      lastMessageSentBy:
+                                          _model.createdChatMsg?.user,
+                                    ));
+                                FFAppState().update(() {
+                                  FFAppState().selectedMembers = [];
+                                });
+                                Navigator.pop(context);
+                              } finally {
+                                await firestoreBatch.commit();
+                              }
 
                               setState(() {});
                             },

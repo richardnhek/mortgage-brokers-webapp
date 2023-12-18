@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 
 class OverviewModel extends FlutterFlowModel<OverviewWidget> {
@@ -40,7 +39,6 @@ class OverviewModel extends FlutterFlowModel<OverviewWidget> {
   // State field(s) for loan_amount widget.
   FocusNode? loanAmountFocusNode;
   TextEditingController? loanAmountController;
-  final loanAmountMask = MaskTextInputFormatter(mask: '\$######');
   String? Function(BuildContext, String?)? loanAmountControllerValidator;
   // State field(s) for communication_notes widget.
   FocusNode? communicationNotesFocusNode;

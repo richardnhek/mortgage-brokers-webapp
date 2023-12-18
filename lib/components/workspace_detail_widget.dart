@@ -7,8 +7,10 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +21,15 @@ class WorkspaceDetailWidget extends StatefulWidget {
   const WorkspaceDetailWidget({
     Key? key,
     required this.chatRef,
+    required this.specificWorkspaceId,
+    required this.isPinned,
+    required this.thisWorkspaceRef,
   }) : super(key: key);
 
   final DocumentReference? chatRef;
+  final String? specificWorkspaceId;
+  final bool? isPinned;
+  final DocumentReference? thisWorkspaceRef;
 
   @override
   _WorkspaceDetailWidgetState createState() => _WorkspaceDetailWidgetState();
@@ -40,6 +48,13 @@ class _WorkspaceDetailWidgetState extends State<WorkspaceDetailWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => WorkspaceDetailModel());
+
+    // On component load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      setState(() {
+        _model.isPinned = widget.isPinned!;
+      });
+    });
 
     _model.textFieldFocusNode ??= FocusNode();
 
@@ -267,39 +282,173 @@ class _WorkspaceDetailWidgetState extends State<WorkspaceDetailWidget> {
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 10.0, 0.0),
-                              child: Container(
-                                width: 74.0,
-                                height: 40.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  border: Border.all(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    width: 1.0,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 8.0, 0.0),
-                                      child: Icon(
-                                        FFIcons.kpin,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondary,
-                                        size: 14.0,
+                              child: Builder(
+                                builder: (context) {
+                                  if (_model.isPinned == false) {
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        _model.allChatRefs =
+                                            await queryChatsRecordOnce(
+                                          queryBuilder: (chatsRecord) =>
+                                              chatsRecord
+                                                  .where(
+                                                    'workspace_ref',
+                                                    isEqualTo:
+                                                        widget.thisWorkspaceRef,
+                                                  )
+                                                  .where(
+                                                    'pinnedBy',
+                                                    arrayContains:
+                                                        currentUserReference,
+                                                  ),
+                                        );
+                                        if (_model.allChatRefs!.length > 0) {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                    'Only one pinned message at a time'),
+                                                content: Text(
+                                                    'You can only pin one message in a workspace'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          await widget.chatRef!.update({
+                                            ...mapToFirestore(
+                                              {
+                                                'pinnedBy':
+                                                    FieldValue.arrayUnion(
+                                                        [currentUserReference]),
+                                              },
+                                            ),
+                                          });
+                                          setState(() {
+                                            _model.isPinned = true;
+                                          });
+                                        }
+
+                                        setState(() {});
+                                      },
+                                      child: Container(
+                                        width: 74.0,
+                                        height: 40.0,
+                                        decoration: BoxDecoration(
+                                          color: Colors.transparent,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          border: Border.all(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                              child: Icon(
+                                                FFIcons.kpin,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondary,
+                                                size: 14.0,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Pin',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      'Pin',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                    ),
-                                  ],
-                                ),
+                                    );
+                                  } else {
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        await widget.chatRef!.update({
+                                          ...mapToFirestore(
+                                            {
+                                              'pinnedBy':
+                                                  FieldValue.arrayRemove(
+                                                      [currentUserReference]),
+                                            },
+                                          ),
+                                        });
+                                        setState(() {
+                                          _model.isPinned = false;
+                                        });
+                                      },
+                                      child: Container(
+                                        width: 84.0,
+                                        height: 40.0,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .accent1,
+                                          borderRadius:
+                                              BorderRadius.circular(5.0),
+                                          border: Border.all(
+                                            color: Colors.transparent,
+                                            width: 0.0,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 0.0, 8.0, 0.0),
+                                              child: Icon(
+                                                FFIcons.kpin,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryBackground,
+                                                size: 14.0,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Unpin',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily: 'Inter',
+                                                        color: FlutterFlowTheme
+                                                                .of(context)
+                                                            .primaryBackground,
+                                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                             Material(

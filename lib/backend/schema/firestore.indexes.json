@@ -23,6 +23,20 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "workspace_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "pinnedBy",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "chats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
           "fieldPath": "users",
           "arrayConfig": "CONTAINS"
         },

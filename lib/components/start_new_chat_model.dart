@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -20,6 +21,10 @@ class StartNewChatModel extends FlutterFlowModel<StartNewChatWidget> {
   FocusNode? channelNameFocusNode;
   TextEditingController? channelNameController;
   String? Function(BuildContext, String?)? channelNameControllerValidator;
+  // Stores action output result for [Group Chat Action] action in Button widget.
+  ChatsRecord? groupChatCreated;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  ChatMessagesRecord? createdMessage;
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
   List<ChatsRecord>? chatsInWorkspace;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.

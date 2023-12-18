@@ -402,6 +402,8 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                           email: widget.userEmail,
                                           displayName: widget.displayName,
                                           userRef: currentUserReference,
+                                          photoUrl:
+                                              'https://cdn.iconscout.com/icon/free/png-256/free-profile-1481935-1254808.png',
                                         ));
                                       }
 
@@ -432,6 +434,42 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                 borderRadius: BorderRadius.circular(8.0),
                                 disabledColor:
                                     FlutterFlowTheme.of(context).secondaryText,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 25.0, 0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                context.safePop();
+                              },
+                              text: 'Back',
+                              options: FFButtonOptions(
+                                width: double.infinity,
+                                height: 50.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: Colors.transparent,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      fontSize: 16.0,
+                                      lineHeight: 1.5,
+                                    ),
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                                hoverColor:
+                                    FlutterFlowTheme.of(context).accent1,
                               ),
                             ),
                           ),

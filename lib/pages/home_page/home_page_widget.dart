@@ -272,8 +272,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         return Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: List.generate(
-                                              columnWorkspacesRecordList.length,
-                                              (columnIndex) {
+                                                  columnWorkspacesRecordList
+                                                      .length, (columnIndex) {
                                             final columnWorkspacesRecord =
                                                 columnWorkspacesRecordList[
                                                     columnIndex];
@@ -490,167 +490,305 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                     20.0,
                                                                     0.0,
                                                                     0.0),
-                                                        child: Container(
-                                                          width:
-                                                              double.infinity,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryBackground,
+                                                        child: StreamBuilder<
+                                                            List<ChatsRecord>>(
+                                                          stream:
+                                                              queryChatsRecord(
+                                                            queryBuilder: (chatsRecord) =>
+                                                                chatsRecord
+                                                                    .where(
+                                                                      'users',
+                                                                      arrayContains:
+                                                                          currentUserReference,
+                                                                    )
+                                                                    .where(
+                                                                      'workspace_ref',
+                                                                      isEqualTo:
+                                                                          columnWorkspacesRecord
+                                                                              .workspaceRef,
+                                                                    )
+                                                                    .orderBy(
+                                                                        'last_message_time',
+                                                                        descending:
+                                                                            true),
                                                           ),
-                                                          child: StreamBuilder<
-                                                              List<
-                                                                  ChatsRecord>>(
-                                                            stream:
-                                                                queryChatsRecord(
-                                                              queryBuilder: (chatsRecord) =>
-                                                                  chatsRecord
-                                                                      .where(
-                                                                        'users',
-                                                                        arrayContains:
-                                                                            currentUserReference,
-                                                                      )
-                                                                      .where(
-                                                                        'workspace_ref',
-                                                                        isEqualTo:
-                                                                            columnWorkspacesRecord.workspaceRef,
-                                                                      )
-                                                                      .orderBy(
-                                                                          'last_message_time',
-                                                                          descending:
-                                                                              true),
-                                                            ),
-                                                            builder: (context,
-                                                                snapshot) {
-                                                              // Customize what your widget looks like when it's loading.
-                                                              if (!snapshot
-                                                                  .hasData) {
-                                                                return Center(
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            // Customize what your widget looks like when it's loading.
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return Center(
+                                                                child: SizedBox(
+                                                                  width: 50.0,
+                                                                  height: 50.0,
                                                                   child:
-                                                                      SizedBox(
-                                                                    width: 50.0,
-                                                                    height:
-                                                                        50.0,
-                                                                    child:
-                                                                        CircularProgressIndicator(
-                                                                      valueColor:
-                                                                          AlwaysStoppedAnimation<
-                                                                              Color>(
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .primary,
-                                                                      ),
+                                                                      CircularProgressIndicator(
+                                                                    valueColor:
+                                                                        AlwaysStoppedAnimation<
+                                                                            Color>(
+                                                                      FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primary,
                                                                     ),
                                                                   ),
-                                                                );
-                                                              }
-                                                              List<ChatsRecord>
-                                                                  columnChatsRecordList =
-                                                                  snapshot
-                                                                      .data!;
-                                                              return Column(
+                                                                ),
+                                                              );
+                                                            }
+                                                            List<ChatsRecord>
+                                                                containerChatsRecordList =
+                                                                snapshot.data!;
+                                                            return Container(
+                                                              width: double
+                                                                  .infinity,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryBackground,
+                                                              ),
+                                                              child: Column(
                                                                 mainAxisSize:
                                                                     MainAxisSize
                                                                         .max,
-                                                                children: List.generate(
-                                                                    columnChatsRecordList
-                                                                        .length,
-                                                                    (columnIndex) {
-                                                                  final columnChatsRecord =
-                                                                      columnChatsRecordList[
-                                                                          columnIndex];
-                                                                  return Builder(
-                                                                    builder:
-                                                                        (context) {
-                                                                      if (columnChatsRecord
-                                                                              .chatType ==
-                                                                          'Channel') {
-                                                                        return InkWell(
-                                                                          splashColor:
-                                                                              Colors.transparent,
-                                                                          focusColor:
-                                                                              Colors.transparent,
-                                                                          hoverColor:
-                                                                              Colors.transparent,
-                                                                          highlightColor:
-                                                                              Colors.transparent,
-                                                                          onTap:
-                                                                              () async {
-                                                                            setState(() {
-                                                                              FFAppState().currentChatRef = columnChatsRecord.reference;
-                                                                              FFAppState().currentChatUserRef = null;
-                                                                            });
-                                                                            setState(() {
-                                                                              _model.chatUser = null;
-                                                                              _model.selectedChannel = columnChatsRecord.channelName;
-                                                                            });
-                                                                            setState(() {
-                                                                              FFAppState().currentMainView = 'Chat';
-                                                                            });
-                                                                          },
-                                                                          child:
-                                                                              ChannelButtonWidget(
-                                                                            key:
-                                                                                Key('Key5l7_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                                            channelName:
-                                                                                columnChatsRecord.channelName,
-                                                                            isRead:
-                                                                                columnChatsRecord.lastMessageSeenBy.contains(currentUserReference) == true,
+                                                                children: [
+                                                                  FutureBuilder<
+                                                                      List<
+                                                                          ChatsRecord>>(
+                                                                    future:
+                                                                        queryChatsRecordOnce(
+                                                                      queryBuilder: (chatsRecord) => chatsRecord
+                                                                          .where(
+                                                                            'pinnedBy',
+                                                                            arrayContains:
+                                                                                currentUserReference,
+                                                                          )
+                                                                          .where(
+                                                                            'workspace_ref',
+                                                                            isEqualTo:
+                                                                                columnWorkspacesRecord.reference,
                                                                           ),
-                                                                        );
-                                                                      } else {
-                                                                        return InkWell(
-                                                                          splashColor:
-                                                                              Colors.transparent,
-                                                                          focusColor:
-                                                                              Colors.transparent,
-                                                                          hoverColor:
-                                                                              Colors.transparent,
-                                                                          highlightColor:
-                                                                              Colors.transparent,
-                                                                          onTap:
-                                                                              () async {
-                                                                            setState(() {
-                                                                              FFAppState().currentChatRef = columnChatsRecord.reference;
-                                                                              FFAppState().currentChatUserRef = columnChatsRecord.users.where((e) => e != currentUserReference).toList().first;
-                                                                            });
-                                                                            _model.selectedUser =
-                                                                                await queryUsersRecordOnce(
-                                                                              queryBuilder: (usersRecord) => usersRecord.where(
-                                                                                'user_ref',
-                                                                                isEqualTo: columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
-                                                                              ),
-                                                                              singleRecord: true,
-                                                                            ).then((s) => s.firstOrNull);
-                                                                            setState(() {
-                                                                              _model.chatUser = _model.selectedUser;
-                                                                            });
-                                                                            setState(() {
-                                                                              FFAppState().currentMainView = 'Chat';
-                                                                            });
-
-                                                                            setState(() {});
-                                                                          },
+                                                                      singleRecord:
+                                                                          true,
+                                                                    ),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      // Customize what your widget looks like when it's loading.
+                                                                      if (!snapshot
+                                                                          .hasData) {
+                                                                        return Center(
                                                                           child:
-                                                                              DirectMessageButtonWidget(
-                                                                            key:
-                                                                                Key('Key67z_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                                            userRef:
-                                                                                columnChatsRecord.users.where((e) => e != currentUserReference).toList().first,
-                                                                            isRead:
-                                                                                columnChatsRecord.lastMessageSeenBy.contains(currentUserReference) == true,
+                                                                              SizedBox(
+                                                                            width:
+                                                                                50.0,
+                                                                            height:
+                                                                                50.0,
+                                                                            child:
+                                                                                CircularProgressIndicator(
+                                                                              valueColor: AlwaysStoppedAnimation<Color>(
+                                                                                FlutterFlowTheme.of(context).primary,
+                                                                              ),
+                                                                            ),
                                                                           ),
                                                                         );
                                                                       }
+                                                                      List<ChatsRecord>
+                                                                          containerChatsRecordList =
+                                                                          snapshot
+                                                                              .data!;
+                                                                      // Return an empty Container when the item does not exist.
+                                                                      if (snapshot
+                                                                          .data!
+                                                                          .isEmpty) {
+                                                                        return Container();
+                                                                      }
+                                                                      final containerChatsRecord = containerChatsRecordList
+                                                                              .isNotEmpty
+                                                                          ? containerChatsRecordList
+                                                                              .first
+                                                                          : null;
+                                                                      return Container(
+                                                                        decoration:
+                                                                            BoxDecoration(),
+                                                                        child:
+                                                                            Builder(
+                                                                          builder:
+                                                                              (context) {
+                                                                            if (containerChatsRecord?.chatType ==
+                                                                                'Channel') {
+                                                                              return InkWell(
+                                                                                splashColor: Colors.transparent,
+                                                                                focusColor: Colors.transparent,
+                                                                                hoverColor: Colors.transparent,
+                                                                                highlightColor: Colors.transparent,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    FFAppState().currentChatRef = containerChatsRecord?.reference;
+                                                                                    FFAppState().currentChatUserRef = null;
+                                                                                  });
+                                                                                  setState(() {
+                                                                                    _model.chatUser = null;
+                                                                                    _model.selectedChannel = containerChatsRecord!.channelName;
+                                                                                  });
+                                                                                  setState(() {
+                                                                                    FFAppState().currentMainView = 'Chat';
+                                                                                  });
+                                                                                },
+                                                                                child: ChannelButtonWidget(
+                                                                                  key: Key('Keyd2l_${columnIndex}_of_${columnWorkspacesRecordList.length}'),
+                                                                                  channelName: containerChatsRecord!.channelName,
+                                                                                  isRead: containerChatsRecord?.lastMessageSeenBy?.contains(currentUserReference) == true,
+                                                                                  isSelected: FFAppState().currentChatRef == containerChatsRecord?.reference,
+                                                                                  lastMsg: containerChatsRecord!.lastMessage,
+                                                                                  isPinned: containerChatsRecord?.pinnedBy?.contains(currentUserReference) == true,
+                                                                                  lastMsgTime: containerChatsRecord!.lastMessageTime!,
+                                                                                  lastMsgSentBy: containerChatsRecord!.lastMessageSentBy!,
+                                                                                ),
+                                                                              );
+                                                                            } else {
+                                                                              return InkWell(
+                                                                                splashColor: Colors.transparent,
+                                                                                focusColor: Colors.transparent,
+                                                                                hoverColor: Colors.transparent,
+                                                                                highlightColor: Colors.transparent,
+                                                                                onTap: () async {
+                                                                                  setState(() {
+                                                                                    FFAppState().currentChatRef = containerChatsRecord?.reference;
+                                                                                    FFAppState().currentChatUserRef = containerChatsRecord?.users?.where((e) => e != currentUserReference).toList()?.first;
+                                                                                  });
+                                                                                  _model.selectedUserPinned = await queryUsersRecordOnce(
+                                                                                    queryBuilder: (usersRecord) => usersRecord.where(
+                                                                                      'user_ref',
+                                                                                      isEqualTo: containerChatsRecord?.users?.where((e) => e != currentUserReference).toList()?.first,
+                                                                                    ),
+                                                                                    singleRecord: true,
+                                                                                  ).then((s) => s.firstOrNull);
+                                                                                  setState(() {
+                                                                                    _model.chatUser = _model.selectedUserPinned;
+                                                                                  });
+                                                                                  setState(() {
+                                                                                    FFAppState().currentMainView = 'Chat';
+                                                                                  });
+
+                                                                                  setState(() {});
+                                                                                },
+                                                                                child: DirectMessageButtonWidget(
+                                                                                  key: Key('Key3fi_${columnIndex}_of_${columnWorkspacesRecordList.length}'),
+                                                                                  userRef: containerChatsRecord!.users.where((e) => e != currentUserReference).toList().first,
+                                                                                  isRead: containerChatsRecord?.lastMessageSeenBy?.contains(currentUserReference) == true,
+                                                                                  isPinned: containerChatsRecord!.pinnedBy.contains(currentUserReference),
+                                                                                  lastMsg: containerChatsRecord!.lastMessage,
+                                                                                  lastMsgTime: containerChatsRecord!.lastMessageTime!,
+                                                                                  lastMsgSentBy: containerChatsRecord!.lastMessageSentBy!,
+                                                                                  isSelected: FFAppState().currentChatRef == containerChatsRecord?.reference,
+                                                                                ),
+                                                                              );
+                                                                            }
+                                                                          },
+                                                                        ),
+                                                                      );
                                                                     },
-                                                                  );
-                                                                }).divide(
-                                                                    SizedBox(
-                                                                        height:
-                                                                            5.0)),
-                                                              );
-                                                            },
-                                                          ),
+                                                                  ),
+                                                                  Builder(
+                                                                    builder:
+                                                                        (context) {
+                                                                      final containerVar = containerChatsRecordList
+                                                                          .where((e) =>
+                                                                              e.pinnedBy.contains(currentUserReference) ==
+                                                                              false)
+                                                                          .toList();
+                                                                      return Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.max,
+                                                                        children: List.generate(
+                                                                            containerVar.length,
+                                                                            (containerVarIndex) {
+                                                                          final containerVarItem =
+                                                                              containerVar[containerVarIndex];
+                                                                          return Builder(
+                                                                            builder:
+                                                                                (context) {
+                                                                              if (containerVarItem.chatType == 'Channel') {
+                                                                                return InkWell(
+                                                                                  splashColor: Colors.transparent,
+                                                                                  focusColor: Colors.transparent,
+                                                                                  hoverColor: Colors.transparent,
+                                                                                  highlightColor: Colors.transparent,
+                                                                                  onTap: () async {
+                                                                                    setState(() {
+                                                                                      FFAppState().currentChatRef = containerVarItem.reference;
+                                                                                      FFAppState().currentChatUserRef = null;
+                                                                                    });
+                                                                                    setState(() {
+                                                                                      _model.chatUser = null;
+                                                                                      _model.selectedChannel = containerVarItem.channelName;
+                                                                                    });
+                                                                                    setState(() {
+                                                                                      FFAppState().currentMainView = 'Chat';
+                                                                                    });
+                                                                                  },
+                                                                                  child: ChannelButtonWidget(
+                                                                                    key: Key('Key5l7_${containerVarIndex}_of_${containerVar.length}'),
+                                                                                    channelName: containerVarItem.channelName,
+                                                                                    isRead: containerVarItem.lastMessageSeenBy.contains(currentUserReference) == true,
+                                                                                    isSelected: FFAppState().currentChatRef == containerVarItem.reference,
+                                                                                    lastMsg: containerVarItem.lastMessage,
+                                                                                    isPinned: containerVarItem.pinnedBy.contains(currentUserReference) == true,
+                                                                                    lastMsgTime: containerVarItem.lastMessageTime!,
+                                                                                    lastMsgSentBy: containerVarItem.lastMessageSentBy!,
+                                                                                  ),
+                                                                                );
+                                                                              } else {
+                                                                                return InkWell(
+                                                                                  splashColor: Colors.transparent,
+                                                                                  focusColor: Colors.transparent,
+                                                                                  hoverColor: Colors.transparent,
+                                                                                  highlightColor: Colors.transparent,
+                                                                                  onTap: () async {
+                                                                                    setState(() {
+                                                                                      FFAppState().currentChatRef = containerVarItem.reference;
+                                                                                      FFAppState().currentChatUserRef = containerVarItem.users.where((e) => e != currentUserReference).toList().first;
+                                                                                    });
+                                                                                    _model.selectedUser = await queryUsersRecordOnce(
+                                                                                      queryBuilder: (usersRecord) => usersRecord.where(
+                                                                                        'user_ref',
+                                                                                        isEqualTo: containerVarItem.users.where((e) => e != currentUserReference).toList().first,
+                                                                                      ),
+                                                                                      singleRecord: true,
+                                                                                    ).then((s) => s.firstOrNull);
+                                                                                    setState(() {
+                                                                                      _model.chatUser = _model.selectedUser;
+                                                                                    });
+                                                                                    setState(() {
+                                                                                      FFAppState().currentMainView = 'Chat';
+                                                                                    });
+
+                                                                                    setState(() {});
+                                                                                  },
+                                                                                  child: DirectMessageButtonWidget(
+                                                                                    key: Key('Key67z_${containerVarIndex}_of_${containerVar.length}'),
+                                                                                    userRef: containerVarItem.users.where((e) => e != currentUserReference).toList().first,
+                                                                                    isRead: containerVarItem.lastMessageSeenBy.contains(currentUserReference) == true,
+                                                                                    isPinned: containerVarItem.pinnedBy.contains(currentUserReference),
+                                                                                    lastMsg: containerVarItem.lastMessage,
+                                                                                    lastMsgTime: containerVarItem.lastMessageTime!,
+                                                                                    lastMsgSentBy: containerVarItem.lastMessageSentBy!,
+                                                                                    isSelected: FFAppState().currentChatRef == containerVarItem.reference,
+                                                                                  ),
+                                                                                );
+                                                                              }
+                                                                            },
+                                                                          );
+                                                                        }).divide(SizedBox(
+                                                                            height:
+                                                                                5.0)),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            );
+                                                          },
                                                         ),
                                                       ),
                                                       Builder(
@@ -804,7 +942,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                 ),
                                               ),
                                             );
-                                          }).divide(SizedBox(height: 10.0)),
+                                          })
+                                              .divide(SizedBox(height: 10.0))
+                                              .addToEnd(SizedBox(height: 25.0)),
                                         );
                                       },
                                     ),
@@ -908,6 +1048,238 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         ),
                                       ),
                                     ),
+                                    StreamBuilder<List<ChatsRecord>>(
+                                      stream: queryChatsRecord(
+                                        queryBuilder: (chatsRecord) =>
+                                            chatsRecord
+                                                .where(
+                                                  'users',
+                                                  arrayContains:
+                                                      currentUserReference,
+                                                )
+                                                .orderBy('last_message_time',
+                                                    descending: true),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        List<ChatsRecord>
+                                            containerChatsRecordList =
+                                            snapshot.data!;
+                                        return Container(
+                                          decoration: BoxDecoration(),
+                                          child: Builder(
+                                            builder: (context) {
+                                              final pinnedChats =
+                                                  containerChatsRecordList
+                                                      .where((e) =>
+                                                          e.pinnedBy.contains(
+                                                              currentUserReference) ==
+                                                          true)
+                                                      .toList();
+                                              return SingleChildScrollView(
+                                                primary: false,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: List.generate(
+                                                      pinnedChats.length,
+                                                      (pinnedChatsIndex) {
+                                                    final pinnedChatsItem =
+                                                        pinnedChats[
+                                                            pinnedChatsIndex];
+                                                    return Builder(
+                                                      builder: (context) {
+                                                        if (pinnedChatsItem
+                                                                .chatType ==
+                                                            'Channel') {
+                                                          return InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentChatRef =
+                                                                    pinnedChatsItem
+                                                                        .reference;
+                                                                FFAppState()
+                                                                        .currentChatUserRef =
+                                                                    null;
+                                                              });
+                                                              setState(() {
+                                                                _model.chatUser =
+                                                                    null;
+                                                                _model.selectedChannel =
+                                                                    pinnedChatsItem
+                                                                        .channelName;
+                                                              });
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentMainView =
+                                                                    'Chat';
+                                                              });
+                                                            },
+                                                            child:
+                                                                ChannelButtonWidget(
+                                                              key: Key(
+                                                                  'Keyfa1_${pinnedChatsIndex}_of_${pinnedChats.length}'),
+                                                              channelName:
+                                                                  pinnedChatsItem
+                                                                      .channelName,
+                                                              isRead: pinnedChatsItem
+                                                                      .lastMessageSeenBy
+                                                                      .contains(
+                                                                          currentUserReference) ==
+                                                                  true,
+                                                              isSelected: FFAppState()
+                                                                      .currentChatRef ==
+                                                                  pinnedChatsItem
+                                                                      .reference,
+                                                              lastMsg:
+                                                                  pinnedChatsItem
+                                                                      .lastMessage,
+                                                              isPinned: pinnedChatsItem
+                                                                      .pinnedBy
+                                                                      .contains(
+                                                                          currentUserReference) ==
+                                                                  true,
+                                                              lastMsgTime:
+                                                                  pinnedChatsItem
+                                                                      .lastMessageTime!,
+                                                              lastMsgSentBy:
+                                                                  pinnedChatsItem
+                                                                      .lastMessageSentBy!,
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          return InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentChatRef =
+                                                                    pinnedChatsItem
+                                                                        .reference;
+                                                                FFAppState()
+                                                                        .currentChatUserRef =
+                                                                    pinnedChatsItem
+                                                                        .users
+                                                                        .where((e) =>
+                                                                            e !=
+                                                                            currentUserReference)
+                                                                        .toList()
+                                                                        .first;
+                                                              });
+                                                              _model.selectedUserChats =
+                                                                  await queryUsersRecordOnce(
+                                                                queryBuilder:
+                                                                    (usersRecord) =>
+                                                                        usersRecord
+                                                                            .where(
+                                                                  'user_ref',
+                                                                  isEqualTo: pinnedChatsItem
+                                                                      .users
+                                                                      .where((e) =>
+                                                                          e !=
+                                                                          currentUserReference)
+                                                                      .toList()
+                                                                      .first,
+                                                                ),
+                                                                singleRecord:
+                                                                    true,
+                                                              ).then((s) => s
+                                                                      .firstOrNull);
+                                                              setState(() {
+                                                                _model.chatUser =
+                                                                    _model
+                                                                        .selectedUserChats;
+                                                              });
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentMainView =
+                                                                    'Chat';
+                                                              });
+
+                                                              setState(() {});
+                                                            },
+                                                            child:
+                                                                DirectMessageButtonWidget(
+                                                              key: Key(
+                                                                  'Key5zj_${pinnedChatsIndex}_of_${pinnedChats.length}'),
+                                                              userRef: pinnedChatsItem
+                                                                  .users
+                                                                  .where((e) =>
+                                                                      e !=
+                                                                      currentUserReference)
+                                                                  .toList()
+                                                                  .first,
+                                                              isRead: pinnedChatsItem
+                                                                      .lastMessageSeenBy
+                                                                      .contains(
+                                                                          currentUserReference) ==
+                                                                  true,
+                                                              isPinned:
+                                                                  pinnedChatsItem
+                                                                      .pinnedBy
+                                                                      .contains(
+                                                                          currentUserReference),
+                                                              lastMsg:
+                                                                  pinnedChatsItem
+                                                                      .lastMessage,
+                                                              lastMsgTime:
+                                                                  pinnedChatsItem
+                                                                      .lastMessageTime!,
+                                                              lastMsgSentBy:
+                                                                  pinnedChatsItem
+                                                                      .lastMessageSentBy!,
+                                                              isSelected: FFAppState()
+                                                                      .currentChatRef ==
+                                                                  pinnedChatsItem
+                                                                      .reference,
+                                                            ),
+                                                          );
+                                                        }
+                                                      },
+                                                    );
+                                                  }).divide(
+                                                      SizedBox(height: 5.0)),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
                                     FutureBuilder<List<ChatsRecord>>(
                                       future: queryChatsRecordOnce(
                                         queryBuilder: (chatsRecord) =>
@@ -939,148 +1311,203 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           );
                                         }
                                         List<ChatsRecord>
-                                            columnChatsRecordList =
+                                            containerChatsRecordList =
                                             snapshot.data!;
-                                        return SingleChildScrollView(
-                                          primary: false,
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: List.generate(
-                                                columnChatsRecordList.length,
-                                                (columnIndex) {
-                                              final columnChatsRecord =
-                                                  columnChatsRecordList[
-                                                      columnIndex];
-                                              return Builder(
-                                                builder: (context) {
-                                                  if (columnChatsRecord
-                                                          .chatType ==
-                                                      'Channel') {
-                                                    return InkWell(
-                                                      splashColor:
-                                                          Colors.transparent,
-                                                      focusColor:
-                                                          Colors.transparent,
-                                                      hoverColor:
-                                                          Colors.transparent,
-                                                      highlightColor:
-                                                          Colors.transparent,
-                                                      onTap: () async {
-                                                        setState(() {
-                                                          FFAppState()
-                                                                  .currentChatRef =
-                                                              columnChatsRecord
-                                                                  .reference;
-                                                          FFAppState()
-                                                                  .currentChatUserRef =
-                                                              null;
-                                                        });
-                                                        setState(() {
-                                                          _model.chatUser =
-                                                              null;
-                                                          _model.selectedChannel =
-                                                              columnChatsRecord
-                                                                  .channelName;
-                                                        });
-                                                        setState(() {
-                                                          FFAppState()
-                                                                  .currentMainView =
-                                                              'Chat';
-                                                        });
-                                                      },
-                                                      child:
-                                                          ChannelButtonWidget(
-                                                        key: Key(
-                                                            'Keytaz_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                        channelName:
-                                                            columnChatsRecord
-                                                                .channelName,
-                                                        isRead: columnChatsRecord
-                                                                .lastMessageSeenBy
-                                                                .contains(
-                                                                    currentUserReference) ==
-                                                            true,
-                                                      ),
-                                                    );
-                                                  } else {
-                                                    return InkWell(
-                                                      splashColor:
-                                                          Colors.transparent,
-                                                      focusColor:
-                                                          Colors.transparent,
-                                                      hoverColor:
-                                                          Colors.transparent,
-                                                      highlightColor:
-                                                          Colors.transparent,
-                                                      onTap: () async {
-                                                        setState(() {
-                                                          FFAppState()
-                                                                  .currentChatRef =
-                                                              columnChatsRecord
-                                                                  .reference;
-                                                          FFAppState()
-                                                                  .currentChatUserRef =
-                                                              columnChatsRecord
+                                        return Container(
+                                          decoration: BoxDecoration(),
+                                          child: Builder(
+                                            builder: (context) {
+                                              final containerVar =
+                                                  containerChatsRecordList
+                                                      .where((e) =>
+                                                          e.pinnedBy.contains(
+                                                              currentUserReference) ==
+                                                          false)
+                                                      .toList();
+                                              return SingleChildScrollView(
+                                                primary: false,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: List.generate(
+                                                      containerVar.length,
+                                                      (containerVarIndex) {
+                                                    final containerVarItem =
+                                                        containerVar[
+                                                            containerVarIndex];
+                                                    return Builder(
+                                                      builder: (context) {
+                                                        if (containerVarItem
+                                                                .chatType ==
+                                                            'Channel') {
+                                                          return InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentChatRef =
+                                                                    containerVarItem
+                                                                        .reference;
+                                                                FFAppState()
+                                                                        .currentChatUserRef =
+                                                                    null;
+                                                              });
+                                                              setState(() {
+                                                                _model.chatUser =
+                                                                    null;
+                                                                _model.selectedChannel =
+                                                                    containerVarItem
+                                                                        .channelName;
+                                                              });
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentMainView =
+                                                                    'Chat';
+                                                              });
+                                                            },
+                                                            child:
+                                                                ChannelButtonWidget(
+                                                              key: Key(
+                                                                  'Keytaz_${containerVarIndex}_of_${containerVar.length}'),
+                                                              channelName:
+                                                                  containerVarItem
+                                                                      .channelName,
+                                                              isRead: containerVarItem
+                                                                      .lastMessageSeenBy
+                                                                      .contains(
+                                                                          currentUserReference) ==
+                                                                  true,
+                                                              isSelected: FFAppState()
+                                                                      .currentChatRef ==
+                                                                  containerVarItem
+                                                                      .reference,
+                                                              lastMsg:
+                                                                  containerVarItem
+                                                                      .lastMessage,
+                                                              isPinned: containerVarItem
+                                                                      .pinnedBy
+                                                                      .contains(
+                                                                          currentUserReference) ==
+                                                                  true,
+                                                              lastMsgTime:
+                                                                  containerVarItem
+                                                                      .lastMessageTime!,
+                                                              lastMsgSentBy:
+                                                                  containerVarItem
+                                                                      .lastMessageSentBy!,
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          return InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentChatRef =
+                                                                    containerVarItem
+                                                                        .reference;
+                                                                FFAppState()
+                                                                        .currentChatUserRef =
+                                                                    containerVarItem
+                                                                        .users
+                                                                        .where((e) =>
+                                                                            e !=
+                                                                            currentUserReference)
+                                                                        .toList()
+                                                                        .first;
+                                                              });
+                                                              _model.selectedUserChats2 =
+                                                                  await queryUsersRecordOnce(
+                                                                queryBuilder:
+                                                                    (usersRecord) =>
+                                                                        usersRecord
+                                                                            .where(
+                                                                  'user_ref',
+                                                                  isEqualTo: containerVarItem
+                                                                      .users
+                                                                      .where((e) =>
+                                                                          e !=
+                                                                          currentUserReference)
+                                                                      .toList()
+                                                                      .first,
+                                                                ),
+                                                                singleRecord:
+                                                                    true,
+                                                              ).then((s) => s
+                                                                      .firstOrNull);
+                                                              setState(() {
+                                                                _model.chatUser =
+                                                                    _model
+                                                                        .selectedUserChats2;
+                                                              });
+                                                              setState(() {
+                                                                FFAppState()
+                                                                        .currentMainView =
+                                                                    'Chat';
+                                                              });
+
+                                                              setState(() {});
+                                                            },
+                                                            child:
+                                                                DirectMessageButtonWidget(
+                                                              key: Key(
+                                                                  'Keykj8_${containerVarIndex}_of_${containerVar.length}'),
+                                                              userRef: containerVarItem
                                                                   .users
                                                                   .where((e) =>
                                                                       e !=
                                                                       currentUserReference)
                                                                   .toList()
-                                                                  .first;
-                                                        });
-                                                        _model.selectedUserChats =
-                                                            await queryUsersRecordOnce(
-                                                          queryBuilder:
-                                                              (usersRecord) =>
-                                                                  usersRecord
-                                                                      .where(
-                                                            'user_ref',
-                                                            isEqualTo:
-                                                                columnChatsRecord
-                                                                    .users
-                                                                    .where((e) =>
-                                                                        e !=
-                                                                        currentUserReference)
-                                                                    .toList()
-                                                                    .first,
-                                                          ),
-                                                          singleRecord: true,
-                                                        ).then((s) =>
-                                                                s.firstOrNull);
-                                                        setState(() {
-                                                          _model.chatUser = _model
-                                                              .selectedUserChats;
-                                                        });
-                                                        setState(() {
-                                                          FFAppState()
-                                                                  .currentMainView =
-                                                              'Chat';
-                                                        });
-
-                                                        setState(() {});
+                                                                  .first,
+                                                              isRead: containerVarItem
+                                                                      .lastMessageSeenBy
+                                                                      .contains(
+                                                                          currentUserReference) ==
+                                                                  true,
+                                                              isPinned:
+                                                                  containerVarItem
+                                                                      .pinnedBy
+                                                                      .contains(
+                                                                          currentUserReference),
+                                                              lastMsg:
+                                                                  containerVarItem
+                                                                      .lastMessage,
+                                                              lastMsgTime:
+                                                                  containerVarItem
+                                                                      .lastMessageTime!,
+                                                              lastMsgSentBy:
+                                                                  containerVarItem
+                                                                      .lastMessageSentBy!,
+                                                              isSelected: FFAppState()
+                                                                      .currentChatRef ==
+                                                                  containerVarItem
+                                                                      .reference,
+                                                            ),
+                                                          );
+                                                        }
                                                       },
-                                                      child:
-                                                          DirectMessageButtonWidget(
-                                                        key: Key(
-                                                            'Keykj8_${columnIndex}_of_${columnChatsRecordList.length}'),
-                                                        userRef: columnChatsRecord
-                                                            .users
-                                                            .where((e) =>
-                                                                e !=
-                                                                currentUserReference)
-                                                            .toList()
-                                                            .first,
-                                                        isRead: columnChatsRecord
-                                                                .lastMessageSeenBy
-                                                                .contains(
-                                                                    currentUserReference) ==
-                                                            true,
-                                                      ),
                                                     );
-                                                  }
-                                                },
+                                                  }).divide(
+                                                      SizedBox(height: 5.0)),
+                                                ),
                                               );
-                                            }).divide(SizedBox(height: 5.0)),
+                                            },
                                           ),
                                         );
                                       },
@@ -1134,168 +1561,216 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       Builder(
                                         builder: (context) {
                                           if (_model.chatUser != null) {
-                                            return Builder(
-                                              builder: (context) => Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        25.0, 25.0, 0.0, 0.0),
-                                                child: FutureBuilder<
-                                                    List<UsersRecord>>(
-                                                  future: queryUsersRecordOnce(
-                                                    queryBuilder:
-                                                        (usersRecord) =>
-                                                            usersRecord.where(
-                                                      'user_ref',
-                                                      isEqualTo: _model
-                                                          .chatUser?.reference,
-                                                    ),
-                                                    singleRecord: true,
-                                                  ),
-                                                  builder: (context, snapshot) {
-                                                    // Customize what your widget looks like when it's loading.
-                                                    if (!snapshot.hasData) {
-                                                      return Center(
-                                                        child: SizedBox(
-                                                          width: 50.0,
-                                                          height: 50.0,
-                                                          child:
-                                                              CircularProgressIndicator(
-                                                            valueColor:
-                                                                AlwaysStoppedAnimation<
-                                                                    Color>(
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primary,
-                                                            ),
-                                                          ),
+                                            return FutureBuilder<ChatsRecord>(
+                                              future:
+                                                  ChatsRecord.getDocumentOnce(
+                                                      FFAppState()
+                                                          .currentChatRef!),
+                                              builder: (context, snapshot) {
+                                                // Customize what your widget looks like when it's loading.
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                    child: SizedBox(
+                                                      width: 50.0,
+                                                      height: 50.0,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation<
+                                                                Color>(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primary,
                                                         ),
-                                                      );
-                                                    }
-                                                    List<UsersRecord>
-                                                        rowUsersRecordList =
-                                                        snapshot.data!;
-                                                    // Return an empty Container when the item does not exist.
-                                                    if (snapshot
-                                                        .data!.isEmpty) {
-                                                      return Container();
-                                                    }
-                                                    final rowUsersRecord =
-                                                        rowUsersRecordList
-                                                                .isNotEmpty
-                                                            ? rowUsersRecordList
-                                                                .first
-                                                            : null;
-                                                    return InkWell(
-                                                      splashColor:
-                                                          Colors.transparent,
-                                                      focusColor:
-                                                          Colors.transparent,
-                                                      hoverColor:
-                                                          Colors.transparent,
-                                                      highlightColor:
-                                                          Colors.transparent,
-                                                      onTap: () async {
-                                                        await showAlignedDialog(
-                                                          context: context,
-                                                          isGlobal: true,
-                                                          avoidOverflow: false,
-                                                          targetAnchor:
-                                                              AlignmentDirectional(
-                                                                      0.0, 0.0)
-                                                                  .resolve(
-                                                                      Directionality.of(
-                                                                          context)),
-                                                          followerAnchor:
-                                                              AlignmentDirectional(
-                                                                      0.0, 0.0)
-                                                                  .resolve(
-                                                                      Directionality.of(
-                                                                          context)),
-                                                          builder:
-                                                              (dialogContext) {
-                                                            return Material(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child:
-                                                                  GestureDetector(
-                                                                onTap: () => _model
-                                                                        .unfocusNode
-                                                                        .canRequestFocus
-                                                                    ? FocusScope.of(
-                                                                            context)
-                                                                        .requestFocus(_model
-                                                                            .unfocusNode)
-                                                                    : FocusScope.of(
-                                                                            context)
-                                                                        .unfocus(),
-                                                                child:
-                                                                    UserDetailsWidget(
-                                                                  userDocs:
-                                                                      rowUsersRecord!,
-                                                                  chatRef:
-                                                                      FFAppState()
-                                                                          .currentChatRef!,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                                final rowChatsRecord =
+                                                    snapshot.data!;
+                                                return Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Builder(
+                                                      builder: (context) =>
+                                                          Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    25.0,
+                                                                    25.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        child: FutureBuilder<
+                                                            List<UsersRecord>>(
+                                                          future:
+                                                              queryUsersRecordOnce(
+                                                            queryBuilder:
+                                                                (usersRecord) =>
+                                                                    usersRecord
+                                                                        .where(
+                                                              'user_ref',
+                                                              isEqualTo: _model
+                                                                  .chatUser
+                                                                  ?.reference,
+                                                            ),
+                                                            singleRecord: true,
+                                                          ),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            // Customize what your widget looks like when it's loading.
+                                                            if (!snapshot
+                                                                .hasData) {
+                                                              return Center(
+                                                                child: SizedBox(
+                                                                  width: 50.0,
+                                                                  height: 50.0,
+                                                                  child:
+                                                                      CircularProgressIndicator(
+                                                                    valueColor:
+                                                                        AlwaysStoppedAnimation<
+                                                                            Color>(
+                                                                      FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primary,
+                                                                    ),
+                                                                  ),
                                                                 ),
+                                                              );
+                                                            }
+                                                            List<UsersRecord>
+                                                                rowUsersRecordList =
+                                                                snapshot.data!;
+                                                            // Return an empty Container when the item does not exist.
+                                                            if (snapshot.data!
+                                                                .isEmpty) {
+                                                              return Container();
+                                                            }
+                                                            final rowUsersRecord =
+                                                                rowUsersRecordList
+                                                                        .isNotEmpty
+                                                                    ? rowUsersRecordList
+                                                                        .first
+                                                                    : null;
+                                                            return InkWell(
+                                                              splashColor: Colors
+                                                                  .transparent,
+                                                              focusColor: Colors
+                                                                  .transparent,
+                                                              hoverColor: Colors
+                                                                  .transparent,
+                                                              highlightColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              onTap: () async {
+                                                                await showAlignedDialog(
+                                                                  context:
+                                                                      context,
+                                                                  isGlobal:
+                                                                      true,
+                                                                  avoidOverflow:
+                                                                      false,
+                                                                  targetAnchor: AlignmentDirectional(
+                                                                          0.0,
+                                                                          0.0)
+                                                                      .resolve(
+                                                                          Directionality.of(
+                                                                              context)),
+                                                                  followerAnchor: AlignmentDirectional(
+                                                                          0.0,
+                                                                          0.0)
+                                                                      .resolve(
+                                                                          Directionality.of(
+                                                                              context)),
+                                                                  builder:
+                                                                      (dialogContext) {
+                                                                    return Material(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      child:
+                                                                          GestureDetector(
+                                                                        onTap: () => _model.unfocusNode.canRequestFocus
+                                                                            ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+                                                                            : FocusScope.of(context).unfocus(),
+                                                                        child:
+                                                                            UserDetailsWidget(
+                                                                          userDocs:
+                                                                              rowUsersRecord!,
+                                                                          chatRef:
+                                                                              FFAppState().currentChatRef!,
+                                                                          isPinned:
+                                                                              rowChatsRecord.pinnedBy.contains(currentUserReference) == true,
+                                                                          workspaceRef:
+                                                                              rowChatsRecord.workspaceRef!,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                ).then((value) =>
+                                                                    setState(
+                                                                        () {}));
+                                                              },
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            3.0),
+                                                                    child: Image
+                                                                        .network(
+                                                                      rowUsersRecord!
+                                                                          .photoUrl,
+                                                                      width:
+                                                                          25.0,
+                                                                      height:
+                                                                          25.0,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            10.0,
+                                                                            0.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                    child: Text(
+                                                                      rowUsersRecord!
+                                                                          .displayName
+                                                                          .maybeHandleOverflow(
+                                                                        maxChars:
+                                                                            18,
+                                                                        replacement:
+                                                                            '…',
+                                                                      ),
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            fontFamily:
+                                                                                'Inter',
+                                                                            fontSize:
+                                                                                16.0,
+                                                                            fontWeight:
+                                                                                FontWeight.normal,
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
                                                             );
                                                           },
-                                                        ).then((value) =>
-                                                            setState(() {}));
-                                                      },
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        3.0),
-                                                            child:
-                                                                Image.network(
-                                                              rowUsersRecord!
-                                                                  .photoUrl,
-                                                              width: 25.0,
-                                                              height: 25.0,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        10.0,
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0),
-                                                            child: Text(
-                                                              rowUsersRecord!
-                                                                  .displayName
-                                                                  .maybeHandleOverflow(
-                                                                maxChars: 18,
-                                                                replacement:
-                                                                    '…',
-                                                              ),
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Inter',
-                                                                    fontSize:
-                                                                        16.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                        ],
+                                                        ),
                                                       ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
                                             );
                                           } else {
                                             return Padding(
@@ -1403,6 +1878,16 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                       chatRef:
                                                                           rowChatsRecord!
                                                                               .reference,
+                                                                      specificWorkspaceId:
+                                                                          rowChatsRecord!
+                                                                              .workspaceId,
+                                                                      isPinned: rowChatsRecord
+                                                                              ?.pinnedBy
+                                                                              ?.contains(currentUserReference) ==
+                                                                          true,
+                                                                      thisWorkspaceRef:
+                                                                          rowChatsRecord!
+                                                                              .workspaceRef!,
                                                                     ),
                                                                   ),
                                                                 );

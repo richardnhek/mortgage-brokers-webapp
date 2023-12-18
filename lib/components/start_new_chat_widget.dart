@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -345,127 +346,172 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                     ? null
                     : () async {
                         var _shouldSetState = false;
-                        if (FFAppState().selectedMembers.length > 1) {
-                          _model.updatePage(() {
-                            FFAppState()
-                                .addToSelectedMembers(currentUserReference!);
-                          });
-
-                          await ChatsRecord.collection.doc().set({
-                            ...createChatsRecordData(
-                              chatType: 'Channel',
-                              workspaceId: '',
-                              channelName: _model.channelNameController.text,
-                              workspaceRef: widget.workspaceRef,
-                            ),
-                            ...mapToFirestore(
-                              {
-                                'users': FFAppState().selectedMembers,
-                              },
-                            ),
-                          });
-                        } else {
-                          _model.updatePage(() {
-                            FFAppState()
-                                .addToSelectedMembers(currentUserReference!);
-                          });
-                          _model.chatsInWorkspace = await queryChatsRecordOnce(
-                            queryBuilder: (chatsRecord) => chatsRecord
-                                .where(
-                                  'workspace_ref',
-                                  isEqualTo: widget.workspaceRef,
-                                )
-                                .where(
-                                  'users',
-                                  arrayContains:
-                                      FFAppState().selectedMembers.first,
-                                )
-                                .where(
-                                  'chat_type',
-                                  isEqualTo: 'DM',
-                                ),
-                          );
-                          _shouldSetState = true;
-                          if (_model.chatsInWorkspace!.length >= 1) {
-                            Navigator.pop(context);
+                        final firestoreBatch =
+                            FirebaseFirestore.instance.batch();
+                        try {
+                          if (FFAppState().selectedMembers.length > 1) {
                             _model.updatePage(() {
-                              FFAppState().selectedMembers = [];
+                              FFAppState()
+                                  .addToSelectedMembers(currentUserReference!);
                             });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Chat already exists',
-                                  style: GoogleFonts.getFont(
-                                    'Inter',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16.0,
-                                  ),
-                                ),
-                                duration: Duration(milliseconds: 4000),
-                                backgroundColor:
-                                    FlutterFlowTheme.of(context).primary,
-                              ),
+                            _model.groupChatCreated =
+                                await FFChatManager.instance.createChat(
+                              FFAppState().selectedMembers.toList(),
                             );
-                            if (_shouldSetState) setState(() {});
-                            return;
-                          } else {
-                            var chatsRecordReference2 =
-                                ChatsRecord.collection.doc();
-                            await chatsRecordReference2.set({
-                              ...createChatsRecordData(
-                                chatType: 'DM',
-                                workspaceId: '',
-                                channelName: _model.channelNameController.text,
-                                workspaceRef: widget.workspaceRef,
-                                userA: currentUserReference,
-                                userB: FFAppState().selectedMembers.first,
-                              ),
-                              ...mapToFirestore(
-                                {
-                                  'users': FFAppState().selectedMembers,
-                                },
-                              ),
-                            });
-                            _model.createdChat =
-                                ChatsRecord.getDocumentFromData({
-                              ...createChatsRecordData(
-                                chatType: 'DM',
-                                workspaceId: '',
-                                channelName: _model.channelNameController.text,
-                                workspaceRef: widget.workspaceRef,
-                                userA: currentUserReference,
-                                userB: FFAppState().selectedMembers.first,
-                              ),
-                              ...mapToFirestore(
-                                {
-                                  'users': FFAppState().selectedMembers,
-                                },
-                              ),
-                            }, chatsRecordReference2);
                             _shouldSetState = true;
 
-                            await _model.createdChat!.reference
-                                .update(createChatsRecordData(
-                              chatRef: _model.createdChat?.reference,
-                            ));
+                            var chatMessagesRecordReference =
+                                ChatMessagesRecord.collection.doc();
+                            firestoreBatch.set(
+                                chatMessagesRecordReference,
+                                createChatMessagesRecordData(
+                                  user: currentUserReference,
+                                  chat: _model.groupChatCreated?.reference,
+                                  text: 'Welcome everyone!',
+                                  timestamp: getCurrentTimestamp,
+                                ));
+                            _model.createdMessage =
+                                ChatMessagesRecord.getDocumentFromData(
+                                    createChatMessagesRecordData(
+                                      user: currentUserReference,
+                                      chat: _model.groupChatCreated?.reference,
+                                      text: 'Welcome everyone!',
+                                      timestamp: getCurrentTimestamp,
+                                    ),
+                                    chatMessagesRecordReference);
+                            _shouldSetState = true;
 
-                            await widget.workspaceRef!.update({
-                              ...mapToFirestore(
-                                {
-                                  'chat_refs': FieldValue.arrayUnion(
-                                      [_model.createdChat?.reference]),
-                                },
-                              ),
+                            firestoreBatch.update(
+                                _model.createdMessage!.reference,
+                                createChatMessagesRecordData(
+                                  chatMessageRef:
+                                      _model.createdMessage?.reference,
+                                ));
+
+                            firestoreBatch.update(
+                                _model.groupChatCreated!.reference,
+                                createChatsRecordData(
+                                  lastMessage: 'Welcome everyone!',
+                                  lastMessageTime: getCurrentTimestamp,
+                                  lastMessageSentBy: currentUserReference,
+                                  chatType: 'Channel',
+                                  workspaceId: widget.workspaceId,
+                                  channelName:
+                                      _model.channelNameController.text,
+                                  workspaceRef: widget.workspaceRef,
+                                  chatRef: _model.groupChatCreated?.reference,
+                                  createdTime: getCurrentTimestamp,
+                                ));
+                          } else {
+                            _model.updatePage(() {
+                              FFAppState()
+                                  .addToSelectedMembers(currentUserReference!);
                             });
+                            _model.chatsInWorkspace =
+                                await queryChatsRecordOnce(
+                              queryBuilder: (chatsRecord) => chatsRecord
+                                  .where(
+                                    'workspace_ref',
+                                    isEqualTo: widget.workspaceRef,
+                                  )
+                                  .where(
+                                    'users',
+                                    arrayContains:
+                                        FFAppState().selectedMembers.first,
+                                  )
+                                  .where(
+                                    'chat_type',
+                                    isEqualTo: 'DM',
+                                  ),
+                            );
+                            _shouldSetState = true;
+                            if (_model.chatsInWorkspace!.length >= 1) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Chat already exists',
+                                    style: GoogleFonts.getFont(
+                                      'Inter',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).primary,
+                                ),
+                              );
+                              _model.updatePage(() {
+                                FFAppState().selectedMembers = [];
+                              });
+                              Navigator.pop(context);
+                              if (_shouldSetState) setState(() {});
+                              return;
+                            } else {
+                              var chatsRecordReference =
+                                  ChatsRecord.collection.doc();
+                              firestoreBatch.set(chatsRecordReference, {
+                                ...createChatsRecordData(
+                                  chatType: 'DM',
+                                  workspaceId: '',
+                                  channelName:
+                                      _model.channelNameController.text,
+                                  workspaceRef: widget.workspaceRef,
+                                  userA: currentUserReference,
+                                  userB: FFAppState().selectedMembers.first,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'users': FFAppState().selectedMembers,
+                                  },
+                                ),
+                              });
+                              _model.createdChat =
+                                  ChatsRecord.getDocumentFromData({
+                                ...createChatsRecordData(
+                                  chatType: 'DM',
+                                  workspaceId: '',
+                                  channelName:
+                                      _model.channelNameController.text,
+                                  workspaceRef: widget.workspaceRef,
+                                  userA: currentUserReference,
+                                  userB: FFAppState().selectedMembers.first,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'users': FFAppState().selectedMembers,
+                                  },
+                                ),
+                              }, chatsRecordReference);
+                              _shouldSetState = true;
+
+                              firestoreBatch.update(
+                                  _model.createdChat!.reference,
+                                  createChatsRecordData(
+                                    chatRef: _model.createdChat?.reference,
+                                  ));
+
+                              firestoreBatch.update(widget.workspaceRef!, {
+                                ...mapToFirestore(
+                                  {
+                                    'chat_refs': FieldValue.arrayUnion(
+                                        [_model.createdChat?.reference]),
+                                  },
+                                ),
+                              });
+                            }
                           }
+
+                          _model.updatePage(() {
+                            FFAppState().selectedMembers = [];
+                          });
+                          Navigator.pop(context);
+                        } finally {
+                          await firestoreBatch.commit();
                         }
 
-                        _model.updatePage(() {
-                          FFAppState().selectedMembers = [];
-                        });
-                        Navigator.pop(context);
                         if (_shouldSetState) setState(() {});
                       },
                 text: 'Start Chat',

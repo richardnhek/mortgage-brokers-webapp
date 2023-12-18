@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/chat/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -9,6 +10,7 @@ import 'create_workspace_widget.dart' show CreateWorkspaceWidget;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +30,10 @@ class CreateWorkspaceModel extends FlutterFlowModel<CreateWorkspaceWidget> {
           int index, Function(String) updateFn) =>
       channelMemberUidList[index] = updateFn(channelMemberUidList[index]);
 
+  DocumentReference? thisWorkspaceRef;
+
+  String thisWorkspaceId = '';
+
   ///  State fields for stateful widgets in this component.
 
   final formKey = GlobalKey<FormState>();
@@ -40,7 +46,11 @@ class CreateWorkspaceModel extends FlutterFlowModel<CreateWorkspaceWidget> {
   TextEditingController? channelNameController;
   String? Function(BuildContext, String?)? channelNameControllerValidator;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
-  WorkspacesRecord? createdWorkspace;
+  WorkspacesRecord? thisWorkspace;
+  // Stores action output result for [Group Chat Action] action in Button widget.
+  ChatsRecord? createdGC;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  ChatMessagesRecord? createdChatMsg;
 
   /// Initialization and disposal methods.
 

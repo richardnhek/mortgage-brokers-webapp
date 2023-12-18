@@ -241,6 +241,16 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                               .lastMessageSeenBy
                                               .contains(currentUserReference) ==
                                           true,
+                                      isSelected: FFAppState().currentChatRef ==
+                                          columnChatsRecord.reference,
+                                      lastMsg: columnChatsRecord.lastMessage,
+                                      isPinned: columnChatsRecord.pinnedBy
+                                              .contains(currentUserReference) ==
+                                          true,
+                                      lastMsgTime:
+                                          columnChatsRecord.lastMessageTime!,
+                                      lastMsgSentBy:
+                                          columnChatsRecord.lastMessageSentBy!,
                                     ),
                                   );
                                 }).divide(SizedBox(height: 5.0)),
@@ -359,6 +369,15 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                               .lastMessageSeenBy
                                               .contains(currentUserReference) ==
                                           true,
+                                      isPinned: columnChatsRecord.pinnedBy
+                                          .contains(currentUserReference),
+                                      lastMsg: columnChatsRecord.lastMessage,
+                                      lastMsgTime:
+                                          columnChatsRecord.lastMessageTime!,
+                                      lastMsgSentBy:
+                                          columnChatsRecord.lastMessageSentBy!,
+                                      isSelected: FFAppState().currentChatRef ==
+                                          columnChatsRecord.reference,
                                     ),
                                   );
                                 }).divide(SizedBox(height: 5.0)),

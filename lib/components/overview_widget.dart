@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'overview_model.dart';
 export 'overview_model.dart';
@@ -75,16 +74,30 @@ class _OverviewWidgetState extends State<OverviewWidget> {
             widget.selectedWorkspaceOverview!.currentStatus;
       });
       setState(() {
+        _model.clientOneController?.text =
+            widget.selectedWorkspaceOverview!.clients.first;
+      });
+      setState(() {
+        _model.clientTwoController?.text =
+            widget.selectedWorkspaceOverview!.clients.last;
+      });
+      setState(() {
         _model.isChanged = false;
       });
     });
 
     _model.clientOneController ??= TextEditingController(
-        text: widget.selectedWorkspaceOverview?.clients?.first);
+        text: valueOrDefault<String>(
+      widget.selectedWorkspaceOverview?.clients?.first,
+      'N/A',
+    ));
     _model.clientOneFocusNode ??= FocusNode();
 
     _model.clientTwoController ??= TextEditingController(
-        text: widget.selectedWorkspaceOverview?.clients?.last);
+        text: valueOrDefault<String>(
+      widget.selectedWorkspaceOverview?.clients?.last,
+      'N/A',
+    ));
     _model.clientTwoFocusNode ??= FocusNode();
 
     _model.currentStatusController ??= TextEditingController(
@@ -236,7 +249,12 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                       '_model.clientOneController',
                                                       Duration(
                                                           milliseconds: 100),
-                                                      () => setState(() {}),
+                                                      () async {
+                                                        setState(() {
+                                                          _model.isChanged =
+                                                              true;
+                                                        });
+                                                      },
                                                     ),
                                                     autofocus: true,
                                                     obscureText: false,
@@ -351,7 +369,12 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                       '_model.clientTwoController',
                                                       Duration(
                                                           milliseconds: 100),
-                                                      () => setState(() {}),
+                                                      () async {
+                                                        setState(() {
+                                                          _model.isChanged =
+                                                              true;
+                                                        });
+                                                      },
                                                     ),
                                                     autofocus: true,
                                                     obscureText: false,
@@ -668,7 +691,9 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                         .loanAmountControllerValidator
                                                         .asValidator(context),
                                                     inputFormatters: [
-                                                      _model.loanAmountMask
+                                                      FilteringTextInputFormatter
+                                                          .allow(
+                                                              RegExp('[0-9]'))
                                                     ],
                                                   ),
                                                 ),
@@ -916,19 +941,19 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 await widget.workspaceRef!.update(
                                                     createWorkspacesRecordData(
                                                   overview:
-                                                      updateWorkspaceOverviewStruct(
-                                                    WorkspaceOverviewStruct(
-                                                      currentStatus: _model
-                                                          .currentStatusController
-                                                          .text,
-                                                      loanAmount:
-                                                          double.tryParse(_model
-                                                              .loanAmountController
-                                                              .text),
-                                                      communicationNotes: _model
-                                                          .communicationNotesController
-                                                          .text,
-                                                      clients: (String
+                                                      createWorkspaceOverviewStruct(
+                                                    currentStatus: _model
+                                                        .currentStatusController
+                                                        .text,
+                                                    loanAmount: double.tryParse(
+                                                        _model
+                                                            .loanAmountController
+                                                            .text),
+                                                    communicationNotes: _model
+                                                        .communicationNotesController
+                                                        .text,
+                                                    fieldValues: {
+                                                      'clients': (String
                                                                   clientOne,
                                                               String clientTwo) {
                                                         return [
@@ -942,7 +967,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                           _model
                                                               .clientTwoController
                                                               .text),
-                                                    ),
+                                                    },
                                                     clearUnsetFields: false,
                                                   ),
                                                 ));
