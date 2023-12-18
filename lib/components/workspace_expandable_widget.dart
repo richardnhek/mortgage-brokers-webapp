@@ -125,8 +125,7 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                       ),
                     ),
                     child: Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(5.0, 5.0, 5.0, 5.0),
+                      padding: EdgeInsets.all(5.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
@@ -238,6 +237,20 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                           'Keyg6r_${columnIndex}_of_${columnChatsRecordList.length}'),
                                       channelName:
                                           columnChatsRecord.channelName,
+                                      isRead: columnChatsRecord
+                                              .lastMessageSeenBy
+                                              .contains(currentUserReference) ==
+                                          true,
+                                      isSelected: FFAppState().currentChatRef ==
+                                          columnChatsRecord.reference,
+                                      lastMsg: columnChatsRecord.lastMessage,
+                                      isPinned: columnChatsRecord.pinnedBy
+                                              .contains(currentUserReference) ==
+                                          true,
+                                      lastMsgTime:
+                                          columnChatsRecord.lastMessageTime!,
+                                      lastMsgSentBy:
+                                          columnChatsRecord.lastMessageSentBy!,
                                     ),
                                   );
                                 }).divide(SizedBox(height: 5.0)),
@@ -352,6 +365,19 @@ class _WorkspaceExpandableWidgetState extends State<WorkspaceExpandableWidget> {
                                               (e) => e != currentUserReference)
                                           .toList()
                                           .first,
+                                      isRead: columnChatsRecord
+                                              .lastMessageSeenBy
+                                              .contains(currentUserReference) ==
+                                          true,
+                                      isPinned: columnChatsRecord.pinnedBy
+                                          .contains(currentUserReference),
+                                      lastMsg: columnChatsRecord.lastMessage,
+                                      lastMsgTime:
+                                          columnChatsRecord.lastMessageTime!,
+                                      lastMsgSentBy:
+                                          columnChatsRecord.lastMessageSentBy!,
+                                      isSelected: FFAppState().currentChatRef ==
+                                          columnChatsRecord.reference,
                                     ),
                                   );
                                 }).divide(SizedBox(height: 5.0)),

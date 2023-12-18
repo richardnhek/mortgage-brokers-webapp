@@ -75,15 +75,31 @@ class _OverviewWidgetState extends State<OverviewWidget> {
             widget.selectedWorkspaceOverview!.currentStatus;
       });
       setState(() {
+        _model.clientOneController?.text =
+            widget.selectedWorkspaceOverview!.clients.first;
+      });
+      setState(() {
+        _model.clientTwoController?.text =
+            widget.selectedWorkspaceOverview!.clients.last;
+      });
+      setState(() {
         _model.isChanged = false;
       });
     });
 
-    _model.textController1 ??= TextEditingController();
-    _model.textFieldFocusNode1 ??= FocusNode();
+    _model.clientOneController ??= TextEditingController(
+        text: valueOrDefault<String>(
+      widget.selectedWorkspaceOverview?.clients?.first,
+      'N/A',
+    ));
+    _model.clientOneFocusNode ??= FocusNode();
 
-    _model.textController2 ??= TextEditingController();
-    _model.textFieldFocusNode2 ??= FocusNode();
+    _model.clientTwoController ??= TextEditingController(
+        text: valueOrDefault<String>(
+      widget.selectedWorkspaceOverview?.clients?.last,
+      'N/A',
+    ));
+    _model.clientTwoFocusNode ??= FocusNode();
 
     _model.currentStatusController ??= TextEditingController(
         text: widget.selectedWorkspaceOverview?.currentStatus);
@@ -128,7 +144,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Align(
-              alignment: AlignmentDirectional(-1.00, -1.00),
+              alignment: AlignmentDirectional(-1.0, -1.0),
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.5, 0.0, 25.5),
                 child: Text(
@@ -188,7 +204,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 0, 0, 10),
                                                 child: Text(
-                                                  'Clients',
+                                                  'Client #1',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -221,12 +237,23 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 child: Container(
                                                   width: double.infinity,
                                                   child: TextFormField(
-                                                    controller:
-                                                        _model.textController1,
+                                                    controller: _model
+                                                        .clientOneController,
                                                     focusNode: _model
-                                                        .textFieldFocusNode1,
+                                                        .clientOneFocusNode,
+                                                    onChanged: (_) =>
+                                                        EasyDebounce.debounce(
+                                                      '_model.clientOneController',
+                                                      Duration(
+                                                          milliseconds: 100),
+                                                      () async {
+                                                        setState(() {
+                                                          _model.isChanged =
+                                                              true;
+                                                        });
+                                                      },
+                                                    ),
                                                     autofocus: true,
-                                                    readOnly: true,
                                                     obscureText: false,
                                                     decoration: InputDecoration(
                                                       labelStyle:
@@ -274,7 +301,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                                 context)
                                                             .primary,
                                                     validator: _model
-                                                        .textController1Validator
+                                                        .clientOneControllerValidator
                                                         .asValidator(context),
                                                   ),
                                                 ),
@@ -292,7 +319,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(0, 0, 0, 10),
                                                 child: Text(
-                                                  'Clients',
+                                                  'Client #2',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium
@@ -325,10 +352,22 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 child: Container(
                                                   width: double.infinity,
                                                   child: TextFormField(
-                                                    controller:
-                                                        _model.textController2,
+                                                    controller: _model
+                                                        .clientTwoController,
                                                     focusNode: _model
-                                                        .textFieldFocusNode2,
+                                                        .clientTwoFocusNode,
+                                                    onChanged: (_) =>
+                                                        EasyDebounce.debounce(
+                                                      '_model.clientTwoController',
+                                                      Duration(
+                                                          milliseconds: 100),
+                                                      () async {
+                                                        setState(() {
+                                                          _model.isChanged =
+                                                              true;
+                                                        });
+                                                      },
+                                                    ),
                                                     autofocus: true,
                                                     obscureText: false,
                                                     decoration: InputDecoration(
@@ -377,7 +416,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                                 context)
                                                             .primary,
                                                     validator: _model
-                                                        .textController2Validator
+                                                        .clientTwoControllerValidator
                                                         .asValidator(context),
                                                   ),
                                                 ),
@@ -630,6 +669,11 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                     validator: _model
                                                         .loanAmountControllerValidator
                                                         .asValidator(context),
+                                                    inputFormatters: [
+                                                      FilteringTextInputFormatter
+                                                          .allow(
+                                                              RegExp('[0-9]'))
+                                                    ],
                                                   ),
                                                 ),
                                               ),
@@ -745,9 +789,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                               4),
                                                     ),
                                                     contentPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                16, 16, 16, 16),
+                                                        EdgeInsets.all(16.0),
                                                   ),
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -783,7 +825,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                 color: FlutterFlowTheme.of(context).alternate,
                               ),
                               Align(
-                                alignment: AlignmentDirectional(1.00, 0.00),
+                                alignment: AlignmentDirectional(1.0, 0.0),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0, 0, 30, 0),
@@ -817,14 +859,31 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                           .selectedWorkspaceOverview!
                                                           .communicationNotes;
                                                 });
+                                                setState(() {
+                                                  _model.clientOneController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .clients
+                                                          .first;
+                                                });
+                                                setState(() {
+                                                  _model.clientTwoController
+                                                          ?.text =
+                                                      widget
+                                                          .selectedWorkspaceOverview!
+                                                          .clients
+                                                          .last;
+                                                });
+                                                _model.updatePage(() {
+                                                  _model.isChanged = false;
+                                                });
                                               },
                                         text: 'Dischard changes',
                                         options: FFButtonOptions(
-                                          width: 160,
-                                          height: 50,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 0),
+                                          width: 160.0,
+                                          height: 50.0,
+                                          padding: EdgeInsets.all(0.0),
                                           iconPadding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 0),
@@ -860,19 +919,33 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                 await widget.workspaceRef!.update(
                                                     createWorkspacesRecordData(
                                                   overview:
-                                                      updateWorkspaceOverviewStruct(
-                                                    WorkspaceOverviewStruct(
-                                                      currentStatus: _model
-                                                          .currentStatusController
-                                                          .text,
-                                                      loanAmount:
-                                                          double.tryParse(_model
-                                                              .loanAmountController
+                                                      createWorkspaceOverviewStruct(
+                                                    currentStatus: _model
+                                                        .currentStatusController
+                                                        .text,
+                                                    loanAmount: double.tryParse(
+                                                        _model
+                                                            .loanAmountController
+                                                            .text),
+                                                    communicationNotes: _model
+                                                        .communicationNotesController
+                                                        .text,
+                                                    fieldValues: {
+                                                      'clients': (String
+                                                                  clientOne,
+                                                              String clientTwo) {
+                                                        return [
+                                                          clientOne,
+                                                          clientTwo
+                                                        ];
+                                                      }(
+                                                          _model
+                                                              .clientOneController
+                                                              .text,
+                                                          _model
+                                                              .clientTwoController
                                                               .text),
-                                                      communicationNotes: _model
-                                                          .communicationNotesController
-                                                          .text,
-                                                    ),
+                                                    },
                                                     clearUnsetFields: false,
                                                   ),
                                                 ));
@@ -916,16 +989,35 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                           .overview
                                                           .communicationNotes;
                                                 });
+                                                setState(() {
+                                                  _model.clientOneController
+                                                          ?.text =
+                                                      _model
+                                                          .currentWorkspace!
+                                                          .overview
+                                                          .clients
+                                                          .first;
+                                                });
+                                                setState(() {
+                                                  _model.clientTwoController
+                                                          ?.text =
+                                                      _model
+                                                          .currentWorkspace!
+                                                          .overview
+                                                          .clients
+                                                          .last;
+                                                });
+                                                _model.updatePage(() {
+                                                  _model.isChanged = false;
+                                                });
 
                                                 setState(() {});
                                               },
                                         text: 'Save Changes',
                                         options: FFButtonOptions(
-                                          width: 160,
-                                          height: 50,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 0),
+                                          width: 160.0,
+                                          height: 50.0,
+                                          padding: EdgeInsets.all(0.0),
                                           iconPadding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 0),
@@ -942,9 +1034,8 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                   ),
                                           elevation: 0,
                                           borderSide: BorderSide(
-                                            color: FlutterFlowTheme.of(context)
-                                                .accent2,
-                                            width: 1,
+                                            color: Colors.transparent,
+                                            width: 0.0,
                                           ),
                                           borderRadius:
                                               BorderRadius.circular(8.0),
@@ -975,8 +1066,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                           ),
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(25, 25, 25, 25),
+                          padding: EdgeInsets.all(25.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -1046,86 +1136,157 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                 ],
                               ),
                               Align(
-                                alignment: AlignmentDirectional(-1.00, -1.00),
+                                alignment: AlignmentDirectional(-1.0, -1.0),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      10.0, 20.0, 10.0, 0.0),
-                                  child: StreamBuilder<List<UsersRecord>>(
-                                    stream: queryUsersRecord(
-                                      queryBuilder: (usersRecord) =>
-                                          usersRecord.whereIn('user_ref',
-                                              widget.workspaceMembers),
-                                    ),
-                                    builder: (context, snapshot) {
-                                      // Customize what your widget looks like when it's loading.
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: SizedBox(
-                                            width: 50,
-                                            height: 50,
-                                            child: CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
+                                      0.0, 20.0, 0.0, 0.0),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            AuthUserStreamWidget(
+                                              builder: (context) => ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5.0),
+                                                child: Image.network(
+                                                  currentUserPhoto,
+                                                  width: 40.0,
+                                                  height: 40.0,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             ),
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      10.0, 0.0, 0.0, 0.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  AuthUserStreamWidget(
+                                                    builder: (context) => Text(
+                                                      currentUserDisplayName,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    currentUserEmail,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily: 'Inter',
+                                                          color:
+                                                              Color(0xFFB0B2B2),
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        StreamBuilder<List<UsersRecord>>(
+                                          stream: queryUsersRecord(
+                                            queryBuilder: (usersRecord) =>
+                                                usersRecord
+                                                    .whereIn('user_ref',
+                                                        widget.workspaceMembers)
+                                                    .where(
+                                                      'user_ref',
+                                                      isNotEqualTo:
+                                                          currentUserReference,
+                                                    ),
                                           ),
-                                        );
-                                      }
-                                      List<UsersRecord> rowUsersRecordList =
-                                          snapshot.data!;
-                                      return SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: List.generate(
-                                              rowUsersRecordList.length,
-                                              (rowIndex) {
-                                            final rowUsersRecord =
-                                                rowUsersRecordList[rowIndex];
-                                            return Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  child: Image.network(
-                                                    rowUsersRecord.photoUrl,
-                                                    width: 40,
-                                                    height: 40,
-                                                    fit: BoxFit.cover,
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 50.0,
+                                                  height: 50.0,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                            Color>(
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .primary,
+                                                    ),
                                                   ),
                                                 ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(10, 0, 0, 0),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.min,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        rowUsersRecord
-                                                            .displayName,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium,
+                                              );
+                                            }
+                                            List<UsersRecord>
+                                                rowUsersRecordList =
+                                                snapshot.data!;
+                                            return Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: List.generate(
+                                                  rowUsersRecordList.length,
+                                                  (rowIndex) {
+                                                final rowUsersRecord =
+                                                    rowUsersRecordList[
+                                                        rowIndex];
+                                                return Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      child: Image.network(
+                                                        rowUsersRecord.photoUrl,
+                                                        width: 40.0,
+                                                        height: 40.0,
+                                                        fit: BoxFit.cover,
                                                       ),
-                                                      Text(
-                                                        rowUsersRecord.email,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  10.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Text(
+                                                            rowUsersRecord
+                                                                .displayName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium,
+                                                          ),
+                                                          Text(
+                                                            rowUsersRecord
+                                                                .email,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
                                                                 .bodyMedium
                                                                 .override(
                                                                   fontFamily:
@@ -1133,16 +1294,18 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                                   color: Color(
                                                                       0xFFB0B2B2),
                                                                 ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
+                                                    ),
+                                                  ],
+                                                );
+                                              }).divide(SizedBox(width: 50.0)),
                                             );
-                                          }).divide(SizedBox(width: 75)),
+                                          },
                                         ),
-                                      );
-                                    },
+                                      ].divide(SizedBox(width: 50.0)),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -1164,14 +1327,13 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                           ),
                         ),
                         child: Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(35, 25, 35, 25),
+                          padding: EdgeInsets.all(25.0),
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Align(
-                                alignment: AlignmentDirectional(-1.00, -1.00),
+                                alignment: AlignmentDirectional(-1.0, -1.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   mainAxisAlignment:
@@ -1346,7 +1508,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                                     ),
                                                   ],
                                                 );
-                                              }).divide(SizedBox(width: 75.0)),
+                                              }).divide(SizedBox(width: 50.0)),
                                             ),
                                           );
                                         },

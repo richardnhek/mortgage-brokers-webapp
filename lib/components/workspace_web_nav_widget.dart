@@ -59,7 +59,7 @@ class _WorkspaceWebNavWidgetState extends State<WorkspaceWebNavWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(25.0, 25.0, 25.0, 25.0),
+            padding: EdgeInsets.all(25.0),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,7 +82,7 @@ class _WorkspaceWebNavWidgetState extends State<WorkspaceWebNavWidget> {
             color: FlutterFlowTheme.of(context).secondaryBackground,
           ),
           Align(
-            alignment: AlignmentDirectional(-1.00, -1.00),
+            alignment: AlignmentDirectional(-1.0, -1.0),
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(25.0, 40.0, 0.0, 0.0),
               child: Text(

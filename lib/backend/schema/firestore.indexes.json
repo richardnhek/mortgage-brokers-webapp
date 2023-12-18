@@ -33,10 +33,6 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "chat_type",
-          "order": "ASCENDING"
-        },
-        {
           "fieldPath": "workspace_ref",
           "order": "ASCENDING"
         },
@@ -52,6 +48,20 @@
     }
   ],
   "fieldOverrides": [
+    {
+      "collectionGroup": "chats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "workspace_ref",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "pinnedBy",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    },
     {
       "collectionGroup": "chats",
       "queryScope": "COLLECTION",

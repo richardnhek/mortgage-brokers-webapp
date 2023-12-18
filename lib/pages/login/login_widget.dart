@@ -1,7 +1,10 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +31,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     super.initState();
     _model = createModel(context, () => LoginModel());
 
+    authManager.handlePhoneAuthStateChanges(context);
     _model.phoneNumberController ??= TextEditingController();
     _model.phoneNumberFocusNode ??= FocusNode();
     authManager.handlePhoneAuthStateChanges(context);
@@ -72,7 +76,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 tablet: false,
               ))
                 Align(
-                  alignment: AlignmentDirectional(0.00, 0.00),
+                  alignment: AlignmentDirectional(0.0, 0.0),
                   child: Container(
                     width: double.infinity,
                     height: MediaQuery.sizeOf(context).height * 0.8,
@@ -90,12 +94,53 @@ class _LoginWidgetState extends State<LoginWidget> {
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(0.0),
-                              child: Image.asset(
-                                'assets/images/logo.jpeg',
-                                height: 50.0,
-                                fit: BoxFit.cover,
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                final phoneNumberVal = '+11234567890';
+                                if (phoneNumberVal == null ||
+                                    phoneNumberVal.isEmpty ||
+                                    !phoneNumberVal.startsWith('+')) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Phone Number is required and has to start with +.'),
+                                    ),
+                                  );
+                                  return;
+                                }
+                                await authManager.beginPhoneAuth(
+                                  context: context,
+                                  phoneNumber: phoneNumberVal,
+                                  onCodeSent: (context) async {
+                                    context.goNamedAuth(
+                                      'CodeVerification',
+                                      context.mounted,
+                                      queryParameters: {
+                                        'phoneNumber': serializeParam(
+                                          '+11234567890',
+                                          ParamType.String,
+                                        ),
+                                        'authType': serializeParam(
+                                          'Login',
+                                          ParamType.String,
+                                        ),
+                                      }.withoutNulls,
+                                      ignoreRedirect: true,
+                                    );
+                                  },
+                                );
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(0.0),
+                                child: Image.asset(
+                                  'assets/images/logo.jpeg',
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                             Padding(
@@ -142,7 +187,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         children: [
                                           Align(
                                             alignment: AlignmentDirectional(
-                                                -1.00, -1.00),
+                                                -1.0, -1.0),
                                             child: Text(
                                               'Phone number',
                                               style:
@@ -237,7 +282,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                       FlutterFlowTheme.of(
                                                               context)
                                                           .bodyMedium,
-                                                  hintText: '+1 (555) 000-0000',
+                                                  hintText: '(555) 000-000',
                                                   hintStyle: FlutterFlowTheme
                                                           .of(context)
                                                       .labelMedium
@@ -338,47 +383,88 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                     ''
                                             ? null
                                             : () async {
-                                                final phoneNumberVal = _model
-                                                    .phoneNumberController.text;
-                                                if (phoneNumberVal == null ||
-                                                    phoneNumberVal.isEmpty ||
-                                                    !phoneNumberVal
-                                                        .startsWith('+')) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                          'Phone Number is required and has to start with +.'),
-                                                    ),
+                                                _model.existingUser =
+                                                    await queryUsersRecordOnce(
+                                                  queryBuilder: (usersRecord) =>
+                                                      usersRecord.where(
+                                                    'phone_number',
+                                                    isEqualTo: _model
+                                                        .phoneNumberController
+                                                        .text,
+                                                  ),
+                                                  singleRecord: true,
+                                                ).then((s) => s.firstOrNull);
+                                                if (_model.existingUser
+                                                        ?.reference ==
+                                                    null) {
+                                                  context.pushNamed(
+                                                    'BrokerCreateAccount',
+                                                    queryParameters: {
+                                                      'phoneNo': serializeParam(
+                                                        _model
+                                                            .phoneNumberController
+                                                            .text,
+                                                        ParamType.String,
+                                                      ),
+                                                    }.withoutNulls,
                                                   );
-                                                  return;
-                                                }
-                                                await authManager
-                                                    .beginPhoneAuth(
-                                                  context: context,
-                                                  phoneNumber: phoneNumberVal,
-                                                  onCodeSent: (context) async {
-                                                    context.goNamedAuth(
-                                                      'CodeVerification',
-                                                      context.mounted,
-                                                      queryParameters: {
-                                                        'phoneNumber':
-                                                            serializeParam(
-                                                          _model
-                                                              .phoneNumberController
-                                                              .text,
-                                                          ParamType.String,
+                                                } else {
+                                                  if (_model.existingUser
+                                                          ?.userType ==
+                                                      'Client') {
+                                                    context.pushNamed(
+                                                        'SuccessfulRegistration');
+                                                  } else {
+                                                    final phoneNumberVal = _model
+                                                        .phoneNumberController
+                                                        .text;
+                                                    if (phoneNumberVal == null ||
+                                                        phoneNumberVal
+                                                            .isEmpty ||
+                                                        !phoneNumberVal
+                                                            .startsWith('+')) {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              'Phone Number is required and has to start with +.'),
                                                         ),
-                                                        'authType':
-                                                            serializeParam(
-                                                          'Login',
-                                                          ParamType.String,
-                                                        ),
-                                                      }.withoutNulls,
-                                                      ignoreRedirect: true,
+                                                      );
+                                                      return;
+                                                    }
+                                                    await authManager
+                                                        .beginPhoneAuth(
+                                                      context: context,
+                                                      phoneNumber:
+                                                          phoneNumberVal,
+                                                      onCodeSent:
+                                                          (context) async {
+                                                        context.goNamedAuth(
+                                                          'CodeVerification',
+                                                          context.mounted,
+                                                          queryParameters: {
+                                                            'phoneNumber':
+                                                                serializeParam(
+                                                              _model
+                                                                  .phoneNumberController
+                                                                  .text,
+                                                              ParamType.String,
+                                                            ),
+                                                            'authType':
+                                                                serializeParam(
+                                                              'Login',
+                                                              ParamType.String,
+                                                            ),
+                                                          }.withoutNulls,
+                                                          ignoreRedirect: true,
+                                                        );
+                                                      },
                                                     );
-                                                  },
-                                                );
+                                                  }
+                                                }
+
+                                                setState(() {});
                                               },
                                         text: 'Login',
                                         options: FFButtonOptions(
@@ -453,7 +539,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      context.pushNamed('CreateAccount');
+                                      context.pushNamed('BrokerCreateAccount');
                                     },
                                     child: Text(
                                       'Create Account',
@@ -481,7 +567,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                 desktop: false,
               ))
                 Align(
-                  alignment: AlignmentDirectional(0.00, 0.00),
+                  alignment: AlignmentDirectional(0.0, 0.0),
                   child: Text(
                     'Not available on mobile',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(

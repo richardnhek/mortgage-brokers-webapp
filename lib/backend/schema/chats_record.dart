@@ -77,6 +77,16 @@ class ChatsRecord extends FirestoreRecord {
   DocumentReference? get chatRef => _chatRef;
   bool hasChatRef() => _chatRef != null;
 
+  // "pinnedBy" field.
+  List<DocumentReference>? _pinnedBy;
+  List<DocumentReference> get pinnedBy => _pinnedBy ?? const [];
+  bool hasPinnedBy() => _pinnedBy != null;
+
+  // "created_time" field.
+  DateTime? _createdTime;
+  DateTime? get createdTime => _createdTime;
+  bool hasCreatedTime() => _createdTime != null;
+
   void _initializeFields() {
     _users = getDataList(snapshotData['users']);
     _userA = snapshotData['user_a'] as DocumentReference?;
@@ -91,6 +101,8 @@ class ChatsRecord extends FirestoreRecord {
     _channelName = snapshotData['channel_name'] as String?;
     _workspaceRef = snapshotData['workspace_ref'] as DocumentReference?;
     _chatRef = snapshotData['chat_ref'] as DocumentReference?;
+    _pinnedBy = getDataList(snapshotData['pinnedBy']);
+    _createdTime = snapshotData['created_time'] as DateTime?;
   }
 
   static CollectionReference get collection =>
@@ -137,6 +149,7 @@ Map<String, dynamic> createChatsRecordData({
   String? channelName,
   DocumentReference? workspaceRef,
   DocumentReference? chatRef,
+  DateTime? createdTime,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -150,6 +163,7 @@ Map<String, dynamic> createChatsRecordData({
       'channel_name': channelName,
       'workspace_ref': workspaceRef,
       'chat_ref': chatRef,
+      'created_time': createdTime,
     }.withoutNulls,
   );
 
@@ -173,7 +187,9 @@ class ChatsRecordDocumentEquality implements Equality<ChatsRecord> {
         e1?.workspaceId == e2?.workspaceId &&
         e1?.channelName == e2?.channelName &&
         e1?.workspaceRef == e2?.workspaceRef &&
-        e1?.chatRef == e2?.chatRef;
+        e1?.chatRef == e2?.chatRef &&
+        listEquality.equals(e1?.pinnedBy, e2?.pinnedBy) &&
+        e1?.createdTime == e2?.createdTime;
   }
 
   @override
@@ -189,7 +205,9 @@ class ChatsRecordDocumentEquality implements Equality<ChatsRecord> {
         e?.workspaceId,
         e?.channelName,
         e?.workspaceRef,
-        e?.chatRef
+        e?.chatRef,
+        e?.pinnedBy,
+        e?.createdTime
       ]);
 
   @override

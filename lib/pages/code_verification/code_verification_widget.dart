@@ -78,7 +78,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
         body: SafeArea(
           top: true,
           child: Align(
-            alignment: AlignmentDirectional(0.00, 0.00),
+            alignment: AlignmentDirectional(0.0, 0.0),
             child: Container(
               width: double.infinity,
               height: MediaQuery.sizeOf(context).height * 0.825,
@@ -142,7 +142,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                               mainAxisSize: MainAxisSize.max,
                               children: [
                                 Align(
-                                  alignment: AlignmentDirectional(-1.00, -1.00),
+                                  alignment: AlignmentDirectional(-1.0, -1.0),
                                   child: Text(
                                     'Secure code',
                                     style: FlutterFlowTheme.of(context)
@@ -175,10 +175,15 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                     hintCharacter: '*',
                                     keyboardType: TextInputType.number,
                                     pinTheme: PinTheme(
-                                      fieldHeight: 60,
-                                      fieldWidth: 60,
-                                      borderWidth: 1,
-                                      borderRadius: BorderRadius.circular(8),
+                                      fieldHeight: 60.0,
+                                      fieldWidth: 60.0,
+                                      borderWidth: 1.0,
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(8.0),
+                                        bottomRight: Radius.circular(8.0),
+                                        topLeft: Radius.circular(8.0),
+                                        topRight: Radius.circular(8.0),
+                                      ),
                                       shape: PinCodeFieldShape.box,
                                       activeColor: FlutterFlowTheme.of(context)
                                           .primaryText,
@@ -397,6 +402,8 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                           email: widget.userEmail,
                                           displayName: widget.displayName,
                                           userRef: currentUserReference,
+                                          photoUrl:
+                                              'https://cdn.iconscout.com/icon/free/png-256/free-profile-1481935-1254808.png',
                                         ));
                                       }
 
@@ -427,6 +434,42 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                 borderRadius: BorderRadius.circular(8),
                                 disabledColor:
                                     FlutterFlowTheme.of(context).secondaryText,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 25.0, 0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                context.safePop();
+                              },
+                              text: 'Back',
+                              options: FFButtonOptions(
+                                width: double.infinity,
+                                height: 50.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: Colors.transparent,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      fontSize: 16.0,
+                                      lineHeight: 1.5,
+                                    ),
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                                hoverColor:
+                                    FlutterFlowTheme.of(context).accent1,
                               ),
                             ),
                           ),

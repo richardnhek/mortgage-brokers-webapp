@@ -95,11 +95,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => HomePageWidget(),
         ),
         FFRoute(
-          name: 'CreateAccount',
-          path: '/createAccount',
-          builder: (context, params) => CreateAccountWidget(
-            userRef: params.getParam(
-                'userRef', ParamType.DocumentReference, false, ['users']),
+          name: 'BrokerCreateAccount',
+          path: '/brokerCreateAccount',
+          builder: (context, params) => BrokerCreateAccountWidget(
+            phoneNo: params.getParam('phoneNo', ParamType.String),
           ),
         ),
         FFRoute(
@@ -115,11 +114,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'SuccessfulRegistration',
           path: '/successfulRegistration',
-          builder: (context, params) => SuccessfulRegistrationWidget(
-            phoneNumber: params.getParam('phoneNumber', ParamType.String),
-            userEmail: params.getParam('userEmail', ParamType.String),
-            displayName: params.getParam('displayName', ParamType.String),
-          ),
+          builder: (context, params) => SuccessfulRegistrationWidget(),
         ),
         FFRoute(
           name: 'ChatPage',
@@ -137,6 +132,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'Login',
           path: '/login',
           builder: (context, params) => LoginWidget(),
+        ),
+        FFRoute(
+          name: 'ClientCreateAccount',
+          path: '/clientCreateAccount',
+          builder: (context, params) => ClientCreateAccountWidget(
+            userRef: params.getParam(
+                'userRef', ParamType.DocumentReference, false, ['users']),
+            phoneNo: params.getParam('phoneNo', ParamType.String),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -335,13 +339,20 @@ class FFRoute {
                   key: state.pageKey,
                   child: child,
                   transitionDuration: transitionInfo.duration,
-                  transitionsBuilder: PageTransition(
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) =>
+                          PageTransition(
                     type: transitionInfo.transitionType,
                     duration: transitionInfo.duration,
                     reverseDuration: transitionInfo.duration,
                     alignment: transitionInfo.alignment,
                     child: child,
-                  ).transitionsBuilder,
+                  ).buildTransitions(
+                    context,
+                    animation,
+                    secondaryAnimation,
+                    child,
+                  ),
                 )
               : MaterialPage(key: state.pageKey, child: child);
         },

@@ -9,16 +9,7 @@ import 'successful_registration_model.dart';
 export 'successful_registration_model.dart';
 
 class SuccessfulRegistrationWidget extends StatefulWidget {
-  const SuccessfulRegistrationWidget({
-    Key? key,
-    required this.phoneNumber,
-    required this.userEmail,
-    required this.displayName,
-  }) : super(key: key);
-
-  final String? phoneNumber;
-  final String? userEmail;
-  final String? displayName;
+  const SuccessfulRegistrationWidget({Key? key}) : super(key: key);
 
   @override
   _SuccessfulRegistrationWidgetState createState() =>
@@ -69,7 +60,7 @@ class _SuccessfulRegistrationWidgetState
         body: SafeArea(
           top: true,
           child: Align(
-            alignment: AlignmentDirectional(0.00, 0.00),
+            alignment: AlignmentDirectional(0.0, 0.0),
             child: Container(
               width: double.infinity,
               height: MediaQuery.sizeOf(context).height * 0.825,

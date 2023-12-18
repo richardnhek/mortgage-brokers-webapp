@@ -24,14 +24,14 @@ class OverviewModel extends FlutterFlowModel<OverviewWidget> {
 
   ///  State fields for stateful widgets in this component.
 
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode1;
-  TextEditingController? textController1;
-  String? Function(BuildContext, String?)? textController1Validator;
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode2;
-  TextEditingController? textController2;
-  String? Function(BuildContext, String?)? textController2Validator;
+  // State field(s) for clientOne widget.
+  FocusNode? clientOneFocusNode;
+  TextEditingController? clientOneController;
+  String? Function(BuildContext, String?)? clientOneControllerValidator;
+  // State field(s) for clientTwo widget.
+  FocusNode? clientTwoFocusNode;
+  TextEditingController? clientTwoController;
+  String? Function(BuildContext, String?)? clientTwoControllerValidator;
   // State field(s) for current_status widget.
   FocusNode? currentStatusFocusNode;
   TextEditingController? currentStatusController;
@@ -53,11 +53,11 @@ class OverviewModel extends FlutterFlowModel<OverviewWidget> {
   void initState(BuildContext context) {}
 
   void dispose() {
-    textFieldFocusNode1?.dispose();
-    textController1?.dispose();
+    clientOneFocusNode?.dispose();
+    clientOneController?.dispose();
 
-    textFieldFocusNode2?.dispose();
-    textController2?.dispose();
+    clientTwoFocusNode?.dispose();
+    clientTwoController?.dispose();
 
     currentStatusFocusNode?.dispose();
     currentStatusController?.dispose();

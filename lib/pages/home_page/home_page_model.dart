@@ -75,9 +75,13 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   // Model for MainWebNav component.
   late MainWebNavModel mainWebNavModel;
   // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
+  UsersRecord? selectedUserPinned;
+  // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
   UsersRecord? selectedUser;
   // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
   UsersRecord? selectedUserChats;
+  // Stores action output result for [Firestore Query - Query a collection] action in DirectMessageButton widget.
+  UsersRecord? selectedUserChats2;
   // Model for EmptyChatWidget component.
   late EmptyChatWidgetModel emptyChatWidgetModel;
   // Model for Overview component.
