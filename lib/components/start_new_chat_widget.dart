@@ -360,10 +360,10 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                             );
                             _shouldSetState = true;
 
-                            var chatMessagesRecordReference =
+                            var chatMessagesRecordReference1 =
                                 ChatMessagesRecord.collection.doc();
                             firestoreBatch.set(
-                                chatMessagesRecordReference,
+                                chatMessagesRecordReference1,
                                 createChatMessagesRecordData(
                                   user: currentUserReference,
                                   chat: _model.groupChatCreated?.reference,
@@ -378,7 +378,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                       text: 'Welcome everyone!',
                                       timestamp: getCurrentTimestamp,
                                     ),
-                                    chatMessagesRecordReference);
+                                    chatMessagesRecordReference1);
                             _shouldSetState = true;
 
                             firestoreBatch.update(
@@ -402,6 +402,21 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                   chatRef: _model.groupChatCreated?.reference,
                                   createdTime: getCurrentTimestamp,
                                 ));
+
+                            firestoreBatch.update(widget.workspaceRef!, {
+                              ...mapToFirestore(
+                                {
+                                  'chat_refs': FieldValue.arrayUnion(
+                                      [_model.groupChatCreated?.reference]),
+                                },
+                              ),
+                            });
+                            FFAppState().update(() {
+                              FFAppState().currentChatRef =
+                                  _model.groupChatCreated?.reference;
+                              FFAppState().currentChatUserRef = null;
+                              FFAppState().currentMainView = 'Chat';
+                            });
                           } else {
                             _model.updatePage(() {
                               FFAppState()
@@ -447,6 +462,16 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                 FFAppState().selectedMembers = [];
                               });
                               Navigator.pop(context);
+                              FFAppState().update(() {
+                                FFAppState().currentChatRef =
+                                    _model.chatsInWorkspace?.first?.reference;
+                                FFAppState().currentChatUserRef = _model
+                                    .chatsInWorkspace?.first?.users
+                                    ?.where((e) => e != currentUserReference)
+                                    .toList()
+                                    ?.first;
+                                FFAppState().currentMainView = 'Chat';
+                              });
                               if (_shouldSetState) setState(() {});
                               return;
                             } else {
@@ -455,12 +480,13 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                               firestoreBatch.set(chatsRecordReference, {
                                 ...createChatsRecordData(
                                   chatType: 'DM',
-                                  workspaceId: '',
+                                  workspaceId: widget.workspaceId,
                                   channelName:
                                       _model.channelNameController.text,
                                   workspaceRef: widget.workspaceRef,
                                   userA: currentUserReference,
                                   userB: FFAppState().selectedMembers.first,
+                                  createdTime: getCurrentTimestamp,
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -472,12 +498,13 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                   ChatsRecord.getDocumentFromData({
                                 ...createChatsRecordData(
                                   chatType: 'DM',
-                                  workspaceId: '',
+                                  workspaceId: widget.workspaceId,
                                   channelName:
                                       _model.channelNameController.text,
                                   workspaceRef: widget.workspaceRef,
                                   userA: currentUserReference,
                                   userB: FFAppState().selectedMembers.first,
+                                  createdTime: getCurrentTimestamp,
                                 ),
                                 ...mapToFirestore(
                                   {
@@ -487,11 +514,50 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                               }, chatsRecordReference);
                               _shouldSetState = true;
 
-                              firestoreBatch.update(
-                                  _model.createdChat!.reference,
-                                  createChatsRecordData(
-                                    chatRef: _model.createdChat?.reference,
+                              var chatMessagesRecordReference2 =
+                                  ChatMessagesRecord.collection.doc();
+                              firestoreBatch.set(
+                                  chatMessagesRecordReference2,
+                                  createChatMessagesRecordData(
+                                    user: currentUserReference,
+                                    chat: _model.createdChat?.reference,
+                                    text: 'Hello!',
+                                    timestamp: getCurrentTimestamp,
                                   ));
+                              _model.createdMessage2 =
+                                  ChatMessagesRecord.getDocumentFromData(
+                                      createChatMessagesRecordData(
+                                        user: currentUserReference,
+                                        chat: _model.createdChat?.reference,
+                                        text: 'Hello!',
+                                        timestamp: getCurrentTimestamp,
+                                      ),
+                                      chatMessagesRecordReference2);
+                              _shouldSetState = true;
+
+                              firestoreBatch.update(
+                                  _model.createdMessage2!.reference,
+                                  createChatMessagesRecordData(
+                                    chatMessageRef:
+                                        _model.createdMessage2?.reference,
+                                  ));
+
+                              firestoreBatch
+                                  .update(_model.createdChat!.reference, {
+                                ...createChatsRecordData(
+                                  chatRef: _model.createdChat?.reference,
+                                  lastMessage: _model.createdMessage2?.text,
+                                  lastMessageTime: getCurrentTimestamp,
+                                  lastMessageSentBy: currentUserReference,
+                                ),
+                                ...mapToFirestore(
+                                  {
+                                    'last_message_seen_by':
+                                        FieldValue.arrayUnion(
+                                            [currentUserReference]),
+                                  },
+                                ),
+                              });
 
                               firestoreBatch.update(widget.workspaceRef!, {
                                 ...mapToFirestore(
@@ -500,6 +566,13 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                         [_model.createdChat?.reference]),
                                   },
                                 ),
+                              });
+                              FFAppState().update(() {
+                                FFAppState().currentChatRef =
+                                    _model.createdChat?.reference;
+                                FFAppState().currentChatUserRef =
+                                    _model.createdChat?.userB;
+                                FFAppState().currentMainView = 'Chat';
                               });
                             }
                           }

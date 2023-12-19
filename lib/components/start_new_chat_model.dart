@@ -29,6 +29,8 @@ class StartNewChatModel extends FlutterFlowModel<StartNewChatWidget> {
   List<ChatsRecord>? chatsInWorkspace;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
   ChatsRecord? createdChat;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  ChatMessagesRecord? createdMessage2;
 
   /// Initialization and disposal methods.
 

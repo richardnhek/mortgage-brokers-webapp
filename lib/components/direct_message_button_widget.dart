@@ -164,10 +164,10 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            AutoSizeText(
                               containerUsersRecord!.displayName
                                   .maybeHandleOverflow(
-                                maxChars: 18,
+                                maxChars: 16,
                                 replacement: '…',
                               ),
                               style: FlutterFlowTheme.of(context)
@@ -177,14 +177,10 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.normal,
                                   ),
+                              minFontSize: 14.0,
                             ),
                             Text(
-                              functions
-                                  .getMessageTime(widget.lastMsgTime)
-                                  .maybeHandleOverflow(
-                                    maxChars: 20,
-                                    replacement: '…',
-                                  ),
+                              functions.getMessageTime(widget.lastMsgTime),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(

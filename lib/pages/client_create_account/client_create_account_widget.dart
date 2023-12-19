@@ -869,6 +869,9 @@ class _ClientCreateAccountWidgetState extends State<ClientCreateAccountWidget> {
                                                       .companyNameController
                                                       .text,
                                                 ));
+
+                                                context.goNamed(
+                                                    'SuccessfulRegistration');
                                               } else {
                                                 final phoneNumberVal = _model
                                                     .phoneNumberController.text;

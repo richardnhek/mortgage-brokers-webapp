@@ -23,18 +23,25 @@ Future<void> saveFile(String? filePath) async {
   }
 
   try {
+    // Decode the file path
+    final decodedFilePath = Uri.decodeFull(filePath);
+    final Uri fileUri = Uri.parse(decodedFilePath);
+
+    // Extract the file name
+    final fileName = fileUri.pathSegments.last;
+
     // Create an HTTP client
     client = http.Client();
 
     // Make a request to download the file
-    var response = await client.get(Uri.parse(filePath));
+    var response = await client.get(fileUri);
 
     if (response.statusCode == 200) {
       // Create a Blob from the file's content
       final blob = html.Blob([response.bodyBytes]);
       final url = html.Url.createObjectUrlFromBlob(blob);
       final anchor = html.AnchorElement(href: url)
-        ..setAttribute("download", filePath.split('/').last)
+        ..setAttribute("download", fileName)
         ..click();
 
       // Cleanup: Revoke the object URL after use

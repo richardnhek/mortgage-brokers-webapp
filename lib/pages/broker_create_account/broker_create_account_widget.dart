@@ -124,7 +124,8 @@ class _BrokerCreateAccountWidgetState extends State<BrokerCreateAccountWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
                                   Text(
-                                    'Create an account',
+                                    'Create an account (Broker)',
+                                    textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -585,6 +586,7 @@ class _BrokerCreateAccountWidgetState extends State<BrokerCreateAccountWidget> {
                                                       () => setState(() {}),
                                                     ),
                                                     autofocus: true,
+                                                    readOnly: true,
                                                     obscureText: false,
                                                     decoration: InputDecoration(
                                                       labelStyle:
@@ -907,12 +909,7 @@ class _BrokerCreateAccountWidgetState extends State<BrokerCreateAccountWidget> {
                                                       ),
                                                       'authType':
                                                           serializeParam(
-                                                        widget.phoneNo !=
-                                                                    null &&
-                                                                widget.phoneNo !=
-                                                                    ''
-                                                            ? 'Login'
-                                                            : 'Create',
+                                                        'Create',
                                                         ParamType.String,
                                                       ),
                                                     }.withoutNulls,

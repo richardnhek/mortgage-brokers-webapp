@@ -631,8 +631,7 @@ class _UserProfiileWidgetState extends State<UserProfiileWidget>
                           width: 308.0,
                           height: 50.0,
                           decoration: BoxDecoration(
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
+                            color: FlutterFlowTheme.of(context).darkGray1,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 4.0,
@@ -660,6 +659,7 @@ class _UserProfiileWidgetState extends State<UserProfiileWidget>
                               },
                             ),
                             autofocus: true,
+                            readOnly: true,
                             obscureText: false,
                             decoration: InputDecoration(
                               hintText: 'alex@gmail.com',
@@ -694,96 +694,98 @@ class _UserProfiileWidgetState extends State<UserProfiileWidget>
                       ],
                     ),
                   ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 35.0, 0.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: FFButtonWidget(
-                            onPressed: _model.isEmailChanged == false
-                                ? null
-                                : () async {
-                                    setState(() {
-                                      _model.emailController?.text =
-                                          widget.userDoc!.email;
-                                    });
-                                    setState(() {
-                                      _model.isEmailChanged = false;
-                                    });
-                                  },
-                            text: 'Discard changes',
-                            options: FFButtonOptions(
-                              height: 50.0,
-                              padding: EdgeInsets.all(0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: Color(0x00FFFFFF),
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: 'Inter',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                              elevation: 0.0,
-                              borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).secondary4,
-                                width: 1.0,
+                  if (false)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 35.0, 0.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Expanded(
+                            child: FFButtonWidget(
+                              onPressed: _model.isEmailChanged == false
+                                  ? null
+                                  : () async {
+                                      setState(() {
+                                        _model.emailController?.text =
+                                            widget.userDoc!.email;
+                                      });
+                                      setState(() {
+                                        _model.isEmailChanged = false;
+                                      });
+                                    },
+                              text: 'Discard changes',
+                              options: FFButtonOptions(
+                                height: 50.0,
+                                padding: EdgeInsets.all(0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: Color(0x00FFFFFF),
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).secondary4,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                                disabledTextColor:
+                                    FlutterFlowTheme.of(context).secondary4,
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
-                              disabledTextColor:
-                                  FlutterFlowTheme.of(context).secondary4,
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: FFButtonWidget(
-                            onPressed: _model.isEmailChanged == false
-                                ? null
-                                : () async {
-                                    await widget.userDoc!.reference
-                                        .update(createUsersRecordData(
-                                      email: _model.emailController.text,
-                                    ));
-                                    setState(() {
-                                      _model.isEmailChanged = false;
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                            text: 'Save Changes',
-                            options: FFButtonOptions(
-                              height: 50.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 0.0, 24.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context).accent1,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: 'Inter',
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                              elevation: 0.0,
-                              borderSide: BorderSide(
-                                color: Color(0x49105035),
-                                width: 1.0,
+                          Expanded(
+                            child: FFButtonWidget(
+                              onPressed: _model.isEmailChanged == false
+                                  ? null
+                                  : () async {
+                                      await widget.userDoc!.reference
+                                          .update(createUsersRecordData(
+                                        email: _model.emailController.text,
+                                      ));
+                                      setState(() {
+                                        _model.isEmailChanged = false;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                              text: 'Save Changes',
+                              options: FFButtonOptions(
+                                height: 50.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).accent1,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                elevation: 0.0,
+                                borderSide: BorderSide(
+                                  color: Color(0x49105035),
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                                disabledColor:
+                                    FlutterFlowTheme.of(context).secondary4,
                               ),
-                              borderRadius: BorderRadius.circular(8.0),
-                              disabledColor:
-                                  FlutterFlowTheme.of(context).secondary4,
                             ),
                           ),
-                        ),
-                      ].divide(SizedBox(width: 15.0)),
+                        ].divide(SizedBox(width: 15.0)),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

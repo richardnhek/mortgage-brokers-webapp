@@ -128,12 +128,12 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        AutoSizeText(
                           valueOrDefault<String>(
                             widget.channelName,
                             'N/A',
                           ).maybeHandleOverflow(
-                            maxChars: 18,
+                            maxChars: 16,
                             replacement: '…',
                           ),
                           style:
@@ -142,14 +142,12 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.normal,
                                   ),
+                          minFontSize: 14.0,
                         ),
                         Text(
                           valueOrDefault<String>(
                             functions.getMessageTime(widget.lastMsgTime),
                             'N/A',
-                          ).maybeHandleOverflow(
-                            maxChars: 20,
-                            replacement: '…',
                           ),
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
