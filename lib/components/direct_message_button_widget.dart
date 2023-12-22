@@ -166,20 +166,22 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            AutoSizeText(
-                              containerUsersRecord!.displayName
-                                  .maybeHandleOverflow(
-                                maxChars: 16,
-                                replacement: '…',
+                            Expanded(
+                              child: AutoSizeText(
+                                containerUsersRecord!.displayName
+                                    .maybeHandleOverflow(
+                                  maxChars: 16,
+                                  replacement: '…',
+                                ),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Inter',
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                minFontSize: 14.0,
                               ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Inter',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                              minFontSize: 14.0,
                             ),
                             Text(
                               functions.getMessageTime(widget.lastMsgTime),
@@ -189,11 +191,11 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
                                     fontFamily: 'Inter',
                                     color:
                                         FlutterFlowTheme.of(context).secondary4,
-                                    fontSize: 12.0,
+                                    fontSize: 10.0,
                                     fontWeight: FontWeight.normal,
                                   ),
                             ),
-                          ],
+                          ].divide(SizedBox(width: 5.0)),
                         ),
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -208,7 +210,7 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
                                     widget.lastMsg,
                                     'N/A',
                                   ).maybeHandleOverflow(
-                                    maxChars: 32,
+                                    maxChars: 30,
                                     replacement: '…',
                                   ),
                                   maxLines: 1,

@@ -3,7 +3,9 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -829,10 +831,12 @@ class _ClientCreateAccountWidgetState extends State<ClientCreateAccountWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 50.0, 0.0, 0.0),
                                     child: FFButtonWidget(
-                                      onPressed: (_model.nameController.text == null ||
+                                      onPressed: (_model.nameController.text ==
+                                                      null ||
                                                   _model.nameController.text ==
                                                       '') ||
-                                              (_model.emailController.text == null ||
+                                              (_model.emailController.text ==
+                                                      null ||
                                                   _model.emailController.text ==
                                                       '') ||
                                               (widget.phoneNo != null &&
@@ -849,9 +853,12 @@ class _ClientCreateAccountWidgetState extends State<ClientCreateAccountWidget> {
                                                       _model.phoneNumberController
                                                               .text ==
                                                           '')) ||
-                                              (_model.companyNameController.text ==
+                                              (_model.companyNameController
+                                                          .text ==
                                                       null ||
-                                                  _model.companyNameController.text == '')
+                                                  _model.companyNameController
+                                                          .text ==
+                                                      '')
                                           ? null
                                           : () async {
                                               if (widget.userRef != null) {
@@ -873,67 +880,111 @@ class _ClientCreateAccountWidgetState extends State<ClientCreateAccountWidget> {
                                                 context.goNamed(
                                                     'SuccessfulRegistration');
                                               } else {
-                                                final phoneNumberVal = _model
-                                                    .phoneNumberController.text;
-                                                if (phoneNumberVal == null ||
-                                                    phoneNumberVal.isEmpty ||
-                                                    !phoneNumberVal
-                                                        .startsWith('+')) {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                          'Phone Number is required and has to start with +.'),
-                                                    ),
+                                                _model.existingUser =
+                                                    await queryUsersRecordOnce(
+                                                  queryBuilder: (usersRecord) =>
+                                                      usersRecord.where(
+                                                    'phone_number',
+                                                    isEqualTo: functions
+                                                        .getFormattedPhoneNo(_model
+                                                            .phoneNumberController
+                                                            .text),
+                                                  ),
+                                                  singleRecord: true,
+                                                ).then((s) => s.firstOrNull);
+                                                if (_model.existingUser
+                                                        ?.reference !=
+                                                    null) {
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                            'Phone number exists!'),
+                                                        content: Text(
+                                                            'This phone number has already been registered'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
                                                   );
-                                                  return;
-                                                }
-                                                await authManager
-                                                    .beginPhoneAuth(
-                                                  context: context,
-                                                  phoneNumber: phoneNumberVal,
-                                                  onCodeSent: (context) async {
-                                                    context.goNamedAuth(
-                                                      'CodeVerification',
-                                                      context.mounted,
-                                                      queryParameters: {
-                                                        'phoneNumber':
-                                                            serializeParam(
-                                                          _model
-                                                              .phoneNumberController
-                                                              .text,
-                                                          ParamType.String,
-                                                        ),
-                                                        'userEmail':
-                                                            serializeParam(
-                                                          _model.emailController
-                                                              .text,
-                                                          ParamType.String,
-                                                        ),
-                                                        'displayName':
-                                                            serializeParam(
-                                                          _model.nameController
-                                                              .text,
-                                                          ParamType.String,
-                                                        ),
-                                                        'authType':
-                                                            serializeParam(
-                                                          'Create-Client',
-                                                          ParamType.String,
-                                                        ),
-                                                        'companyName':
-                                                            serializeParam(
-                                                          _model
-                                                              .companyNameController
-                                                              .text,
-                                                          ParamType.String,
-                                                        ),
-                                                      }.withoutNulls,
-                                                      ignoreRedirect: true,
+                                                } else {
+                                                  final phoneNumberVal = _model
+                                                      .phoneNumberController
+                                                      .text;
+                                                  if (phoneNumberVal == null ||
+                                                      phoneNumberVal.isEmpty ||
+                                                      !phoneNumberVal
+                                                          .startsWith('+')) {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                            'Phone Number is required and has to start with +.'),
+                                                      ),
                                                     );
-                                                  },
-                                                );
+                                                    return;
+                                                  }
+                                                  await authManager
+                                                      .beginPhoneAuth(
+                                                    context: context,
+                                                    phoneNumber: phoneNumberVal,
+                                                    onCodeSent:
+                                                        (context) async {
+                                                      context.goNamedAuth(
+                                                        'CodeVerification',
+                                                        context.mounted,
+                                                        queryParameters: {
+                                                          'phoneNumber':
+                                                              serializeParam(
+                                                            _model
+                                                                .phoneNumberController
+                                                                .text,
+                                                            ParamType.String,
+                                                          ),
+                                                          'userEmail':
+                                                              serializeParam(
+                                                            _model
+                                                                .emailController
+                                                                .text,
+                                                            ParamType.String,
+                                                          ),
+                                                          'displayName':
+                                                              serializeParam(
+                                                            _model
+                                                                .nameController
+                                                                .text,
+                                                            ParamType.String,
+                                                          ),
+                                                          'authType':
+                                                              serializeParam(
+                                                            'Create-Client',
+                                                            ParamType.String,
+                                                          ),
+                                                          'companyName':
+                                                              serializeParam(
+                                                            _model
+                                                                .companyNameController
+                                                                .text,
+                                                            ParamType.String,
+                                                          ),
+                                                        }.withoutNulls,
+                                                        ignoreRedirect: true,
+                                                      );
+                                                    },
+                                                  );
+                                                }
                                               }
+
+                                              setState(() {});
                                             },
                                       text: 'Create an account',
                                       options: FFButtonOptions(

@@ -372,7 +372,6 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                               onPressed: _model.isComplete == false
                                   ? null
                                   : () async {
-                                      Function() _navigate = () {};
                                       final firestoreBatch =
                                           FirebaseFirestore.instance.batch();
                                       try {
@@ -399,8 +398,6 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                           return;
                                         }
 
-                                        _navigate = () => context.goNamedAuth(
-                                            'HomePage', context.mounted);
                                         if (widget.authType == 'Create') {
                                           firestoreBatch.update(
                                               currentUserReference!,
@@ -426,12 +423,28 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                                 userType: 'Client',
                                                 company: widget.companyName,
                                               ));
+                                          GoRouter.of(context)
+                                              .prepareAuthEvent();
+                                          await authManager.signOut();
+                                          GoRouter.of(context)
+                                              .clearRedirectLocation();
+
+                                          context.goNamedAuth(
+                                            'SuccessfulRegistration',
+                                            context.mounted,
+                                            extra: <String, dynamic>{
+                                              kTransitionInfoKey:
+                                                  TransitionInfo(
+                                                hasTransition: true,
+                                                transitionType:
+                                                    PageTransitionType.fade,
+                                              ),
+                                            },
+                                          );
                                         }
                                       } finally {
                                         await firestoreBatch.commit();
                                       }
-
-                                      _navigate();
                                     },
                               text: 'Confirm',
                               options: FFButtonOptions(

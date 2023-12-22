@@ -32,7 +32,6 @@ class _LoginWidgetState extends State<LoginWidget> {
     super.initState();
     _model = createModel(context, () => LoginModel());
 
-    authManager.handlePhoneAuthStateChanges(context);
     _model.phoneNumberController ??= TextEditingController();
     _model.phoneNumberFocusNode ??= FocusNode();
 
@@ -102,39 +101,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                final phoneNumberVal = '+11234567890';
-                                if (phoneNumberVal == null ||
-                                    phoneNumberVal.isEmpty ||
-                                    !phoneNumberVal.startsWith('+')) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Phone Number is required and has to start with +.'),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                await authManager.beginPhoneAuth(
-                                  context: context,
-                                  phoneNumber: phoneNumberVal,
-                                  onCodeSent: (context) async {
-                                    context.goNamedAuth(
-                                      'CodeVerification',
-                                      context.mounted,
-                                      queryParameters: {
-                                        'phoneNumber': serializeParam(
-                                          '+11234567890',
-                                          ParamType.String,
-                                        ),
-                                        'authType': serializeParam(
-                                          'Login',
-                                          ParamType.String,
-                                        ),
-                                      }.withoutNulls,
-                                      ignoreRedirect: true,
-                                    );
-                                  },
-                                );
+                                context.goNamed('ClientCreateAccount');
                               },
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(0.0),

@@ -368,15 +368,13 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                               message: updateMailMessageStruct(
                                 MailMessageStruct(
                                   subject: 'Invitation to BuyerSide',
-                                  text: (String fullName,
+                                  html: (String fullName,
                                           String registrationLink) {
                                     return "Dear $fullName" +
                                         "<br>" +
-                                        "You have been invite to join BuyerSide community. Please click on the link below to complete your registration:" +
+                                        "You have been invited to join BuyerSide community. Please click on the link below to complete your registration:" +
                                         "<br>" +
-                                        "<a>" +
-                                        registrationLink +
-                                        "<a>";
+                                        "<a href=$registrationLink>Click Here</a>";
                                   }('${_model.textController1.text} ${_model.textController2.text}',
                                       'https://testing-mortgage-2023.firebaseapp.com/clientCreateAccount'),
                                 ),
@@ -385,6 +383,22 @@ class _AddNewMemberWidgetState extends State<AddNewMemberWidget> {
                               ),
                               to: _model.textController3.text,
                             ));
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Invitation sent!',
+                              style: GoogleFonts.getFont(
+                                'Inter',
+                                color: FlutterFlowTheme.of(context)
+                                    .primaryBackground,
+                              ),
+                            ),
+                            duration: Duration(milliseconds: 2000),
+                            backgroundColor:
+                                FlutterFlowTheme.of(context).secondary,
+                          ),
+                        );
                       },
                 text: 'Add Member',
                 options: FFButtonOptions(

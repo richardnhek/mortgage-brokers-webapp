@@ -128,21 +128,24 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        AutoSizeText(
-                          valueOrDefault<String>(
-                            widget.channelName,
-                            'N/A',
-                          ).maybeHandleOverflow(
-                            maxChars: 16,
-                            replacement: '…',
+                        Expanded(
+                          child: AutoSizeText(
+                            valueOrDefault<String>(
+                              widget.channelName,
+                              'N/A',
+                            ).maybeHandleOverflow(
+                              maxChars: 14,
+                              replacement: '…',
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Inter',
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                            minFontSize: 14.0,
                           ),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Inter',
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                          minFontSize: 14.0,
                         ),
                         Text(
                           valueOrDefault<String>(
@@ -154,11 +157,11 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                               .override(
                                 fontFamily: 'Inter',
                                 color: FlutterFlowTheme.of(context).secondary4,
-                                fontSize: 12.0,
+                                fontSize: 10.0,
                                 fontWeight: FontWeight.normal,
                               ),
                         ),
-                      ],
+                      ].divide(SizedBox(width: 5.0)),
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.max,
@@ -195,7 +198,7 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                                     '${textUsersRecord.displayName} : ${widget.lastMsg}',
                                     'N/A',
                                   ).maybeHandleOverflow(
-                                    maxChars: 32,
+                                    maxChars: 30,
                                     replacement: '…',
                                   ),
                                   maxLines: 1,
