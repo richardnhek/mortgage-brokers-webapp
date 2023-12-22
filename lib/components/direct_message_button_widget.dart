@@ -66,12 +66,14 @@ class _DirectMessageButtonWidgetState extends State<DirectMessageButtonWidget> {
     context.watch<FFAppState>();
 
     return FutureBuilder<List<UsersRecord>>(
-      future: queryUsersRecordOnce(
-        queryBuilder: (usersRecord) => usersRecord.where(
-          'user_ref',
-          isEqualTo: widget.userRef,
+      future: _model.chatUserQueryCache(
+        requestFn: () => queryUsersRecordOnce(
+          queryBuilder: (usersRecord) => usersRecord.where(
+            'user_ref',
+            isEqualTo: widget.userRef,
+          ),
+          singleRecord: true,
         ),
-        singleRecord: true,
       ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.

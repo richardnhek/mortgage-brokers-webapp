@@ -169,15 +169,17 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 5.0, 0.0),
                             child: FutureBuilder<UsersRecord>(
-                              future: UsersRecord.getDocumentOnce(
-                                  widget.lastMsgSentBy!),
+                              future: _model.lastUserQueryCache(
+                                requestFn: () => UsersRecord.getDocumentOnce(
+                                    widget.lastMsgSentBy!),
+                              ),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
                                   return Center(
                                     child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
+                                      width: 10.0,
+                                      height: 10.0,
                                       child: CircularProgressIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(

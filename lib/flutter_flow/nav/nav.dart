@@ -109,6 +109,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             userEmail: params.getParam('userEmail', ParamType.String),
             displayName: params.getParam('displayName', ParamType.String),
             authType: params.getParam('authType', ParamType.String),
+            companyName: params.getParam('companyName', ParamType.String),
           ),
         ),
         FFRoute(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'flutter_flow/request_manager.dart';
 import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -76,6 +77,51 @@ class FFAppState extends ChangeNotifier {
   set mainNavView(String _value) {
     _mainNavView = _value;
   }
+
+  final _testChatQueryCacheManager = StreamRequestManager<List<ChatsRecord>>();
+  Stream<List<ChatsRecord>> testChatQueryCache({
+    String? uniqueQueryKey,
+    bool? overrideCache,
+    required Stream<List<ChatsRecord>> Function() requestFn,
+  }) =>
+      _testChatQueryCacheManager.performRequest(
+        uniqueQueryKey: uniqueQueryKey,
+        overrideCache: overrideCache,
+        requestFn: requestFn,
+      );
+  void clearTestChatQueryCacheCache() => _testChatQueryCacheManager.clear();
+  void clearTestChatQueryCacheCacheKey(String? uniqueKey) =>
+      _testChatQueryCacheManager.clearRequest(uniqueKey);
+
+  final _pinChatQueryCacheManager = StreamRequestManager<List<ChatsRecord>>();
+  Stream<List<ChatsRecord>> pinChatQueryCache({
+    String? uniqueQueryKey,
+    bool? overrideCache,
+    required Stream<List<ChatsRecord>> Function() requestFn,
+  }) =>
+      _pinChatQueryCacheManager.performRequest(
+        uniqueQueryKey: uniqueQueryKey,
+        overrideCache: overrideCache,
+        requestFn: requestFn,
+      );
+  void clearPinChatQueryCacheCache() => _pinChatQueryCacheManager.clear();
+  void clearPinChatQueryCacheCacheKey(String? uniqueKey) =>
+      _pinChatQueryCacheManager.clearRequest(uniqueKey);
+
+  final _chatListQueryCacheManager = StreamRequestManager<List<ChatsRecord>>();
+  Stream<List<ChatsRecord>> chatListQueryCache({
+    String? uniqueQueryKey,
+    bool? overrideCache,
+    required Stream<List<ChatsRecord>> Function() requestFn,
+  }) =>
+      _chatListQueryCacheManager.performRequest(
+        uniqueQueryKey: uniqueQueryKey,
+        overrideCache: overrideCache,
+        requestFn: requestFn,
+      );
+  void clearChatListQueryCacheCache() => _chatListQueryCacheManager.clear();
+  void clearChatListQueryCacheCacheKey(String? uniqueKey) =>
+      _chatListQueryCacheManager.clearRequest(uniqueKey);
 }
 
 LatLng? _latLngFromString(String? val) {

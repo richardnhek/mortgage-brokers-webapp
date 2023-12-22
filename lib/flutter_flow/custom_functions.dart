@@ -40,3 +40,7 @@ String getMessageTime(DateTime? messageTime) {
     return '${messageTime.day.toString().padLeft(2, '0')}/${messageTime.month.toString().padLeft(2, '0')}/${messageTime.year.toString().substring(2)}';
   }
 }
+
+String getFormattedPhoneNo(String phoneNo) {
+  return phoneNo.replaceAll(RegExp(r'[^\d+]'), '');
+}

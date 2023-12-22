@@ -912,6 +912,13 @@ class _BrokerCreateAccountWidgetState extends State<BrokerCreateAccountWidget> {
                                                         'Create',
                                                         ParamType.String,
                                                       ),
+                                                      'companyName':
+                                                          serializeParam(
+                                                        _model
+                                                            .companyNameController
+                                                            .text,
+                                                        ParamType.String,
+                                                      ),
                                                     }.withoutNulls,
                                                     ignoreRedirect: true,
                                                   );

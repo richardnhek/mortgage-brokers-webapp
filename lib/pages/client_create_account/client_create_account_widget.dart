@@ -918,7 +918,14 @@ class _ClientCreateAccountWidgetState extends State<ClientCreateAccountWidget> {
                                                         ),
                                                         'authType':
                                                             serializeParam(
-                                                          'Create',
+                                                          'Create-Client',
+                                                          ParamType.String,
+                                                        ),
+                                                        'companyName':
+                                                            serializeParam(
+                                                          _model
+                                                              .companyNameController
+                                                              .text,
                                                           ParamType.String,
                                                         ),
                                                       }.withoutNulls,

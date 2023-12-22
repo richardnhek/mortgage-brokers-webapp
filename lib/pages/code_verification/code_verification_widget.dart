@@ -21,6 +21,7 @@ class CodeVerificationWidget extends StatefulWidget {
     this.userEmail,
     this.displayName,
     String? authType,
+    this.companyName,
   })  : this.authType = authType ?? '',
         super(key: key);
 
@@ -28,6 +29,7 @@ class CodeVerificationWidget extends StatefulWidget {
   final String? userEmail;
   final String? displayName;
   final String authType;
+  final String? companyName;
 
   @override
   _CodeVerificationWidgetState createState() => _CodeVerificationWidgetState();
@@ -371,40 +373,62 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                                   ? null
                                   : () async {
                                       Function() _navigate = () {};
-                                      GoRouter.of(context).prepareAuthEvent();
-                                      final smsCodeVal =
-                                          _model.pinCodeController!.text;
-                                      if (smsCodeVal == null ||
-                                          smsCodeVal.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Enter SMS verification code.'),
-                                          ),
+                                      final firestoreBatch =
+                                          FirebaseFirestore.instance.batch();
+                                      try {
+                                        GoRouter.of(context).prepareAuthEvent();
+                                        final smsCodeVal =
+                                            _model.pinCodeController!.text;
+                                        if (smsCodeVal == null ||
+                                            smsCodeVal.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  'Enter SMS verification code.'),
+                                            ),
+                                          );
+                                          return;
+                                        }
+                                        final phoneVerifiedUser =
+                                            await authManager.verifySmsCode(
+                                          context: context,
+                                          smsCode: smsCodeVal,
                                         );
-                                        return;
-                                      }
-                                      final phoneVerifiedUser =
-                                          await authManager.verifySmsCode(
-                                        context: context,
-                                        smsCode: smsCodeVal,
-                                      );
-                                      if (phoneVerifiedUser == null) {
-                                        return;
-                                      }
+                                        if (phoneVerifiedUser == null) {
+                                          return;
+                                        }
 
-                                      _navigate = () => context.goNamedAuth(
-                                          'HomePage', context.mounted);
-                                      if (widget.authType == 'Create') {
-                                        await currentUserReference!
-                                            .update(createUsersRecordData(
-                                          email: widget.userEmail,
-                                          displayName: widget.displayName,
-                                          userRef: currentUserReference,
-                                          photoUrl:
-                                              'https://cdn.iconscout.com/icon/free/png-256/free-profile-1481935-1254808.png',
-                                        ));
+                                        _navigate = () => context.goNamedAuth(
+                                            'HomePage', context.mounted);
+                                        if (widget.authType == 'Create') {
+                                          firestoreBatch.update(
+                                              currentUserReference!,
+                                              createUsersRecordData(
+                                                email: widget.userEmail,
+                                                displayName: widget.displayName,
+                                                userRef: currentUserReference,
+                                                photoUrl:
+                                                    'https://cdn.iconscout.com/icon/free/png-256/free-profile-1481935-1254808.png',
+                                                userType: 'Broker',
+                                                company: widget.companyName,
+                                              ));
+                                        } else if (widget.authType ==
+                                            'Create-Client') {
+                                          firestoreBatch.update(
+                                              currentUserReference!,
+                                              createUsersRecordData(
+                                                email: widget.userEmail,
+                                                displayName: widget.displayName,
+                                                userRef: currentUserReference,
+                                                photoUrl:
+                                                    'https://cdn.iconscout.com/icon/free/png-256/free-profile-1481935-1254808.png',
+                                                userType: 'Client',
+                                                company: widget.companyName,
+                                              ));
+                                        }
+                                      } finally {
+                                        await firestoreBatch.commit();
                                       }
 
                                       _navigate();

@@ -3,6 +3,7 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
@@ -389,15 +390,16 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                   queryBuilder: (usersRecord) =>
                                                       usersRecord.where(
                                                     'phone_number',
-                                                    isEqualTo: _model
-                                                        .phoneNumberController
-                                                        .text,
+                                                    isEqualTo: functions
+                                                        .getFormattedPhoneNo(_model
+                                                            .phoneNumberController
+                                                            .text),
                                                   ),
                                                   singleRecord: true,
                                                 ).then((s) => s.firstOrNull);
-                                                if (_model.existingUser
-                                                        ?.reference ==
-                                                    null) {
+                                                if ((_model.existingUser !=
+                                                        null) ==
+                                                    false) {
                                                   context.pushNamed(
                                                     'BrokerCreateAccount',
                                                     queryParameters: {

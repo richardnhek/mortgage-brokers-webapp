@@ -492,25 +492,27 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                     0.0),
                                                         child: StreamBuilder<
                                                             List<ChatsRecord>>(
-                                                          stream:
-                                                              queryChatsRecord(
-                                                            queryBuilder: (chatsRecord) =>
-                                                                chatsRecord
-                                                                    .where(
-                                                                      'users',
-                                                                      arrayContains:
-                                                                          currentUserReference,
-                                                                    )
-                                                                    .where(
-                                                                      'workspace_ref',
-                                                                      isEqualTo:
-                                                                          columnWorkspacesRecord
-                                                                              .workspaceRef,
-                                                                    )
-                                                                    .orderBy(
-                                                                        'last_message_time',
-                                                                        descending:
-                                                                            true),
+                                                          stream: FFAppState()
+                                                              .testChatQueryCache(
+                                                            requestFn: () =>
+                                                                queryChatsRecord(
+                                                              queryBuilder: (chatsRecord) =>
+                                                                  chatsRecord
+                                                                      .where(
+                                                                        'users',
+                                                                        arrayContains:
+                                                                            currentUserReference,
+                                                                      )
+                                                                      .where(
+                                                                        'workspace_ref',
+                                                                        isEqualTo:
+                                                                            columnWorkspacesRecord.workspaceRef,
+                                                                      )
+                                                                      .orderBy(
+                                                                          'last_message_time',
+                                                                          descending:
+                                                                              true),
+                                                            ),
                                                           ),
                                                           builder: (context,
                                                               snapshot) {
@@ -1049,16 +1051,18 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       ),
                                     ),
                                     StreamBuilder<List<ChatsRecord>>(
-                                      stream: queryChatsRecord(
-                                        queryBuilder: (chatsRecord) =>
-                                            chatsRecord
-                                                .where(
-                                                  'users',
-                                                  arrayContains:
-                                                      currentUserReference,
-                                                )
-                                                .orderBy('last_message_time',
-                                                    descending: true),
+                                      stream: FFAppState().pinChatQueryCache(
+                                        requestFn: () => queryChatsRecord(
+                                          queryBuilder: (chatsRecord) =>
+                                              chatsRecord
+                                                  .where(
+                                                    'users',
+                                                    arrayContains:
+                                                        currentUserReference,
+                                                  )
+                                                  .orderBy('last_message_time',
+                                                      descending: true),
+                                        ),
                                       ),
                                       builder: (context, snapshot) {
                                         // Customize what your widget looks like when it's loading.
@@ -1280,17 +1284,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                         );
                                       },
                                     ),
-                                    FutureBuilder<List<ChatsRecord>>(
-                                      future: queryChatsRecordOnce(
-                                        queryBuilder: (chatsRecord) =>
-                                            chatsRecord
-                                                .where(
-                                                  'users',
-                                                  arrayContains:
-                                                      currentUserReference,
-                                                )
-                                                .orderBy('last_message_time',
-                                                    descending: true),
+                                    StreamBuilder<List<ChatsRecord>>(
+                                      stream: FFAppState().chatListQueryCache(
+                                        requestFn: () => queryChatsRecord(
+                                          queryBuilder: (chatsRecord) =>
+                                              chatsRecord
+                                                  .where(
+                                                    'users',
+                                                    arrayContains:
+                                                        currentUserReference,
+                                                  )
+                                                  .orderBy('last_message_time',
+                                                      descending: true),
+                                        ),
                                       ),
                                       builder: (context, snapshot) {
                                         // Customize what your widget looks like when it's loading.
