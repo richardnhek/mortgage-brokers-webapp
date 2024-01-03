@@ -831,7 +831,7 @@ class _BrokerCreateAccountWidgetState extends State<BrokerCreateAccountWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 50.0, 0.0, 0.0),
                                     child: FFButtonWidget(
-                                      onPressed: (_model.nameController.text ==
+                                      onPressed: ((_model.nameController.text ==
                                                       null ||
                                                   _model.nameController.text ==
                                                       '') ||
@@ -858,7 +858,7 @@ class _BrokerCreateAccountWidgetState extends State<BrokerCreateAccountWidget> {
                                                       null ||
                                                   _model.companyNameController
                                                           .text ==
-                                                      '')
+                                                      ''))
                                           ? null
                                           : () async {
                                               _model.existingUserDoc =

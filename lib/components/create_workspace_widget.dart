@@ -516,11 +516,12 @@ class _CreateWorkspaceWidgetState extends State<CreateWorkspaceWidget> {
                       ),
                     ),
                     FFButtonWidget(
-                      onPressed: (_model.workspaceNameController.text == null ||
+                      onPressed: ((_model.workspaceNameController.text ==
+                                      null ||
                                   _model.workspaceNameController.text == '') ||
                               (_model.channelNameController.text == null ||
                                   _model.channelNameController.text == '') ||
-                              (FFAppState().selectedMembers.length < 2)
+                              (FFAppState().selectedMembers.length < 2))
                           ? null
                           : () async {
                               final firestoreBatch =

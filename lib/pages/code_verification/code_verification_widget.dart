@@ -376,7 +376,7 @@ class _CodeVerificationWidgetState extends State<CodeVerificationWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 100.0, 0.0, 0.0),
                               child: FFButtonWidget(
-                                onPressed: _model.isComplete == false
+                                onPressed: (_model.isComplete == false)
                                     ? null
                                     : () async {
                                         final firestoreBatch =

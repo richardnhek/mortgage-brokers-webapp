@@ -335,12 +335,12 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 50.0, 0.0, 0.0),
                                       child: FFButtonWidget(
-                                        onPressed: _model.phoneNumberController
+                                        onPressed: (_model.phoneNumberController
                                                         .text ==
                                                     null ||
                                                 _model.phoneNumberController
                                                         .text ==
-                                                    ''
+                                                    '')
                                             ? null
                                             : () async {
                                                 _model.existingUser =

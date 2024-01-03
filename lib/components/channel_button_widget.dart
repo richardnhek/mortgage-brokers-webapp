@@ -144,7 +144,7 @@ class _ChannelButtonWidgetState extends State<ChannelButtonWidget> {
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.normal,
                                 ),
-                            minFontSize: 14.0,
+                            minFontSize: 12.0,
                           ),
                         ),
                         Text(

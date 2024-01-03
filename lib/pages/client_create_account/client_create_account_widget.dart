@@ -831,7 +831,7 @@ class _ClientCreateAccountWidgetState extends State<ClientCreateAccountWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 50.0, 0.0, 0.0),
                                     child: FFButtonWidget(
-                                      onPressed: (_model.nameController.text ==
+                                      onPressed: ((_model.nameController.text ==
                                                       null ||
                                                   _model.nameController.text ==
                                                       '') ||
@@ -858,7 +858,7 @@ class _ClientCreateAccountWidgetState extends State<ClientCreateAccountWidget> {
                                                       null ||
                                                   _model.companyNameController
                                                           .text ==
-                                                      '')
+                                                      ''))
                                           ? null
                                           : () async {
                                               if (widget.userRef != null) {

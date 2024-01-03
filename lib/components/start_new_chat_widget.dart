@@ -586,14 +586,14 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                       builder: (context) {
                         if (widget.workspaceRef != null) {
                           return FFButtonWidget(
-                            onPressed: (FFAppState().selectedMembers.length ==
+                            onPressed: ((FFAppState().selectedMembers.length ==
                                         0) ||
                                     ((FFAppState().selectedMembers.length >
                                             1) &&
                                         (_model.channelNameController.text ==
                                                 null ||
                                             _model.channelNameController.text ==
-                                                ''))
+                                                '')))
                                 ? null
                                 : () async {
                                     var _shouldSetState = false;
@@ -920,7 +920,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                           );
                         } else {
                           return FFButtonWidget(
-                            onPressed: (FFAppState().selectedMembers.length ==
+                            onPressed: ((FFAppState().selectedMembers.length ==
                                         0) ||
                                     ((FFAppState().selectedMembers.length >
                                             1) &&
@@ -929,7 +929,7 @@ class _StartNewChatWidgetState extends State<StartNewChatWidget> {
                                             _model.channelNameController.text ==
                                                 '')) ||
                                     (_model.dropDownValue == null ||
-                                        _model.dropDownValue == '')
+                                        _model.dropDownValue == ''))
                                 ? null
                                 : () async {
                                     var _shouldSetState = false;

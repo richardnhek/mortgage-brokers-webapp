@@ -494,6 +494,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                             List<ChatsRecord>>(
                                                           stream: FFAppState()
                                                               .testChatQueryCache(
+                                                            uniqueQueryKey:
+                                                                columnWorkspacesRecord
+                                                                    .reference
+                                                                    .id,
                                                             requestFn: () =>
                                                                 queryChatsRecord(
                                                               queryBuilder: (chatsRecord) =>
@@ -506,7 +510,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                                                       .where(
                                                                         'workspace_ref',
                                                                         isEqualTo:
-                                                                            columnWorkspacesRecord.workspaceRef,
+                                                                            columnWorkspacesRecord.reference,
                                                                       )
                                                                       .orderBy(
                                                                           'last_message_time',

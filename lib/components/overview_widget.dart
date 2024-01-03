@@ -856,7 +856,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       FFButtonWidget(
-                                        onPressed: _model.isChanged == false
+                                        onPressed: (_model.isChanged == false)
                                             ? null
                                             : () async {
                                                 setState(() {
@@ -935,7 +935,7 @@ class _OverviewWidgetState extends State<OverviewWidget> {
                                         ),
                                       ),
                                       FFButtonWidget(
-                                        onPressed: _model.isChanged == false
+                                        onPressed: (_model.isChanged == false)
                                             ? null
                                             : () async {
                                                 await widget.workspaceRef!.update(

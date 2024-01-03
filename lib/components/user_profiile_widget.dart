@@ -497,7 +497,7 @@ class _UserProfiileWidgetState extends State<UserProfiileWidget>
                       children: [
                         Expanded(
                           child: FFButtonWidget(
-                            onPressed: _model.isChanged == false
+                            onPressed: (_model.isChanged == false)
                                 ? null
                                 : () async {
                                     setState(() {
@@ -545,7 +545,7 @@ class _UserProfiileWidgetState extends State<UserProfiileWidget>
                         ),
                         Expanded(
                           child: FFButtonWidget(
-                            onPressed: _model.isChanged == false
+                            onPressed: (_model.isChanged == false)
                                 ? null
                                 : () async {
                                     await widget.userDoc!.reference
@@ -703,7 +703,7 @@ class _UserProfiileWidgetState extends State<UserProfiileWidget>
                         children: [
                           Expanded(
                             child: FFButtonWidget(
-                              onPressed: _model.isEmailChanged == false
+                              onPressed: (_model.isEmailChanged == false)
                                   ? null
                                   : () async {
                                       setState(() {
@@ -744,7 +744,7 @@ class _UserProfiileWidgetState extends State<UserProfiileWidget>
                           ),
                           Expanded(
                             child: FFButtonWidget(
-                              onPressed: _model.isEmailChanged == false
+                              onPressed: (_model.isEmailChanged == false)
                                   ? null
                                   : () async {
                                       await widget.userDoc!.reference
